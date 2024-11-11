@@ -1,0 +1,79 @@
+<!-- profile.html (會員資料頁面) -->
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>會員資料 - 大義麵親</title>
+    <style>
+        /* 沿用之前的通用樣式 */
+        /* ... */
+
+        .profile-section {
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .order-item {
+            border: 1px solid #ddd;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+        }
+
+        .points-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: #4CAF50;
+            color: white;
+            border-radius: 20px;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="logo">大義麵親</a>
+        <a href="profile.html" class="user-icon">
+            <i>👤</i>
+        </a>
+    </header>
+
+    <div class="main-content">
+        <div class="profile-section">
+            <h2>個人資料</h2>
+            <div class="form-group">
+                <label>姓名</label>
+                <p>王小明</p>
+            </div>
+            <div class="form-group">
+                <label>電話</label>
+                <p>0912-345-678</p>
+            </div>
+            <div class="form-group">
+                <label>電子郵件</label>
+                <p>wang@example.com</p>
+            </div>
+            <div class="points-badge">
+                點數：2,500 點
+            </div>
+        </div>
+
+        <div class="profile-section">
+            <h2>訂單紀錄</h2>
+            <div class="order-item">
+                <p><strong>訂單編號：</strong> #12345</p>
+                <p><strong>訂位日期：</strong> 2024-03-20</p>
+                <p><strong>用餐時段：</strong> 晚餐</p>
+                <p><strong>人數：</strong> 4人</p>
+                <p><strong>消費金額：</strong> NT$ 2,400</p>
+                <p><strong>狀態：</strong> 已確認</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
