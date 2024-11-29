@@ -13,6 +13,7 @@ CREATE TABLE Customer (
 	Customer_ID INT,
 	Customer_name VARCHAR(100) NOT NULL,
 	Customer_phoneNumber VARCHAR(15) NOT NULL,
+	PWD VARCHAR(100) NOT NULL,
 	Points INT DEFAULT 0,
 	PRIMARY KEY(Customer_ID),
 );
