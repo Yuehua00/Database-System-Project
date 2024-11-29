@@ -9,6 +9,32 @@
         /* 沿用之前的通用樣式 */
         /* ... */
 
+        .header {
+            background-color: #fff;
+            padding: 1.2rem 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .page-title {
+            padding: 3rem 5rem; 
+        }
+
+
+        
         .menu-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
