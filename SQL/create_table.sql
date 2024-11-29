@@ -16,21 +16,23 @@ CREATE TABLE Customer (
 	Points INT DEFAULT 0,
 	PRIMARY KEY(Customer_ID),
 );
-	
+
 CREATE TABLE desk (
 	Table_ID INT,
 	Number_of_Seat INT NOT NULL,
 	PRIMARY KEY(Table_ID)
 );
-
+	
 CREATE TABLE Reservation (
 	Reservation_ID INT,
 	TimeSlots VARCHAR(100) NOT NULL,  /* 中午 下午 晚上 */
 	Number_of_People INT NOT NULL,
+	Reservation_Time DATETIME NOT NULL, /* 格式 : YYYY-MM-DD HH:MI:SS */
 	PRIMARY KEY(Reservation_ID),
 	Customer_ID INT FOREIGN KEY REFERENCES Customer,
 	Table_ID INT FOREIGN KEY REFERENCES desk
 );
+
 	
 CREATE TABLE Order_rem (
 	Order_ID INT,
