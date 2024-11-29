@@ -53,23 +53,33 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+        Customer_name = request.form.get('Customer_name')
+        Customer_phoneNumber = request.form.get('Customer_phoneNumber')
+        PWD = request.form.get('PWD')
         
         # 假設資料庫有一個用戶表格，檢查用戶名和密碼是否匹配
         conn_obj = conn()
         if conn_obj:
             cursor = conn_obj.cursor()
-            query = "SELECT Customer_ID FROM Customer WHERE username = ? AND password = ?"
-            cursor.execute(query, (username, password))
-            user = cursor.fetchone()
-            if user:
-                # 登錄成功，存儲 session 並跳轉回預約頁面
-                session['Customer_ID'] = user.Customer_ID
-                return redirect(url_for('index'))
-            else:
-                # 登錄失敗
-                return "無效的用戶名或密碼"
+            query_check = "SELECT * FROM Customer WHERE Customer_phoneNumber = ?"
+            cursor.execute(query_check, (Customer_phoneNumber,))
+            existing_user = cursor.fetchone()
+
+            if existing_user:
+                # 電話已存在
+                return "電話號碼已被註冊，請使用其他電話號碼。"
+            
+            # 插入新用戶資料
+            insert_query = "INSERT INTO Customer (Customer_name, Customer_phoneNumber, PWD, Points) VALUES (?, ?, ?, ?)"
+            cursor.execute(insert_query, (Customer_name, Customer_phoneNumber, PWD, 0))
+            conn_obj.commit()
+            cursor.close()
+            session['message'] = '註冊成功！'
+            
+            # 註冊成功，跳轉到登入頁面
+            #return redirect(url_for('login'))
+            return redirect(url_for('index'))
+
     return render_template('login.html')
 
 
