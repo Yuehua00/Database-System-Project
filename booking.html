@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大義麵親 - 線上訂位</title>
+    <link rel="stylesheet" href="styles/common.css">
+    <link rel="stylesheet" href="styles/booking.css">
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="logo">大義麵親</a>
+        <a href="member.html" class="user-icon">
+            <i>👤</i>
+        </a>
+    </header>
+
+    <main class="main-content">
+        <section class="booking-section">
+            <h1>線上訂位</h1>
+            <form class="booking-form" action="member.html" method="POST">
+                <div class="form-group">
+                    <label for="people">用餐人數</label>
+                    <select id="people" required>
+                        <option value="">請選擇人數</option>
+                        <option value="1">1人</option>
+                        <option value="2">2人</option>
+                        <option value="3">3人</option>
+                        <option value="4">4人</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="date">用餐日期</label>
+                    <input type="date" id="date" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="time">用餐時段</label>
+                    <select id="time" required>
+                        <option value="">請選擇時段</option>
+                        <option value="lunch">午餐</option>
+                        <option value="dinner">晚餐</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="food">選擇食物</label>
+                    <input type="text" id="food" name="food" placeholder="請輸入菜名">
+                </div>
+
+                <button type="submit" class="btn btn-primary">確認訂位</button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

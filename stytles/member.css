@@ -1,0 +1,49 @@
+/* styles/member.css */
+.member-info,
+.order-history {
+    background: #fff;
+    border-radius: 10px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.info-card {
+    margin-top: 1.5rem;
+}
+
+.points-info {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #ddd;
+}
+
+.points {
+    color: #4CAF50;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.order-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #ddd;
+}
+
+.order-status {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.order-details p {
+    margin-bottom: 0.5rem;
+}

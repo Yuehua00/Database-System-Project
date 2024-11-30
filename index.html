@@ -1,160 +1,46 @@
-<!-- index.html (首頁) -->
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>大義麵親 - 線上訂位</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        /* 通用樣式 */
-        body {
-            min-height: 100vh;
-            background-color: #f5f5f5;
-        }
-
-        /* 頭部樣式 */
-        .header {
-            background-color: #fff;
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #333;
-            text-decoration: none;
-        }
-
-        .user-icon {
-            width: 40px;
-            height: 40px;
-            background-color: #4CAF50;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        /* 主要內容區域 */
-        .main-content {
-            margin-top: 80px;
-            padding: 2rem;
-        }
-
-        /* 訂位表單樣式 */
-        .booking-form {
-            max-width: 600px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #333;
-            font-weight: 500;
-        }
-
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
-
-        .btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-            font-size: 1rem;
-            font-weight: 500;
-            transition: background-color 0.3s ease;
-        }
-
-        .btn:hover {
-            background-color: #45a049;
-        }
-
-        /* 頁面標題樣式 */
-        .page-title {
-            text-align: center;
-            color: #333;
-            margin-bottom: 2rem;
-            font-size: 2rem;
-        }
-    </style>
+    <title>大義麵親 - 首頁</title>
+    <link rel="stylesheet" href="styles/common.css">
+    <link rel="stylesheet" href="styles/index.css">
 </head>
 <body>
-    <!-- 頭部 -->
     <header class="header">
         <a href="index.html" class="logo">大義麵親</a>
-        <a href="login.html" class="user-icon">
+        <a href="member.html" class="user-icon">
             <i>👤</i>
         </a>
     </header>
 
-    <!-- 主要內容 -->
-    <div class="main-content">
-        <h1 class="page-title">線上訂位</h1>
-        <form class="booking-form" action="menu.html">
-            <div class="form-group">
-                <label for="people">用餐人數</label>
-                <select id="people" required>
-                    <option value="">請選擇人數</option>
-                    <option value="1">1人</option>
-                    <option value="2">2人</option>
-                    <option value="3">3人</option>
-                    <option value="4">4人</option>
-                    <option value="5">5人</option>
-                    <option value="6">6人</option>
-                </select>
+    <main class="main-content">
+        <section class="hero">
+            <h1>義大利麵專賣店</h1>
+            <div class="hero-buttons">
+                <a href="#menu" class="btn">查看菜單</a>
+                <a href="booking.html" class="btn btn-primary">立即訂位</a>
             </div>
-            <div class="form-group">
-                <label for="date">用餐日期</label>
-                <input type="date" id="date" required>
+        </section>
+
+        <section id="menu" class="menu-section">
+            <h2>熱門餐點</h2>
+            <div class="menu-grid">
+                <div class="menu-item"><h3>白醬野菇燻雞義大利麵</h3></div>
+                <div class="menu-item"><h3>紅醬野菇燻雞義大利麵</h3></div>
+                <div class="menu-item"><h3>青醬野菇燻雞義大利麵</h3></div>
+                <div class="menu-item"><h3>白醬蘆筍燻鮭魚義大利麵</h3></div>
+                <div class="menu-item"><h3>紅醬蘆筍燻鮭魚義大利麵</h3></div>
+                <div class="menu-item"><h3>青醬蘆筍燻鮭魚義大利麵</h3></div>
+                <div class="menu-item"><h3>白醬香蒜培根義大利麵</h3></div>
+                <div class="menu-item"><h3>紅醬香蒜培根義大利麵</h3></div>
+                <div class="menu-item"><h3>青醬香蒜培根義大利麵</h3></div>
+                <div class="menu-item"><h3>白酒蛤蜊義大利麵</h3></div>
+                <div class="menu-item"><h3>番茄肉醬義大利麵</h3></div>
+                <div class="menu-item"><h3>青醬海鮮義大利麵</h3></div>
             </div>
-            <div class="form-group">
-                <label for="time">用餐時段</label>
-                <select id="time" required>
-                    <option value="">請選擇時段</option>
-                    <option value="lunch">午餐 (11:30-14:00)</option>
-                    <option value="afternoon">下午茶 (14:30-17:00)</option>
-                    <option value="dinner">晚餐 (17:30-21:00)</option>
-                </select>
-            </div>
-            <button type="submit" class="btn">前往選擇餐點</button>
-        </form>
-    </div>
+        </section>
+    </main>
 </body>
 </html>
