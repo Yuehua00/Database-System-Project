@@ -1,145 +1,213 @@
-import React, { useState, useEffect } from 'react';
-import { Trash2, MinusCircle, PlusCircle } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Checkbox } from '@/components/ui/checkbox';
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>購物車數量調整</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<style>
+  body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  padding-top: 80px; /* 增加 padding-top，讓內容距離 header 有空間 */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100vh;
+  background-color: #f5f5f5;
+}
 
-const RestaurantCart = () => {
-  // 初始菜單項目
-  const [cartItems, setCartItems] = useState([
-    { id: 1, name: '香煎雞胸', price: 180, quantity: 1 },
-    { id: 2, name: '義大利麵', price: 220, quantity: 2 },
-    { id: 3, name: '凱薩沙拉', price: 150, quantity: 1 }
-  ]);
+  .container {
+  margin-top: 80px; /* 增加 margin-top，讓內容距離 header 有空間 */
+  background-color: white;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
 
-  // 點數設定
-  const [usePoints, setUsePoints] = useState(false);
-  const [availablePoints, setAvailablePoints] = useState(500);
-  const pointDiscount = 50; // 每100點可折50元
 
-  // 優惠代碼設定
-  const [promoCode, setPromoCode] = useState('');
-  const [promoDiscount, setPromoDiscount] = useState(0);
-  const validPromoCodes = {
-    'FIRST20': 0.2,
-    'SUMMER10': 0.1
-  };
+</style>
+<body class="bg-gray-100 p-8">
+  <header>
+    <nav>
+        <a href="index.html" class="logo">大義麵親</a>
+        <div class="menu-icon">
+            <div class="bar1"></div>
+            <div class="bar2"></div>
+            <div class="bar3"></div>
+        </div>
+        <div class="dropdown-menu">
+            <a href="menu.html">菜單</a>
+            <a href="reservation.html">訂位</a>
+            <a href="cart.html">我的餐點</a>
+            <a href="login.html">登入/註冊</a>
+        </div>
+    </nav>
+</header>
+    <div class="container mx-auto bg-white shadow-lg rounded-lg p-6">
+        <h1 class="text-3xl font-bold mb-6 text-center">購物車</h1>
 
-  // 計算總金額
-  const calculateTotal = () => {
-    const subtotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
-    const pointsDiscount = usePoints ? Math.floor(availablePoints / 100) * pointDiscount : 0;
-    const promoReduction = subtotal * (validPromoCodes[promoCode] || 0);
-    return Math.max(subtotal - pointsDiscount - promoReduction, 0);
-  };
+        <table class="w-full border-collapse">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="p-3 text-left">餐點</th>
+                    <th class="p-3">單價</th>
+                    <th class="p-3">數量</th>
+                    <th class="p-3">小計</th>
+                </tr>
+            </thead>
+            <tbody id="cartItems">
+                <tr>
+                    <td class="p-3">炒飯</td>
+                    <td class="p-3 text-center">$120</td>
+                    <td class="p-3 text-center">
+                        <div class="flex items-center justify-center">
+                            <button onclick="changeQuantity('炒飯', -1)" class="bg-red-500 text-white w-8 h-8 rounded-full">-</button>
+                            <input type="number" id="炒飯Quantity" value="1" min="0" 
+                                   class="mx-2 w-12 text-center border rounded"
+                                   onchange="updateTotal()">
+                            <button onclick="changeQuantity('炒飯', 1)" class="bg-green-500 text-white w-8 h-8 rounded-full">+</button>
+                        </div>
+                    </td>
+                    <td class="p-3 text-center" id="炒飯Total">$120</td>
+                </tr>
+                <tr>
+                    <td class="p-3">牛肉麵</td>
+                    <td class="p-3 text-center">$180</td>
+                    <td class="p-3 text-center">
+                        <div class="flex items-center justify-center">
+                            <button onclick="changeQuantity('牛肉麵', -1)" class="bg-red-500 text-white w-8 h-8 rounded-full">-</button>
+                            <input type="number" id="牛肉麵Quantity" value="1" min="0" 
+                                   class="mx-2 w-12 text-center border rounded"
+                                   onchange="updateTotal()">
+                            <button onclick="changeQuantity('牛肉麵', 1)" class="bg-green-500 text-white w-8 h-8 rounded-full">+</button>
+                        </div>
+                    </td>
+                    <td class="p-3 text-center" id="牛肉麵Total">$180</td>
+                </tr>
+                <tr>
+                    <td class="p-3">水餃</td>
+                    <td class="p-3 text-center">$80</td>
+                    <td class="p-3 text-center">
+                        <div class="flex items-center justify-center">
+                            <button onclick="changeQuantity('水餃', -1)" class="bg-red-500 text-white w-8 h-8 rounded-full">-</button>
+                            <input type="number" id="水餃Quantity" value="1" min="0" 
+                                   class="mx-2 w-12 text-center border rounded"
+                                   onchange="updateTotal()">
+                            <button onclick="changeQuantity('水餃', 1)" class="bg-green-500 text-white w-8 h-8 rounded-full">+</button>
+                        </div>
+                    </td>
+                    <td class="p-3 text-center" id="水餃Total">$80</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr class="bg-gray-100 font-bold">
+                    <td colspan="3" class="p-3 text-right">總計：</td>
+                    <td id="finalTotal" class="p-3 text-center">$380</td>
+                </tr>
+            </tfoot>
+        </table>
 
-  // 修改餐點數量
-  const updateQuantity = (id, newQuantity) => {
-    if (newQuantity < 1) {
-      // 如果數量為0，移除餐點
-      setCartItems(cartItems.filter(item => item.id !== id));
-    } else {
-      setCartItems(cartItems.map(item => 
-        item.id === id ? { ...item, quantity: newQuantity } : item
-      ));
-    }
-  };
-
-  // 移除餐點
-  const removeItem = (id) => {
-    setCartItems(cartItems.filter(item => item.id !== id));
-  };
-
-  // 應用優惠代碼
-  const applyPromoCode = () => {
-    if (validPromoCodes[promoCode]) {
-      setPromoDiscount(validPromoCodes[promoCode]);
-      alert('優惠代碼已成功套用！');
-    } else {
-      alert('無效的優惠代碼');
-      setPromoCode('');
-    }
-  };
-
-  return (
-    <div className="max-w-2xl mx-auto p-4">
-      <Card>
-        <CardHeader>
-          <CardTitle>購物車</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {/* 餐點列表 */}
-          {cartItems.map(item => (
-            <div key={item.id} className="flex items-center justify-between border-b py-2">
-              <div className="flex items-center space-x-4">
-                <span>{item.name}</span>
-                <span className="text-gray-500">NT${item.price}</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Button 
-                  variant="outline" 
-                  size="icon" 
-                  onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                >
-                  <MinusCircle className="h-4 w-4" />
-                </Button>
-                <span>{item.quantity}</span>
-                <Button 
-                  variant="outline" 
-                  size="icon" 
-                  onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                >
-                  <PlusCircle className="h-4 w-4" />
-                </Button>
-                <Button 
-                  variant="destructive" 
-                  size="icon" 
-                  onClick={() => removeItem(item.id)}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
+        <div class="mt-6 flex justify-between items-center">
+            <div>
+                <label class="mr-2">
+                    <input type="checkbox" id="pointDiscount" onchange="updateTotal()">
+                    使用點數折扣(9折)
+                </label>
+                <input type="text" id="promoCode" placeholder="輸入優惠代碼" 
+                       class="ml-2 px-2 py-1 border rounded">
+                <button onclick="applyPromoCode()" 
+                        class="ml-2 bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
+                    套用
+                </button>
             </div>
-          ))}
+        </div>
 
-          {/* 點數折扣 */}
-          <div className="flex items-center space-x-2 mt-4">
-            <Checkbox 
-              id="use-points" 
-              checked={usePoints}
-              onCheckedChange={setUsePoints}
-            />
-            <label htmlFor="use-points">
-              使用點數折扣 (可用點數: {availablePoints})
-            </label>
-          </div>
-
-          {/* 優惠代碼 */}
-          <div className="flex items-center space-x-2 mt-4">
-            <Input 
-              placeholder="輸入優惠代碼" 
-              value={promoCode}
-              onChange={(e) => setPromoCode(e.target.value)}
-            />
-            <Button onClick={applyPromoCode}>套用</Button>
-          </div>
-
-          {/* 總金額 */}
-          <div className="mt-4 text-right">
-            <div className="text-xl font-bold">
-              總金額：NT${calculateTotal()}
-            </div>
-          </div>
-
-          {/* 結帳按鈕 */}
-          <Button className="w-full mt-4">
-            前往結帳
-          </Button>
-        </CardContent>
-      </Card>
+        <div class="mt-4 text-right">
+            <p>原始總金額: <span id="originalTotal">$380</span></p>
+            <p class="text-red-600">折扣金額: <span id="discountAmount">$0</span></p>
+            <p class="text-xl font-bold text-green-700">
+                應付金額: <span id="finalPayTotal">$380</span>
+            </p>
+        </div>
     </div>
-  );
-};
 
-export default RestaurantCart;
+    <script>
+        const prices = {
+            '炒飯': 120,
+            '牛肉麵': 180,
+            '水餃': 80
+        };
+
+        function changeQuantity(item, change) {
+            const quantityInput = document.getElementById(`${item}Quantity`);
+            let currentQuantity = parseInt(quantityInput.value);
+            
+            // 確保數量不會小於0
+            currentQuantity = Math.max(0, currentQuantity + change);
+            quantityInput.value = currentQuantity;
+            
+            updateTotal();
+        }
+
+        function updateTotal() {
+            let total = 0;
+            let originalTotal = 0;
+
+            // 計算每個餐點的小計
+            Object.keys(prices).forEach(item => {
+                const quantity = parseInt(document.getElementById(`${item}Quantity`).value);
+                const itemTotal = prices[item] * quantity;
+                
+                document.getElementById(`${item}Total`).textContent = `$${itemTotal}`;
+                total += itemTotal;
+                originalTotal += itemTotal;
+            });
+
+            // 點數折扣
+            const pointDiscountChecked = document.getElementById('pointDiscount').checked;
+            const promoCode = document.getElementById('promoCode').value;
+
+            document.getElementById('originalTotal').textContent = `$${originalTotal}`;
+            
+            let discountAmount = 0;
+            let finalTotal = total;
+
+            // 點數折扣
+            if (pointDiscountChecked) {
+                discountAmount = total * 0.1;
+                finalTotal *= 0.9;
+            }
+
+            // 優惠代碼折扣
+            const promoDiscounts = {
+                'SAVE10': 0.9,
+                'FIRST50': 0.8
+            };
+
+            if (promoDiscounts[promoCode]) {
+                const promoDiscount = total * (1 - promoDiscounts[promoCode]);
+                if (promoDiscount > discountAmount) {
+                    discountAmount = total - (total * promoDiscounts[promoCode]);
+                    finalTotal = total * promoDiscounts[promoCode];
+                }
+            }
+
+            document.getElementById('discountAmount').textContent = `$${Math.round(discountAmount)}`;
+            document.getElementById('finalPayTotal').textContent = `$${Math.round(finalTotal)}`;
+            document.getElementById('finalTotal').textContent = `$${Math.round(finalTotal)}`;
+        }
+
+        function applyPromoCode() {
+            updateTotal();
+        }
+
+        // 初始化
+        updateTotal();
+    </script>
+    <script src="menu.js"></script>
+</body>
+</html>

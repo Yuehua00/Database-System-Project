@@ -1,39 +1,43 @@
-<!-- login.html (登入頁面) -->
+<!-- login.html -->
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>會員登入 - 大義麵親</title>
+    <title>會員登入/註冊</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
-        /* 沿用之前的通用樣式 */
-        /* ... */
-
         .auth-container {
+            margin-top: 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             max-width: 400px;
-            margin: 2rem auto;
             padding: 2rem;
             background: white;
             border-radius: 10px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
-
         .auth-tabs {
             display: flex;
             margin-bottom: 2rem;
             border-bottom: 2px solid #ddd;
+            margin-bottom: 30px; /* 增加 Tab 之間的距離 */
         }
 
         .tab {
-            flex: 1;
+            flex: 2;
             text-align: center;
             padding: 1rem;
             cursor: pointer;
+            font-size: 18px; /* 增加 Tab 文字的大小 */
         }
 
         .tab.active {
             border-bottom: 2px solid #4CAF50;
             color: #4CAF50;
+            font-weight: bold; /* 讓活躍的 Tab 更加醒目 */
         }
 
         .auth-form {
@@ -46,19 +50,23 @@
     </style>
 </head>
 <body>
-    <header class="header">
-        <a href="/" class="logo">大義麵親</a>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">大義麵親</a>
+            <div class="menu-icon">
+                <div class="bar1"></div>
+                <div class="bar2"></div>
+                <div class="bar3"></div>
+            </div>
+            <div class="dropdown-menu">
+                <a href="menu.html">菜單</a>
+                <a href="reservation.html">訂位</a>
+                <a href="cart.html">我的餐點</a>
+                <a href="login.html">登入/註冊</a>
+            </div>
+        </nav>
     </header>
-    <!-- <script> // 功能無法使用，待調整
-        // 當頁面載入後，顯示註冊成功的 alert
-        window.onload = function() {
-            {% if session.get('message') %}
-                alert("{{ session['message'] }}");
-                {{ session.pop('message', None) }}  // This removes the message from the session after showing it
-            {% endif %}
-        };
-    </script> -->
-    
+
     <div class="main-content">
         <div class="auth-container">
             <div class="auth-tabs">
@@ -111,5 +119,6 @@
             event.target.classList.add('active');
         }
     </script>
+    <script src="menu.js"></script>
 </body>
 </html>
