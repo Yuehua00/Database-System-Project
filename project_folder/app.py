@@ -17,9 +17,21 @@ def conn():
     except Exception as e:
         print(f"連線失敗: {e}")
         return None
-
-@app.route('/', methods=['GET', 'POST'])
+    
+@app.route('/')
 def index():
+    return render_template('index.html')
+
+@app.route('/menu')
+def menu():
+    return render_template('menu.html')
+
+@app.route('/cart')
+def cart():
+    return render_template('cart.html')
+
+@app.route('/reservation', methods=['GET', 'POST'])
+def reservation():  # Change the function name here to 'reservation'
     if request.method == 'POST':
         # 檢查是否登入
         if 'Customer_ID' not in session:
@@ -47,7 +59,7 @@ def index():
             cursor.close()
             return "預約成功"
 
-    return render_template('index.html')
+    return render_template('reservation.html')  # Render the correct reservation template
 
 # 登錄頁面
 @app.route('/login', methods=['GET', 'POST'])
@@ -81,6 +93,7 @@ def login():
             return redirect(url_for('index'))
 
     return render_template('login.html')
+
 
 
 if __name__ == '__main__':

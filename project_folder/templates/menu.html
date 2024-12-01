@@ -5,22 +5,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>大義麵親 - 菜單</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
     <header>
         <nav>
-            <a href="index.html" class="logo">大義麵親</a>
+            <a href="{{ url_for('index') }}" class="logo">大義麵親</a>
             <div class="menu-icon">
                 <div class="bar1"></div>
                 <div class="bar2"></div>
                 <div class="bar3"></div>
             </div>
             <div class="dropdown-menu">
-                <a href="menu.html">菜單</a>
-                <a href="reservation.html">訂位</a>
-                <a href="cart.html">我的餐點</a>
-                <a href="login.html">登入/註冊</a>
+                <a href="{{ url_for('menu') }}">菜單</a>
+                <a href="{{ url_for('reservation') }}">訂位</a>
+                <a href="{{ url_for('cart') }}">查看購物車</a>
+                <a href="{{ url_for('login') }}">登入/註冊</a>
             </div>
         </nav>
     </header>
@@ -55,6 +55,6 @@
             <!-- 更多菜單項目 -->
         </section>
     </main>
-    <script src="menu.js"></script>
+    <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
 </body>
 </html>
