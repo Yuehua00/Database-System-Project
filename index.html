@@ -1,45 +1,30 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>大義麵親 - 首頁</title>
-    <link rel="stylesheet" href="styles/common.css">
-    <link rel="stylesheet" href="styles/index.css">
+    <title>餐廳首頁</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header class="header">
-        <a href="index.html" class="logo">大義麵親</a>
-        <a href="member.html" class="user-icon">
-            <i>👤</i>
-        </a>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">大義麵親</a>
+            <div class="nav-links">
+                <a href="menu.html">菜單</a>
+                <a href="reservation.html">訂位</a>
+                <a href="login.html">登入/註冊</a>
+            </div>
+        </nav>
     </header>
 
-    <main class="main-content">
+    <main class="home-main">
         <section class="hero">
-            <h1>美味義大利麵專賣</h1>
-            <p>品味正宗義式美食，為您獻上最道地的義大利風味</p>
-            <div class="hero-buttons">
-                <a href="#menu" class="btn">查看菜單</a>
-                <a href="booking.html" class="btn btn-primary">立即訂位</a>
-            </div>
-        </section>
-
-        <section id="menu" class="menu-section">
-            <h2>熱門餐點</h2>
-            <div class="menu-grid">
-                <div class="menu-item"><h3>白醬野菇燻雞義大利麵</h3></div>
-                <div class="menu-item"><h3>紅醬野菇燻雞義大利麵</h3></div>
-                <div class="menu-item"><h3>青醬野菇燻雞義大利麵</h3></div>
-                <div class="menu-item"><h3>白醬蘆筍燻鮭魚義大利麵</h3></div>
-                <div class="menu-item"><h3>紅醬蘆筍燻鮭魚義大利麵</h3></div>
-                <div class="menu-item"><h3>青醬蘆筍燻鮭魚義大利麵</h3></div>
-                <div class="menu-item"><h3>白醬香蒜培根義大利麵</h3></div>
-                <div class="menu-item"><h3>紅醬香蒜培根義大利麵</h3></div>
-                <div class="menu-item"><h3>青醬香蒜培根義大利麵</h3></div>
-                <div class="menu-item"><h3>白酒蛤蜊義大利麵</h3></div>
-                <div class="menu-item"><h3>番茄肉醬義大利麵</h3></div>
-                <div class="menu-item"><h3>青醬海鮮義大利麵</h3></div>
+            <h1>歡迎光臨 大義麵親</h1>
+            <div class="cta-buttons">
+                <a href="menu.html" class="btn">查看菜單</a>
+                <a href="reservation.html" class="btn">立即訂位</a>
             </div>
         </section>
     </main>

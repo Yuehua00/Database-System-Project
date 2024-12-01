@@ -1,73 +1,61 @@
+<!-- member.html -->
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>大義麵親 - 會員專區</title>
-    <link rel="stylesheet" href="styles/common.css">
-    <link rel="stylesheet" href="styles/member.css">
+    <title>會員資料</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header class="header">
-        <a href="index.html" class="logo">大義麵親</a>
-        <a href="member.html" class="user-icon">
-            <i>👤</i>
-        </a>
+    <header>
+        <header>
+            <nav>
+                <a href="index.html" class="logo">大義麵親</a>
+                <div class="nav-links">
+                    <a href="menu.html">菜單</a>
+                    <a href="reservation.html">訂位</a>
+                    <a href="login.html">登入/註冊</a>
+                </div>
+            </nav>
+        </header>
     </header>
 
-    <main class="main-content">
-        <div class="switch-container">
-            <div class="switch-option active" id="login-tab" onclick="showTab('login')">登入</div>
-            <div class="switch-option" id="register-tab" onclick="showTab('register')">註冊</div>
-        </div>
-
-        <section id="login-section" class="tab-content">
-            <h2>登入會員</h2>
-            <form>
-                <label for="phone">電話</label>
-                <input type="tel" id="phone" name="phone" placeholder="請輸入電話" required>
-
-                <label for="password">密碼</label>
-                <input type="password" id="password" name="password" placeholder="請輸入密碼" required>
-
-                <button type="submit" class="btn btn-primary">登入</button>
-            </form>
+    <main class="member-main">
+        <section class="member-info">
+            <h2>會員資料</h2>
+            <div class="info-group">
+                <label>姓名</label>
+                <p id="member-name"></p>
+            </div>
+            <div class="info-group">
+                <label>手機號碼</label>
+                <p id="member-phone"></p>
+            </div>
+            <div class="info-group">
+                <label>電子郵件</label>
+                <p id="member-email"></p>
+            </div>
+            <div class="info-group">
+                <label>密碼</label>
+                <button class="btn change-password">修改密碼</button>
+            </div>
+            <div class="info-group">
+                <label>點數</label>
+                <p id="member-points"></p>
+            </div>
         </section>
 
-        <section id="register-section" class="tab-content" style="display: none;">
-            <h2>註冊會員</h2>
-            <form>
-                <label for="name">姓名</label>
-                <input type="text" id="name" name="name" placeholder="請輸入姓名" required>
-
-                <label for="phone">電話</label>
-                <input type="tel" id="phone" name="phone" placeholder="請輸入電話" required>
-
-                <label for="email">電子郵件</label>
-                <input type="email" id="email" name="email" placeholder="請輸入電子郵件" required>
-
-                <label for="password">密碼</label>
-                <input type="password" id="password" name="password" placeholder="請輸入密碼" required>
-
-                <button type="submit" class="btn btn-primary">註冊</button>
-            </form>
+        <section class="order-history">
+            <h2>訂單查詢</h2>
+            <div class="orders">
+                <!-- 訂單列表會動態產生 -->
+            </div>
         </section>
     </main>
 
-    <script>
-        function showTab(tab) {
-            // Remove active class from all tabs
-            document.getElementById('login-tab').classList.remove('active');
-            document.getElementById('register-tab').classList.remove('active');
-            
-            // Hide all sections
-            document.getElementById('login-section').style.display = 'none';
-            document.getElementById('register-section').style.display = 'none';
-            
-            // Show the selected tab and section
-            document.getElementById(tab + '-tab').classList.add('active');
-            document.getElementById(tab + '-section').style.display = 'block';
-        }
-    </script>
+    <footer>
+        <p>&copy; 2024 餐廳名稱</p>
+    </footer>
 </body>
 </html>

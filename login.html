@@ -1,0 +1,72 @@
+<!-- login.html -->
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>會員登入/註冊</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <header>
+            <nav>
+                <a href="index.html" class="logo">大義麵親</a>
+                <div class="nav-links">
+                    <a href="menu.html">菜單</a>
+                    <a href="reservation.html">訂位</a>
+                    <a href="login.html">登入/註冊</a>
+                </div>
+            </nav>
+        </header>
+    </header>
+
+    <main class="login-main">
+        <div class="login-container">
+            <!-- 登入表單 -->
+            <section class="login-form">
+                <h2>會員登入</h2>
+                <form>
+                    <div class="form-group">
+                        <label for="login-phone">手機號碼</label>
+                        <input type="tel" id="login-phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">密碼</label>
+                        <input type="password" id="login-password" required>
+                    </div>
+                    <button type="submit" class="btn">登入</button>
+                </form>
+            </section>
+
+            <!-- 註冊表單 -->
+            <section class="register-form">
+                <h2>註冊會員</h2>
+                <form>
+                    <div class="form-group">
+                        <label for="register-name">姓名</label>
+                        <input type="text" id="register-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-phone">手機號碼</label>
+                        <input type="tel" id="register-phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-email">電子郵件</label>
+                        <input type="email" id="register-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">密碼</label>
+                        <input type="password" id="register-password" required>
+                    </div>
+                    <button type="submit" class="btn">註冊</button>
+                </form>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 餐廳名稱</p>
+    </footer>
+</body>
+</html>
