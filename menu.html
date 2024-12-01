@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>餐廳菜單</title>
+    <title>大義麵親 - 菜單</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -25,22 +25,29 @@
     </header>
 
     <main class="menu-main">
-        <section class="menu-items">
-            <article class="menu-item">
-                <img src="placeholder.jpg" alt="餐點圖片">
-                <div class="menu-item-info">
-                    <h2>商品名稱</h2>
-                    <p class="price">NT$ 300</p>
-                    <div class="nutrition">
-                        <h3>營養標示</h3>
-                        <p>熱量: 500 kcal</p>
-                        <p>蛋白質: 20g</p>
-                        <p>脂肪: 15g</p>
-                        <p>碳水化合物: 65g</p>
-                    </div>
-                    <div class="reviews">
-                        <h3>顧客評論</h3>
-                        <!-- 評論內容 -->
+        <section class="menu-grid">
+            <article class="menu-card">
+                <div class="menu-preview">
+                    <img src="pasta1.jpg" alt="香蒜培根義大利麵">
+                    <h3>香蒜培根義大利麵</h3>
+                </div>
+                <div class="menu-details">
+                    <div class="menu-content">
+                        <p class="price">NT$ 280</p>
+                        <div class="nutrition">
+                            <h4>營養標示</h4>
+                            <p>熱量: 650 kcal</p>
+                            <p>蛋白質: 25g</p>
+                            <p>脂肪: 18g</p>
+                            <p>碳水化合物: 95g</p>
+                        </div>
+                        <div class="reviews">
+                            <h4>顧客評論</h4>
+                            <div class="review-item">
+                                <p class="review-text">「麵條彈性十足，醬料香氣四溢！」</p>
+                                <p class="review-author">- 王小明</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </article>
@@ -49,7 +56,9 @@
     </main>
 
     <footer>
-        <p>&copy; 2024 餐廳名稱</p>
+        <p>&copy; 2024 大義麵親</p>
     </footer>
+
+    <script src="menu.js"></script>
 </body>
 </html>
