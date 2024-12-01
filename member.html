@@ -16,13 +16,12 @@
     </header>
 
     <main class="main-content">
-        <section class="member-auth">
-            <h2>登入或註冊</h2>
-            <a href="#login" class="btn">登入會員</a>
-            <a href="#register" class="btn btn-primary">註冊會員</a>
-        </section>
+        <div class="switch-container">
+            <div class="switch-option active" id="login-tab" onclick="showTab('login')">登入</div>
+            <div class="switch-option" id="register-tab" onclick="showTab('register')">註冊</div>
+        </div>
 
-        <section id="login" class="login-form">
+        <section id="login-section" class="tab-content">
             <h2>登入會員</h2>
             <form>
                 <label for="phone">電話</label>
@@ -31,11 +30,11 @@
                 <label for="password">密碼</label>
                 <input type="password" id="password" name="password" placeholder="請輸入密碼" required>
 
-                <button type="submit" class="btn">登入</button>
+                <button type="submit" class="btn btn-primary">登入</button>
             </form>
         </section>
 
-        <section id="register" class="register-form">
+        <section id="register-section" class="tab-content" style="display: none;">
             <h2>註冊會員</h2>
             <form>
                 <label for="name">姓名</label>
@@ -54,5 +53,21 @@
             </form>
         </section>
     </main>
+
+    <script>
+        function showTab(tab) {
+            // Remove active class from all tabs
+            document.getElementById('login-tab').classList.remove('active');
+            document.getElementById('register-tab').classList.remove('active');
+            
+            // Hide all sections
+            document.getElementById('login-section').style.display = 'none';
+            document.getElementById('register-section').style.display = 'none';
+            
+            // Show the selected tab and section
+            document.getElementById(tab + '-tab').classList.add('active');
+            document.getElementById(tab + '-section').style.display = 'block';
+        }
+    </script>
 </body>
 </html>
