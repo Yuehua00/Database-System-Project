@@ -1,0 +1,538 @@
+/* styles.css */
+/* 全域樣式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "微軟正黑體", Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+/* 選單圖示樣式 */
+.menu-icon {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.bar1, .bar2, .bar3 {
+    width: 30px;
+    height: 3px;
+    background-color: #333;
+    transition: 0.4s;
+}
+
+/* 選單展開時的圖示動畫 */
+.menu-icon.active .bar1 {
+    transform: rotate(-45deg) translate(-6px, 6px);
+}
+
+.menu-icon.active .bar2 {
+    opacity: 0;
+}
+
+.menu-icon.active .bar3 {
+    transform: rotate(45deg) translate(-6px, -6px);
+}
+
+/* 下拉選單樣式 */
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border-radius: 5px;
+    padding: 1rem 0;
+    display: none;
+    flex-direction: column;
+    min-width: 200px;
+}
+
+.dropdown-menu.active {
+    display: flex;
+}
+
+.dropdown-menu a {
+    padding: 0.8rem 1.5rem;
+    text-decoration: none;
+    color: #333;
+    transition: background-color 0.3s;
+}
+
+.dropdown-menu a:hover {
+    background-color: #f5f5f5;
+    color: #e67e22;
+}
+
+/* 導航列樣式 */
+header {
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+    color: #333;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: #e67e22;
+}
+
+/* 主要內容區域 */
+main {
+    margin-top: 80px;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 80px auto 0;
+}
+
+/* 按鈕樣式 */
+.btn {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    background-color: #e67e22;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s;
+    font-weight: 500;
+}
+
+.btn:hover {
+    background-color: #d35400;
+    transform: translateY(-2px);
+}
+
+/* 首頁樣式 */
+.hero {
+    text-align: center;
+    padding: 6rem 0;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+    color: #2c3e50;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+}
+
+/* 訂位進度條樣式 */
+.reservation-progress {
+    display: flex;
+    justify-content: space-between;
+    margin: 2rem auto;
+    max-width: 600px;
+    position: relative;
+}
+
+.reservation-progress::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: #ddd;
+    z-index: 1;
+}
+
+.progress-step {
+    background-color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    color: #666;
+    position: relative;
+    z-index: 2;
+}
+
+.progress-step.active {
+    background-color: #e67e22;
+    color: white;
+}
+
+/* 訂位表單容器 */
+.reservation-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* 訂位步驟樣式 */
+.reservation-step {
+    display: none;
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.reservation-step.active {
+    display: block;
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* 菜單選擇區域 */
+.menu-selection {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.menu-item {
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.menu-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.quantity-control {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.quantity-btn {
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 50%;
+    background-color: #e67e22;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quantity-btn:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+}
+
+/* 購物車預覽 */
+.cart-preview {
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 2rem 0;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #ddd;
+}
+
+/* 訂單確認區域 */
+.order-summary {
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.reservation-details,
+.order-details {
+    margin-bottom: 2rem;
+}
+
+.total-section {
+    border-top: 2px solid #ddd;
+    padding-top: 1rem;
+    margin-top: 2rem;
+}
+
+.points-info {
+    margin-bottom: 1rem;
+}
+
+.total-amount {
+    text-align: right;
+}
+
+.final-total {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #e67e22;
+}
+
+/* 按鈕樣式 */
+.button-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.prev-step {
+    background-color: #6c757d;
+}
+
+.confirm-order {
+    background-color: #28a745;
+}
+
+/* 動畫效果 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 菜單卡片樣式 */
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+}
+
+.menu-card {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    cursor: pointer;
+}
+
+.menu-preview {
+    padding: 1rem;
+}
+
+.menu-preview img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.menu-preview h3 {
+    margin-top: 1rem;
+    color: #2c3e50;
+    text-align: center;
+}
+
+.menu-details {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+.menu-card.active .menu-details {
+    max-height: 1000px;
+}
+
+.menu-content {
+    padding: 1.5rem;
+}
+
+
+/* 修改登入/註冊頁面樣式 */
+.auth-container {
+    max-width: 400px;
+    margin: 2rem auto;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 2rem;
+    overflow: hidden;
+}
+
+.auth-tabs {
+    display: flex;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #eee;
+}
+
+.tab {
+    flex: 1;
+    text-align: center;
+    padding: 1rem;
+    cursor: pointer;
+}
+
+.auth-tab.active {
+    color: #e67e22;
+    border-bottom: 2px solid #e67e22;
+}
+
+.auth-form {
+    display: none;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 10px; /* 增加右側間距 */
+}
+
+.auth-form.active {
+    display: block;
+}
+
+.auth-form::-webkit-scrollbar {
+    width: 6px;
+    margin-left: 4px; /* 調整位置 */
+}
+
+.auth-form::-webkit-scrollbar-thumb {
+    background-color: #e67e22;
+    border-radius: 4px;
+}
+
+.auth-form::-webkit-scrollbar-track {
+    background-color: #f0f0f0;
+}
+
+/* 會員頁面樣式 */
+.member-info {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.info-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.info-group:last-child {
+    border-bottom: none;
+}
+
+.info-group label {
+    font-weight: 500;
+    color: #666;
+}
+
+.change-password {
+    background-color: #3498db;
+}
+
+.change-password:hover {
+    background-color: #2980b9;
+}
+
+.order-history {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.order-history h2 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+}
+
+.orders {
+    display: grid;
+    gap: 1rem;
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+    .login-container {
+        grid-template-columns: 1fr;
+    }
+
+    .menu-items {
+        grid-template-columns: 1fr;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .menu-btn {
+        display: block;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+    }
+
+    .info-group {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+}
+
+/* 動畫效果 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

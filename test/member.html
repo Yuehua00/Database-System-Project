@@ -1,0 +1,61 @@
+<!-- member.html -->
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>會員資料</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">大義麵親</a>
+            <div class="menu-icon">
+                <div class="bar1"></div>
+                <div class="bar2"></div>
+                <div class="bar3"></div>
+            </div>
+            <div class="dropdown-menu">
+                <a href="menu.html">菜單</a>
+                <a href="reservation.html">訂位</a>
+                <a href="login.html">登入/註冊</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="member-main">
+        <section class="member-info">
+            <h2>會員資料</h2>
+            <div class="info-group">
+                <label>姓名</label>
+                <p id="member-name"></p>
+            </div>
+            <div class="info-group">
+                <label>手機號碼</label>
+                <p id="member-phone"></p>
+            </div>
+            <div class="info-group">
+                <label>電子郵件</label>
+                <p id="member-email"></p>
+            </div>
+            <div class="info-group">
+                <label>密碼</label>
+                <button class="btn change-password">修改密碼</button>
+            </div>
+            <div class="info-group">
+                <label>點數</label>
+                <p id="member-points"></p>
+            </div>
+        </section>
+
+        <section class="order-history">
+            <h2>訂單查詢</h2>
+            <div class="orders">
+                <!-- 訂單列表會動態產生 -->
+            </div>
+        </section>
+    </main>
+    <script src="menu.js"></script>
+</body>
+</html>
