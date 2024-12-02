@@ -131,19 +131,28 @@ def save_reservation():
     if 'Customer_name' not in session:
         return jsonify({'status': 'error', 'message': '請先登入'})
     
-    # 獲取訂位資訊
+    # 获取订位信息
     Number_of_People = request.form.get('Number_of_People')
     Reservation_Time = request.form.get('Reservation_Time')
     TimeSlots = request.form.get('TimeSlots')
-    Customer_ID = session['Customer_ID']  # 使用 session 中的用戶 ID
+    Customer_ID = session['Customer_ID']  # 使用 session 中的用户 ID
 
-    # 假設選擇的桌位是來自前端或某些邏輯處理的結果
-    Table_ID = request.form.get('Table_ID')  # 從前端獲取選擇的桌位 ID
+    # 获取桌位 ID
+    Table_ID = request.form.get('Table_ID')
 
     if not Table_ID:
         return jsonify({'status': 'error', 'message': '請選擇桌位'})
 
-    # 儲存資料到資料庫
+    # 调试：输出接收到的表单数据
+    print("Received Data:", {
+        'Number_of_People': Number_of_People,
+        'Reservation_Time': Reservation_Time,
+        'TimeSlots': TimeSlots,
+        'Customer_ID': Customer_ID,
+        'Table_ID': Table_ID
+    })
+
+    # 存储数据到数据库
     conn_obj = conn()
     if conn_obj:
         cursor = conn_obj.cursor()
