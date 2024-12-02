@@ -6,48 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>會員登入/註冊</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <style>
-        .auth-container {
-            margin-top: 150px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            max-width: 400px;
-            padding: 2rem;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        .auth-tabs {
-            display: flex;
-            margin-bottom: 2rem;
-            border-bottom: 2px solid #ddd;
-            margin-bottom: 30px; /* 增加 Tab 之間的距離 */
-        }
-
-        .tab {
-            flex: 2;
-            text-align: center;
-            padding: 1rem;
-            cursor: pointer;
-            font-size: 18px; /* 增加 Tab 文字的大小 */
-        }
-
-        .tab.active {
-            border-bottom: 2px solid #4CAF50;
-            color: #4CAF50;
-            font-weight: bold; /* 讓活躍的 Tab 更加醒目 */
-        }
-
-        .auth-form {
-            display: none;
-        }
-
-        .auth-form.active {
-            display: block;
-        }
-    </style>
 </head>
 <body>
     <header>
@@ -67,58 +25,60 @@
         </nav>
     </header>
 
-    <div class="main-content">
-        <div class="auth-container">
-            <div class="auth-tabs">
-                <div class="tab active" onclick="showForm('login')">登入</div>
-                <div class="tab" onclick="showForm('register')">註冊</div>
+    <main class="login-main">
+        <div class="main-content">
+            <div class="auth-container">
+                <div class="auth-tabs">
+                    <div class="tab active" onclick="showForm('login')">登入</div>
+                    <div class="tab" onclick="showForm('register')">註冊</div>
+                </div>
+    
+                <!-- 登入表單 -->
+                <form class="auth-form active" id="loginForm">
+                    <div class="form-group">
+                        <label for="Customer_phoneNumber">手機號碼</label>
+                        <input type="text" id="Customer_phoneNumber" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="PWD">密碼</label>
+                        <input type="password" id="PWD" required>
+                    </div>
+                    <button type="submit" class="btn">登入</button>
+                </form>
+    
+                <!-- 註冊表單 -->
+                <form class="auth-form" id="registerForm" action="/login" method="POST">
+                    <div class="form-group">
+                        <label for="Customer_name">姓名</label>
+                        <input type="text" id="Customer_name" name="Customer_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Customer_phoneNumber">手機號碼</label>
+                        <input type="tel" id="Customer_phoneNumber" name="Customer_phoneNumber" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-email">電子郵件</label>
+                        <input type="email" id="register-email" name="register-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="PWD">密碼</label>
+                        <input type="password" id="PWD" name="PWD" required>
+                    </div>
+                    <button type="submit" class="btn">註冊</button>
+                </form>
             </div>
-
-            <!-- 登入表單 -->
-            <form class="auth-form active" id="loginForm">
-                <div class="form-group">
-                    <label for="Customer_phoneNumber">電話號碼</label>
-                    <input type="text" id="Customer_phoneNumber" required>
-                </div>
-                <div class="form-group">
-                    <label for="PWD">密碼</label>
-                    <input type="password" id="PWD" required>
-                </div>
-                <button type="submit" class="btn">登入</button>
-            </form>
-
-            <!-- 註冊表單 -->
-            <form class="auth-form" id="registerForm" action="/login" method="POST">
-                <div class="form-group">
-                    <label for="Customer_name">姓名</label>
-                    <input type="text" id="Customer_name" name="Customer_name" required>
-                </div>
-                <div class="form-group">
-                    <label for="Customer_phoneNumber">電話</label>
-                    <input type="tel" id="Customer_phoneNumber" name="Customer_phoneNumber" required>
-                </div>
-                <!-- <div class="form-group">
-                    <label for="register-email">電子郵件</label>
-                    <input type="email" id="register-email" name="register-email" required>
-                </div> -->
-                <div class="form-group">
-                    <label for="PWD">密碼</label>
-                    <input type="password" id="PWD" name="PWD" required>
-                </div>
-                <button type="submit" class="btn">註冊</button>
-            </form>
         </div>
-    </div>
-
-    <script>
-        function showForm(formType) {
-            document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
-            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            
-            document.getElementById(formType + 'Form').classList.add('active');
-            event.target.classList.add('active');
-        }
-    </script>
+    
+        <script>
+            function showForm(formType) {
+                document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
+                document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+                
+                document.getElementById(formType + 'Form').classList.add('active');
+                event.target.classList.add('active');
+            }
+        </script>
+    </main>
     <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
 </body>
 </html>

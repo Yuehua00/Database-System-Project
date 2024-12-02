@@ -26,22 +26,26 @@
     </header>
 
     <main class="reservation-main">
-        <div class="reservation-steps">
-            <!-- 步驟1：基本訂位資訊 -->
-            <section class="reservation-step" id="step1">
-                <h2>選擇訂位資訊</h2>
+        <div class="reservation-progress">
+            <div class="progress-step active" data-step="1">基本資訊</div>
+            <div class="progress-step" data-step="2">選擇餐點</div>
+            <div class="progress-step" data-step="3">確認訂單</div>
+        </div>
+
+        <div class="reservation-container">
+            <!-- 步驟1：訂位資訊 -->
+            <section class="reservation-step active" id="step1">
+                <h2>訂位資訊</h2>
                 <form class="booking-form" action="/" method="POST">
-                <form id="reservationForm1">
+                <form id="reservationForm">
                     <div class="form-group">
                         <label for="people">用餐人數</label>
                         <select id="people" required>
                             <option value="">請選擇人數</option>
                             <option value="1">1人</option>
                             <option value="2">2人</option>
-                            <option value="2">3人</option>
-                            <option value="2">4人</option>
-                            <option value="2">5人</option>
-                            <option value="2">6人</option>
+                            <option value="3">3人</option>
+                            <option value="4">4人</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -49,49 +53,66 @@
                         <input type="date" id="date" required>
                     </div>
                     <div class="form-group">
-                        <label for="time">用餐時段</label>
-                        <select id="time" required>
+                        <label for="timeSlot">用餐時段</label>
+                        <select id="timeSlot" required>
                             <option value="">請選擇時段</option>
                             <option value="lunch">午餐 (11:30-14:00)</option>
                             <option value="afternoon">下午茶 (14:30-17:00)</option>
                             <option value="dinner">晚餐 (17:30-21:00)</option>
                         </select>
                     </div>
-                    <button type="button" class="btn next-step">繼續</button>
+                    <button type="button" class="btn next-step" data-next="2">繼續</button>
                 </form>
             </section>
 
-            <!-- 步驟2：選擇菜色 -->
-            <section class="reservation-step hidden" id="step2">
+            <!-- 步驟2：選擇餐點 -->
+            <section class="reservation-step" id="step2">
                 <h2>選擇餐點</h2>
                 <div class="menu-selection">
-                    <div class="menu-item">
-                        <h3>商品名稱</h3>
-                        <p class="price">NT$ 300</p>
-                        <div class="quantity-control">
-                            <button class="decrease">-</button>
-                            <span class="quantity">0</span>
-                            <button class="increase">+</button>
-                        </div>
-                    </div>
-                    <!-- 更多餐點項目 -->
+                    <!-- 菜單項目會由JavaScript動態生成 -->
                 </div>
-                <button type="button" class="btn next-step">繼續</button>
+                <div class="cart-preview">
+                    <h3>已選餐點</h3>
+                    <div class="cart-items">
+                        <!-- 購物車內容會由JavaScript動態生成 -->
+                    </div>
+                </div>
+                <button type="button" class="btn prev-step" data-prev="1">返回</button>
+                <button type="button" class="btn next-step" data-next="3">繼續</button>
             </section>
 
             <!-- 步驟3：確認訂單 -->
-            <section class="reservation-step hidden" id="step3">
+            <section class="reservation-step" id="step3">
                 <h2>確認訂單</h2>
                 <div class="order-summary">
-                    <div class="cart-items">
-                        <!-- 購物車內容會動態產生 -->
+                    <div class="reservation-details">
+                        <h3>訂位資訊</h3>
+                        <p>用餐人數: <span id="summary-people"></span></p>
+                        <p>用餐日期: <span id="summary-date"></span></p>
+                        <p>用餐時段: <span id="summary-time"></span></p>
                     </div>
-                    <div class="total-amount">
-                        <p>總金額：<span id="total">NT$ 0</span></p>
-                        <p>可用點數：<span id="points">0</span></p>
+                    <div class="order-details">
+                        <h3>訂購餐點</h3>
+                        <div id="summary-items">
+                            <!-- 訂單內容會由JavaScript動態生成 -->
+                        </div>
+                    </div>
+                    <div class="total-section">
+                        <div class="points-info">
+                            <p>可用點數: <span id="available-points">0</span></p>
+                            <label>
+                                <input type="checkbox" id="use-points"> 使用點數折抵
+                            </label>
+                        </div>
+                        <div class="total-amount">
+                            <p>小計: NT$ <span id="subtotal">0</span></p>
+                            <p>點數折抵: -NT$ <span id="points-discount">0</span></p>
+                            <p class="final-total">總計: NT$ <span id="total">0</span></p>
+                        </div>
                     </div>
                 </div>
-                <button type="button" class="btn confirm-order">確認訂單</button>
+                <button type="button" class="btn prev-step" data-prev="2">返回</button>
+                <button type="button" class="btn confirm-order">確認訂位</button>
             </section>
         </div>
     </main>
