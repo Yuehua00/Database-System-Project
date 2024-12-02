@@ -64,7 +64,12 @@
                 </form>
             </div>
         </div>
-
+        <!-- 顯示錯誤訊息 -->
+        {% if error %}
+        <script>
+            alert("{{ error }}");
+        </script>
+        {% endif %}
         <script>
             function showForm(formType) {
                 document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
