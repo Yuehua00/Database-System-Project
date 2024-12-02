@@ -45,7 +45,7 @@ while len(unique_phone_numbers) < 2000:
 i = 0
 
 # 將唯一的電話號碼寫入 output.txt
-with open("customer.txt", "w") as file:
+with open("sql/data/customer.txt", "w") as file:
     for phone_number in unique_phone_numbers:
 
         i += 1

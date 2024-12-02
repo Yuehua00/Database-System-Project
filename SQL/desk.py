@@ -1,4 +1,4 @@
-with open('desk.txt', 'w') as file:
+with open('sql/data/desk.txt', 'w') as file:
     for n in range(1, 51):
         if n <= 20:
             a = 2

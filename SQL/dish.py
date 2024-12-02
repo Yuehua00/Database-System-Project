@@ -39,7 +39,7 @@ categories = {
 
 cnt = 0
 
-with open('dish.sql', 'w', encoding='utf-8') as file:
+with open('sql/data/dish.sql', 'w', encoding='utf-8') as file:
     # 處理義大利麵項目
     for i in b:
         for j in a:

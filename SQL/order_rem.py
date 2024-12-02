@@ -9,7 +9,7 @@ dish_prices = {
 
 orders = {}
 
-with open('includes.sql', 'r', encoding='utf-8') as file:
+with open('sql/data/includes.sql', 'r', encoding='utf-8') as file:
     for line in file:
         line = line.strip()
         if line.startswith("insert into includes"):
@@ -23,7 +23,7 @@ with open('includes.sql', 'r', encoding='utf-8') as file:
                     orders[reservation_id] = []
                 orders[reservation_id].append(dish_id)
 
-with open('order_rem.sql', 'w', encoding='utf-8') as file:
+with open('sql/data/order_rem.sql', 'w', encoding='utf-8') as file:
     for reservation_id, dish_ids in orders.items():
         total_price = 0
 
