@@ -25,7 +25,7 @@ CREATE TABLE desk (
 );
 	
 CREATE TABLE Reservation (
-	Reservation_ID INT,
+	Reservation_ID INT IDENTITY(1,1),
 	TimeSlots VARCHAR(100) NOT NULL,  /* 中午 下午 晚上 */
 	Number_of_People INT NOT NULL,
 	Reservation_Time DATETIME NOT NULL, /* 格式 : YYYY-MM-DD HH:MI:SS */

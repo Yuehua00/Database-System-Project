@@ -128,26 +128,37 @@ def member():
 
 @app.route('/save_reservation', methods=['POST'])
 def save_reservation():
-    if 'Customer_phoneNumber' not in session:
+    if 'Customer_name' not in session:
         return jsonify({'status': 'error', 'message': '請先登入'})
     
-    people = request.form.get('people')
-    date = request.form.get('date')
-    timeSlot = request.form.get('timeSlot')
-    customer_phone = session['Customer_phoneNumber']  # 使用 session 中的用戶手機號碼
-    
+    # 獲取訂位資訊
+    Number_of_People = request.form.get('Number_of_People')
+    Reservation_Time = request.form.get('Reservation_Time')
+    TimeSlots = request.form.get('TimeSlots')
+    Customer_ID = session['Customer_ID']  # 使用 session 中的用戶 ID
+
+    # 假設選擇的桌位是來自前端或某些邏輯處理的結果
+    Table_ID = request.form.get('Table_ID')  # 從前端獲取選擇的桌位 ID
+
+    if not Table_ID:
+        return jsonify({'status': 'error', 'message': '請選擇桌位'})
+
     # 儲存資料到資料庫
     conn_obj = conn()
     if conn_obj:
         cursor = conn_obj.cursor()
-        query = "INSERT INTO Reservations (Customer_phoneNumber, people, date, timeSlot) VALUES (?, ?, ?, ?)"
-        cursor.execute(query, (customer_phone, people, date, timeSlot))
+        query = """
+            INSERT INTO Reservation (TimeSlots, Number_of_People, Reservation_Time, Customer_ID, Table_ID)
+            VALUES (?, ?, ?, ?, ?)
+        """
+        cursor.execute(query, (TimeSlots, Number_of_People, Reservation_Time, Customer_ID, Table_ID))
         conn_obj.commit()
         cursor.close()
         
         return jsonify({'status': 'success', 'message': '訂位資訊儲存成功'})
     
     return jsonify({'status': 'error', 'message': '資料庫儲存失敗'})
+
 
 
 if __name__ == '__main__':
