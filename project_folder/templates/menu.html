@@ -80,6 +80,20 @@
             </article>
             <!-- 更多菜單項目 -->
         </section>
+        <script>
+        document.querySelectorAll('.menu-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                // 關閉其他卡片
+                document.querySelectorAll('.menu-card').forEach(c => {
+                    if (c !== this) {
+                        c.classList.remove('active');
+                    }
+                });
+                // 切換當前卡片的 active 狀態
+                this.classList.toggle('active');
+            });
+        });
+    </script>
     </main>
     <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
 </body>
