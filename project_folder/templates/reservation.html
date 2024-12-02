@@ -143,7 +143,7 @@
         const formData = new FormData(reservationForm);
         
             // 確認表單是否正確填寫
-            if (formData.get('people') && formData.get('date') && formData.get('timeSlot')) {
+            if (formData.get('Number_of_People') && formData.get('Reservation_Time') && formData.get('TimeSlots')) {
                 try {
                     const response = await fetch('/save_reservation', {
                         method: 'POST',
@@ -160,7 +160,7 @@
                     }
                 } catch (error) {
                     console.error('Error:', error);
-                    alert('提交訂位資料失敗，請稍後再試');
+                    alert(result.message);
                 }
             } else {
                 alert('請填寫所有必填欄位');
