@@ -68,7 +68,6 @@ def login():
         Customer_phoneNumber = request.form.get('Customer_phoneNumber')
         PWD = request.form.get('PWD')
         
-        # 假設資料庫有一個用戶表格，檢查用戶名和密碼是否匹配
         conn_obj = conn()
         if conn_obj:
             cursor = conn_obj.cursor()
@@ -77,20 +76,18 @@ def login():
             existing_user = cursor.fetchone()
 
             if existing_user:
-                # 檢查密碼是否正確
                 if existing_user[2] == PWD:
-                    # 登入成功，儲存用戶名和其他資料到 session
+                    # 登入成功，儲存用戶名稱到 session
                     session['Customer_phoneNumber'] = Customer_phoneNumber
                     session['Customer_name'] = existing_user[1]  # 假設用戶名是第二個欄位
                     return jsonify({'status': 'success', 'message': '登入成功！'})
                 else:
-                    # 密碼錯誤
                     return jsonify({'status': 'error', 'message': '密碼錯誤，請重新輸入。'})
             else:
-                # 用戶不存在
                 return jsonify({'status': 'error', 'message': '該手機號碼尚未註冊，請先註冊。'})
             cursor.close()
     return render_template('login.html')
+
 
 
 @app.route('/register', methods=['POST'])
@@ -123,6 +120,11 @@ def logout():
     session.pop('Customer_name', None)  # 清除用戶名
     return redirect(url_for('index'))  # 重新導向到首頁
 
+@app.route('/member')
+def member():
+    if 'Customer_name' not in session:
+        return redirect(url_for('login'))  # 未登入則跳轉到登入頁面
+    return render_template('member.html', customer_name=session['Customer_name'])
 
 
 
