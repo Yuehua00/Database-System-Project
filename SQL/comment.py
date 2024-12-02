@@ -21,27 +21,31 @@ neutral_comments = [
 ]
 
 with open('sql/comment.sql', 'w', encoding='utf-8') as file:
-    for id in range(1, 1001):
+    for id in range(1, 5001):
 
         # 根據評論內容決定星等
-        if random.random() < 0.15:
-            # 15% 機率選擇負面評論，並給予 1 或 2 顆星
+        if random.random() < 0.1:
+            # 10% 機率選擇負面評論，並給予 1 或 2 顆星
             star = random.randint(1, 2)
             comment = random.choice(negative_comments)
-        elif random.random() < 0.4:
-            # 25% 機率選擇中立評論，並給予 3 顆星
+        elif random.random() < 0.2:
+            # 10% 機率選擇中立評論，並給予 3 顆星
             star = 3
             comment = random.choice(neutral_comments)
+        elif random.random() < 0.5:
+            # 30% 機率選擇中立評論，並給予 4 顆星
+            star = 4
+            comment = random.choice(positive_comments)
         else:
-            # 60% 機率選擇正面評論，並給予 4 或 5 顆星
-            star = random.randint(4, 5)
+            # 50% 機率選擇正面評論，並給予 5 顆星
+            star = 5
             comment = random.choice(positive_comments)
 
         # 隨機選擇顧客ID
         customer_id = random.randint(1, 2000)
 
         # 確保評論時間遞增，並且不超過結束日期
-        delta_days = random.randint(0, 2)  # 生成 0 到 2 天之間的隨機時間差
+        delta_days = random.randint(0, 1)  # 生成 0 到 2 天之間的隨機時間差
         last_comment_time += timedelta(days=delta_days)  # 新的評論時間加上隨機天數
 
         # 確保最後的時間不超過 end_date
