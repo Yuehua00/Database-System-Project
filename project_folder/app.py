@@ -76,7 +76,7 @@ def login():
             existing_user = cursor.fetchone()
 
             if existing_user:
-                if existing_user[2] == PWD:
+                if existing_user['PWD'] == PWD:
                     # 登入成功，儲存用戶名稱到 session
                     session['Customer_phoneNumber'] = Customer_phoneNumber
                     session['Customer_name'] = existing_user[1]  # 假設用戶名是第二個欄位
