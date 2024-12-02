@@ -31,18 +31,20 @@ def cart():
     return render_template('cart.html')
 
 @app.route('/reservation', methods=['GET', 'POST'])
-def reservation():
+def reservation():  # Change the function name here to 'reservation'
     if request.method == 'POST':
         # 檢查是否登入
         if 'Customer_ID' not in session:
-            return redirect(url_for('login'))  # 若未登入，跳轉到登入頁
+            # 如果未登入，跳轉到登入頁面
+            return redirect(url_for('login'))
         
-        # 預約操作
+        # 如果已登入，進行預約操作
         Number_of_People = request.form['Number_of_People']
         TimeSlots = request.form['TimeSlots']
         Reservation_Time = request.form['Reservation_Time']
         customer_id = session['Customer_ID']  # 從 session 獲取 Customer_ID
         
+        # 進行預約操作（插入資料）
         conn_obj = conn()
         if conn_obj:
             cursor = conn_obj.cursor()
@@ -50,42 +52,49 @@ def reservation():
                 INSERT INTO Reservation (Reservation_ID, TimeSlots, Number_of_People, Reservation_Time, Customer_ID, Table_ID)
                 VALUES (?, ?, ?, ?, ?, ?)
             """
-            table_id = 1  # 假設預設為桌號 1
+            # 假設 table_id 是事先查詢到的有效桌號
+            table_id = 1  
             cursor.execute(insert_query, (None, TimeSlots, Number_of_People, Reservation_Time, customer_id, table_id))
             conn_obj.commit()
             cursor.close()
             return "預約成功"
-    return render_template('reservation.html')
 
-# 登入頁面
+    return render_template('reservation.html')  # Render the correct reservation template
+
+# 登錄頁面
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         Customer_phoneNumber = request.form.get('Customer_phoneNumber')
         PWD = request.form.get('PWD')
         
-        print(f"Received login data: {Customer_phoneNumber}, {PWD}")  # 確保收到資料
-        
+        # 假設資料庫有一個用戶表格，檢查用戶名和密碼是否匹配
         conn_obj = conn()
         if conn_obj:
             cursor = conn_obj.cursor()
+            # 查詢用戶的資料
             query_check = "SELECT * FROM Customer WHERE Customer_phoneNumber = ?"
             cursor.execute(query_check, (Customer_phoneNumber,))
             existing_user = cursor.fetchone()
 
             if existing_user:
-                # 密碼比對
-                if existing_user[3] == PWD:  # 假設 PWD 在第三欄，根據您的資料庫結構可能會有所不同
-                    session['Customer_phoneNumber'] = Customer_phoneNumber
-                    session['Customer_ID'] = existing_user[0]  # 假設 Customer_ID 是第一欄
+                # 檢查密碼是否正確
+                if existing_user['PWD'] == PWD:
+                    # 登入成功
+                    session['Customer_phoneNumber'] = Customer_phoneNumber  # 儲存用戶資料到 session
                     session['message'] = '登入成功！'
-                    return redirect(url_for('index'))  # 成功後跳轉到主頁
+                    return render_template('index.html')  # 成功後跳轉到主頁或儀表板
                 else:
+                    # 密碼錯誤
                     return "密碼錯誤，請重新輸入。", 400
             else:
+                # 用戶不存在
                 return "該手機號碼尚未註冊，請先註冊。", 400
             cursor.close()
     return render_template('login.html')
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
