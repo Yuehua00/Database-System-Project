@@ -72,7 +72,6 @@ def login():
         conn_obj = conn()
         if conn_obj:
             cursor = conn_obj.cursor()
-            # 查詢用戶的資料
             query_check = "SELECT * FROM Customer WHERE Customer_phoneNumber = ?"
             cursor.execute(query_check, (Customer_phoneNumber,))
             existing_user = cursor.fetchone()
@@ -83,7 +82,7 @@ def login():
                     # 登入成功
                     session['Customer_phoneNumber'] = Customer_phoneNumber  # 儲存用戶資料到 session
                     session['message'] = '登入成功！'
-                    return render_template('index.html')  # 成功後跳轉到主頁或儀表板
+                    return jsonify({'status': 'success', 'message': '登入成功！'})  # 返回 JSON 格式的成功訊息
                 else:
                     # 密碼錯誤
                     return jsonify({'status': 'error', 'message': '密碼錯誤，請重新輸入。'})
@@ -92,6 +91,7 @@ def login():
                 return jsonify({'status': 'error', 'message': '該手機號碼尚未註冊，請先註冊。'})
             cursor.close()
     return render_template('login.html')
+
 
 @app.route('/register', methods=['POST'])
 def register():
