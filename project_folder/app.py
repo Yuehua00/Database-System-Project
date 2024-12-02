@@ -82,14 +82,15 @@ def login():
                 if existing_user['PWD'] == PWD:
                     # 登入成功
                     session['Customer_phoneNumber'] = Customer_phoneNumber  # 儲存用戶資料到 session
-                    session['message'] = '登入成功！'
-                    return render_template('index.html')  # 成功後跳轉到主頁或儀表板
+                    flash('登入成功！', 'success')  # 使用 flash 顯示成功訊息
+                    return redirect(url_for('index'))  # 成功後跳轉到主頁或儀表板
                 else:
                     # 密碼錯誤
-                    return "密碼錯誤，請重新輸入。", 400
+                    flash("密碼錯誤，請重新輸入。", 'error')  # 顯示錯誤訊息
             else:
                 # 用戶不存在
-                return "該手機號碼尚未註冊，請先註冊。", 400
+                flash("該手機號碼尚未註冊，請先註冊。", 'error')  # 顯示錯誤訊息
+
             cursor.close()
     return render_template('login.html')
 
