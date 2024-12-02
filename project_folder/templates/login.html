@@ -9,7 +9,6 @@
 <body>
     <header>
         <nav>
-            <a href="{{ url_for('index') }}" class="logo">大義麵親</a>
             <div class="menu-icon">
                 <div class="bar1"></div>
                 <div class="bar2"></div>
@@ -19,10 +18,19 @@
                 <a href="{{ url_for('menu') }}">菜單</a>
                 <a href="{{ url_for('reservation') }}">訂位</a>
                 <a href="{{ url_for('cart') }}">查看購物車</a>
-                <a href="{{ url_for('login') }}">登入/註冊</a>
+    
+                {% if 'Customer_name' in session %}
+                    <!-- 顯示用戶名稱和登出選項 -->
+                    <span>歡迎, {{ session['Customer_name'] }}!</span>
+                    <a href="{{ url_for('logout') }}">登出</a>
+                {% else %}
+                    <!-- 顯示登入註冊選項 -->
+                    <a href="{{ url_for('login') }}">登入/註冊</a>
+                {% endif %}
             </div>
         </nav>
     </header>
+    
 
     <main class="login-main">
         <div class="main-content">

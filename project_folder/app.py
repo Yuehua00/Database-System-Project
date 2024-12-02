@@ -79,10 +79,10 @@ def login():
             if existing_user:
                 # 檢查密碼是否正確
                 if existing_user[2] == PWD:
-                    # 登入成功
-                    session['Customer_phoneNumber'] = Customer_phoneNumber  # 儲存用戶資料到 session
-                    session['message'] = '登入成功！'
-                    return jsonify({'status': 'success', 'message': '登入成功！'})  # 返回 JSON 格式的成功訊息
+                    # 登入成功，儲存用戶名和其他資料到 session
+                    session['Customer_phoneNumber'] = Customer_phoneNumber
+                    session['Customer_name'] = existing_user[1]  # 假設用戶名是第二個欄位
+                    return jsonify({'status': 'success', 'message': '登入成功！'})
                 else:
                     # 密碼錯誤
                     return jsonify({'status': 'error', 'message': '密碼錯誤，請重新輸入。'})
@@ -117,6 +117,11 @@ def register():
                 return jsonify({'status': 'success', 'message': '註冊成功，請登入。'})
         return jsonify({'status': 'error', 'message': '資料庫連接失敗。'})
 
+@app.route('/logout')
+def logout():
+    session.pop('Customer_phoneNumber', None)  # 清除登入的電話號碼
+    session.pop('Customer_name', None)  # 清除用戶名
+    return redirect(url_for('index'))  # 重新導向到首頁
 
 
 
