@@ -64,12 +64,26 @@
                 </form>
             </div>
         </div>
-        <!-- 顯示錯誤訊息 -->
-        {% if error %}
         <script>
-            alert("{{ error }}");
+            const form = document.getElementById('loginForm');
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault(); // 阻止表單默認提交行為
+    
+                const formData = new FormData(form);
+                const response = await fetch('{{ url_for("login") }}', {
+                    method: 'POST',
+                    body: formData
+                });
+    
+                const result = await response.json();
+                if (result.status === 'success') {
+                    alert(result.message);
+                    window.location.href = '/'; // 登入成功後跳轉
+                } else {
+                    alert(result.message); // 顯示錯誤訊息
+                }
+            });
         </script>
-        {% endif %}
         <script>
             function showForm(formType) {
                 document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));

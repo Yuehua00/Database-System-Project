@@ -86,10 +86,10 @@ def login():
                     return render_template('index.html')  # 成功後跳轉到主頁或儀表板
                 else:
                     # 密碼錯誤
-                    return render_template('login.html', error="密碼錯誤，請重新輸入。")
+                    return jsonify({'status': 'error', 'message': '密碼錯誤，請重新輸入。'})
             else:
                 # 用戶不存在
-                return "該手機號碼尚未註冊，請先註冊。", 400
+                return jsonify({'status': 'error', 'message': '該手機號碼尚未註冊，請先註冊。'})
             cursor.close()
     return render_template('login.html')
 
