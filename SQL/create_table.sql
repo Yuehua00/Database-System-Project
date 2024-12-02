@@ -75,5 +75,6 @@ CREATE TABLE Comment (
 	Star INT,
 	Comment_Time DATETIME NOT NULL,
 	PRIMARY KEY(Comment_ID),
+	Dish_ID INT,
 	Customer_ID INT FOREIGN KEY REFERENCES Customer
 );
