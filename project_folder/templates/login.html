@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>會員登入/註冊</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        .welcome-message {
+            font-size: 16px;
+            color: #4CAF50; /* 綠色 */
+            font-weight: bold;
+            margin-right: 20px;
+        }
+
+    </style>
 </head>
 <body>
     <header>
@@ -17,8 +26,9 @@
             </div>
             <div class="dropdown-menu">
                 {% if 'Customer_name' in session %}
-                    <span>歡迎, {{ session['Customer_name'] }}!</span>
+                    <span class="welcome-message">歡迎, {{ session['Customer_name'] }}!</span>
                 {% endif %}
+
                 <a href="{{ url_for('menu') }}">菜單</a>
                 <a href="{{ url_for('reservation') }}">訂位</a>
                 <a href="{{ url_for('cart') }}">查看購物車</a>
