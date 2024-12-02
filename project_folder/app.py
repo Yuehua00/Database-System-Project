@@ -79,7 +79,7 @@ def login():
 
             if existing_user:
                 # 檢查密碼是否正確
-                if existing_user['PWD'] == PWD:
+                if existing_user[2] == PWD:
                     # 登入成功
                     session['Customer_phoneNumber'] = Customer_phoneNumber  # 儲存用戶資料到 session
                     session['message'] = '登入成功！'
