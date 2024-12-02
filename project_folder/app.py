@@ -126,6 +126,28 @@ def member():
         return redirect(url_for('login'))  # 未登入則跳轉到登入頁面
     return render_template('member.html', customer_name=session['Customer_name'])
 
+@app.route('/save_reservation', methods=['POST'])
+def save_reservation():
+    if 'Customer_phoneNumber' not in session:
+        return jsonify({'status': 'error', 'message': '請先登入'})
+    
+    people = request.form.get('people')
+    date = request.form.get('date')
+    timeSlot = request.form.get('timeSlot')
+    customer_phone = session['Customer_phoneNumber']  # 使用 session 中的用戶手機號碼
+    
+    # 儲存資料到資料庫
+    conn_obj = conn()
+    if conn_obj:
+        cursor = conn_obj.cursor()
+        query = "INSERT INTO Reservations (Customer_phoneNumber, people, date, timeSlot) VALUES (?, ?, ?, ?)"
+        cursor.execute(query, (customer_phone, people, date, timeSlot))
+        conn_obj.commit()
+        cursor.close()
+        
+        return jsonify({'status': 'success', 'message': '訂位資訊儲存成功'})
+    
+    return jsonify({'status': 'error', 'message': '資料庫儲存失敗'})
 
 
 if __name__ == '__main__':
