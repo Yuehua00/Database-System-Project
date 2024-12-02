@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 import pyodbc
 
 app = Flask(__name__)
@@ -65,11 +65,9 @@ def reservation():  # Change the function name here to 'reservation'
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        Customer_name = request.form.get('Customer_name')
         Customer_phoneNumber = request.form.get('Customer_phoneNumber')
         PWD = request.form.get('PWD')
         
-        # 假設資料庫有一個用戶表格，檢查用戶名和密碼是否匹配
         conn_obj = conn()
         if conn_obj:
             cursor = conn_obj.cursor()
@@ -78,22 +76,78 @@ def login():
             existing_user = cursor.fetchone()
 
             if existing_user:
-                # 電話已存在
-                return "電話號碼已被註冊，請使用其他電話號碼。"
-            
-            # 插入新用戶資料
-            insert_query = "INSERT INTO Customer (Customer_name, Customer_phoneNumber, PWD, Points) VALUES (?, ?, ?, ?)"
-            cursor.execute(insert_query, (Customer_name, Customer_phoneNumber, PWD, 0))
-            conn_obj.commit()
+                if existing_user[3] == PWD:
+                    # 登入成功，儲存用戶名稱到 session
+                    session['Customer_phoneNumber'] = Customer_phoneNumber
+                    session['Customer_name'] = existing_user[1]  # 假設用戶名是第二個欄位
+                    return jsonify({'status': 'success', 'message': '登入成功！'})
+                else:
+                    return jsonify({'status': 'error', 'message': '密碼錯誤，請重新輸入。'})
+            else:
+                return jsonify({'status': 'error', 'message': '該手機號碼尚未註冊，請先註冊。'})
             cursor.close()
-            session['message'] = '註冊成功！'
-            
-            # 註冊成功，跳轉到登入頁面
-            #return redirect(url_for('login'))
-            return redirect(url_for('index'))
-
     return render_template('login.html')
 
+
+
+@app.route('/register', methods=['POST'])
+def register():
+    if request.method == 'POST':
+        Customer_name = request.form.get('Customer_name')
+        Customer_phoneNumber = request.form.get('Customer_phoneNumber')
+        PWD = request.form.get('PWD')
+        
+        conn_obj = conn()
+        if conn_obj:
+            cursor = conn_obj.cursor()
+            query_check = "SELECT * FROM Customer WHERE Customer_phoneNumber = ?"
+            cursor.execute(query_check, (Customer_phoneNumber,))
+            existing_user = cursor.fetchone()
+
+            if existing_user:
+                return jsonify({'status': 'error', 'message': '該手機號碼已被註冊，請使用其他號碼。'})
+            else:
+                insert_query = "INSERT INTO Customer (Customer_name, Customer_phoneNumber, PWD) VALUES (?, ?, ?)"
+                cursor.execute(insert_query, (Customer_name, Customer_phoneNumber, PWD))
+                conn_obj.commit()
+                cursor.close()
+                return jsonify({'status': 'success', 'message': '註冊成功，請登入。'})
+        return jsonify({'status': 'error', 'message': '資料庫連接失敗。'})
+
+@app.route('/logout')
+def logout():
+    session.pop('Customer_phoneNumber', None)  # 清除登入的電話號碼
+    session.pop('Customer_name', None)  # 清除用戶名
+    return redirect(url_for('index'))  # 重新導向到首頁
+
+@app.route('/member')
+def member():
+    if 'Customer_name' not in session:
+        return redirect(url_for('login'))  # 未登入則跳轉到登入頁面
+    return render_template('member.html', customer_name=session['Customer_name'])
+
+@app.route('/save_reservation', methods=['POST'])
+def save_reservation():
+    if 'Customer_phoneNumber' not in session:
+        return jsonify({'status': 'error', 'message': '請先登入'})
+    
+    people = request.form.get('people')
+    date = request.form.get('date')
+    timeSlot = request.form.get('timeSlot')
+    customer_phone = session['Customer_phoneNumber']  # 使用 session 中的用戶手機號碼
+    
+    # 儲存資料到資料庫
+    conn_obj = conn()
+    if conn_obj:
+        cursor = conn_obj.cursor()
+        query = "INSERT INTO Reservations (Customer_phoneNumber, people, date, timeSlot) VALUES (?, ?, ?, ?)"
+        cursor.execute(query, (customer_phone, people, date, timeSlot))
+        conn_obj.commit()
+        cursor.close()
+        
+        return jsonify({'status': 'success', 'message': '訂位資訊儲存成功'})
+    
+    return jsonify({'status': 'error', 'message': '資料庫儲存失敗'})
 
 
 if __name__ == '__main__':

@@ -6,6 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>大義麵親 - 菜單</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        .welcome-message {
+            font-size: 16px;
+            color: #4CAF50; /* 綠色 */
+            font-weight: bold;
+            margin-right: 20px;
+        }
+
+    </style>
 </head>
 <body>
     <header>
@@ -17,10 +26,22 @@
                 <div class="bar3"></div>
             </div>
             <div class="dropdown-menu">
+                {% if 'Customer_name' in session %}
+                    <span class="welcome-message">歡迎, {{ session['Customer_name'] }}!</span>
+                {% endif %}
+
                 <a href="{{ url_for('menu') }}">菜單</a>
                 <a href="{{ url_for('reservation') }}">訂位</a>
                 <a href="{{ url_for('cart') }}">查看購物車</a>
-                <a href="{{ url_for('login') }}">登入/註冊</a>
+                
+                {% if 'Customer_name' in session %}
+                    <!-- 已登入顯示的內容 -->
+                    <a href="{{ url_for('member') }}">會員頁面</a>
+                    <a href="{{ url_for('logout') }}">登出</a>
+                {% else %}
+                    <!-- 未登入顯示的內容 -->
+                    <a href="{{ url_for('login') }}">登入/註冊</a>
+                {% endif %}
             </div>
         </nav>
     </header>
@@ -29,8 +50,34 @@
         <section class="menu-grid">
             <article class="menu-card">
                 <div class="menu-preview">
-                    <img src="pasta1.jpg" alt="香蒜培根義大利麵">
-                    <h3>香蒜培根義大利麵</h3>
+                    <img src="static/images/主餐/白醬香蒜培根義大利麵.jpg" alt="白醬香蒜培根義大利麵">
+        <h3>白醬香蒜培根義大利麵</h3>
+                </div>
+                <div class="menu-details">
+                    <div class="menu-content">
+                        <p class="price">NT$ 280</p>
+                        <div class="nutrition">
+                            <h4>營養標示</h4>
+                            <p>熱量: 650 kcal</p>
+                            <p>蛋白質: 25g</p>
+                            <p>脂肪: 18g</p>
+                            <p>碳水化合物: 95g</p>
+                        </div>
+                        <div class="reviews">
+                            <h4>顧客評論</h4>
+                            <div class="review-item">
+                                <p class="review-text">「麵條彈性十足，醬料香氣四溢！」</p>
+                                <p class="review-author">- 王小明</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            <!-- 更多菜單項目 -->
+                        <article class="menu-card">
+                <div class="menu-preview">
+                    <img src="static/images/主餐/白醬野菇燻雞義大利麵.jpg" alt="白醬野菇燻雞義大利麵">
+        <h3>白醬野菇燻雞義大利麵</h3>
                 </div>
                 <div class="menu-details">
                     <div class="menu-content">
@@ -54,6 +101,8 @@
             </article>
             <!-- 更多菜單項目 -->
         </section>
+
+    </script>
     </main>
     <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
 </body>

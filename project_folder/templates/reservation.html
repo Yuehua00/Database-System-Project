@@ -6,6 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>線上訂位</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        .welcome-message {
+            font-size: 16px;
+            color: #4CAF50; /* 綠色 */
+            font-weight: bold;
+            margin-right: 20px;
+        }
+
+    </style>
 </head>
 <body>
     <header>
@@ -17,10 +26,22 @@
                 <div class="bar3"></div>
             </div>
             <div class="dropdown-menu">
+                {% if 'Customer_name' in session %}
+                    <span class="welcome-message">歡迎, {{ session['Customer_name'] }}!</span>
+                {% endif %}
+
                 <a href="{{ url_for('menu') }}">菜單</a>
                 <a href="{{ url_for('reservation') }}">訂位</a>
                 <a href="{{ url_for('cart') }}">查看購物車</a>
-                <a href="{{ url_for('login') }}">登入/註冊</a>
+                
+                {% if 'Customer_name' in session %}
+                    <!-- 已登入顯示的內容 -->
+                    <a href="{{ url_for('member') }}">會員頁面</a>
+                    <a href="{{ url_for('logout') }}">登出</a>
+                {% else %}
+                    <!-- 未登入顯示的內容 -->
+                    <a href="{{ url_for('login') }}">登入/註冊</a>
+                {% endif %}
             </div>
         </nav>
     </header>
@@ -36,11 +57,10 @@
             <!-- 步驟1：訂位資訊 -->
             <section class="reservation-step active" id="step1">
                 <h2>訂位資訊</h2>
-                <form class="booking-form" action="/" method="POST">
                 <form id="reservationForm">
                     <div class="form-group">
                         <label for="people">用餐人數</label>
-                        <select id="people" required>
+                        <select id="people" name="people" required>
                             <option value="">請選擇人數</option>
                             <option value="1">1人</option>
                             <option value="2">2人</option>
@@ -50,20 +70,21 @@
                     </div>
                     <div class="form-group">
                         <label for="date">用餐日期</label>
-                        <input type="date" id="date" required>
+                        <input type="date" id="date" name="date" required>
                     </div>
                     <div class="form-group">
                         <label for="timeSlot">用餐時段</label>
-                        <select id="timeSlot" required>
+                        <select id="timeSlot" name="timeSlot" required>
                             <option value="">請選擇時段</option>
                             <option value="lunch">午餐 (11:30-14:00)</option>
                             <option value="afternoon">下午茶 (14:30-17:00)</option>
                             <option value="dinner">晚餐 (17:30-21:00)</option>
                         </select>
                     </div>
-                    <button type="button" class="btn next-step" data-next="2">繼續</button>
+                    <button type="button" class="btn next-step" id="nextStepBtn">繼續</button>
                 </form>
             </section>
+
 
             <!-- 步驟2：選擇餐點 -->
             <section class="reservation-step" id="step2">
@@ -116,6 +137,37 @@
             </section>
         </div>
     </main>
+    <script>
+        document.getElementById("nextStepBtn").addEventListener("click", async () => {
+        const reservationForm = document.getElementById("reservationForm");
+        const formData = new FormData(reservationForm);
+        
+            // 確認表單是否正確填寫
+            if (formData.get('people') && formData.get('date') && formData.get('timeSlot')) {
+                try {
+                    const response = await fetch('/save_reservation', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const result = await response.json();
+                    
+                    if (result.status === 'success') {
+                        // 訂位資訊成功儲存後，進入 Step 2
+                        document.getElementById('step1').classList.remove('active');
+                        document.getElementById('step2').classList.add('active');
+                    } else {
+                        alert(result.message); // 顯示錯誤訊息
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('提交訂位資料失敗，請稍後再試');
+                }
+            } else {
+                alert('請填寫所有必填欄位');
+            }
+        });
+
+    </script>
     <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
 </body>
 </html>
