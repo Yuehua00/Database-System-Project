@@ -100,7 +100,6 @@ def register():
         Customer_phoneNumber = request.form.get('Customer_phoneNumber')
         PWD = request.form.get('PWD')
         
-        # 檢查是否有相同的手機號碼
         conn_obj = conn()
         if conn_obj:
             cursor = conn_obj.cursor()
@@ -111,13 +110,13 @@ def register():
             if existing_user:
                 return jsonify({'status': 'error', 'message': '該手機號碼已被註冊，請使用其他號碼。'})
             else:
-                # 插入新用戶
                 insert_query = "INSERT INTO Customer (Customer_name, Customer_phoneNumber, PWD) VALUES (?, ?, ?)"
                 cursor.execute(insert_query, (Customer_name, Customer_phoneNumber, PWD))
                 conn_obj.commit()
                 cursor.close()
                 return jsonify({'status': 'success', 'message': '註冊成功，請登入。'})
-    return jsonify({'status': 'error', 'message': '系統錯誤，請稍後再試。'})
+        return jsonify({'status': 'error', 'message': '資料庫連接失敗。'})
+
 
 
 
