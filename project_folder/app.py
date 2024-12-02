@@ -65,7 +65,6 @@ def reservation():  # Change the function name here to 'reservation'
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        Customer_name = request.form.get('Customer_name')
         Customer_phoneNumber = request.form.get('Customer_phoneNumber')
         PWD = request.form.get('PWD')
         
@@ -73,24 +72,27 @@ def login():
         conn_obj = conn()
         if conn_obj:
             cursor = conn_obj.cursor()
+            # 查詢用戶的資料
             query_check = "SELECT * FROM Customer WHERE Customer_phoneNumber = ?"
             cursor.execute(query_check, (Customer_phoneNumber,))
             existing_user = cursor.fetchone()
 
             if existing_user:
-                # 電話已存在
-                return "電話號碼已被註冊，請使用其他電話號碼。"
-            
-            # 插入新用戶資料
-            insert_query = "INSERT INTO Customer (Customer_name, Customer_phoneNumber, PWD, Points) VALUES (?, ?, ?, ?)"
-            cursor.execute(insert_query, (Customer_name, Customer_phoneNumber, PWD, 0))
-            conn_obj.commit()
+                # 檢查密碼是否正確
+                if existing_user['PWD'] == PWD:
+                    # 登入成功
+                    session['Customer_phoneNumber'] = Customer_phoneNumber  # 儲存用戶資料到 session
+                    session['message'] = '登入成功！'
+                    return redirect(url_for('index'))  # 成功後跳轉到主頁或儀表板
+                else:
+                    # 密碼錯誤
+                    return "密碼錯誤，請重新輸入。", 400
+            else:
+                # 用戶不存在
+                return "該手機號碼尚未註冊，請先註冊。", 400
             cursor.close()
-            session['message'] = '註冊成功！'
-            
-            # 註冊成功，跳轉到登入頁面
-            #return redirect(url_for('login'))
-            return redirect(url_for('index'))
+    return render_template('login.html')
+
 
     return render_template('login.html')
 
