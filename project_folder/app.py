@@ -83,7 +83,7 @@ def login():
                     # 登入成功
                     session['Customer_phoneNumber'] = Customer_phoneNumber  # 儲存用戶資料到 session
                     session['message'] = '登入成功！'
-                    return redirect(url_for('index'))  # 成功後跳轉到主頁或儀表板
+                    return render_template('index.html')  # 成功後跳轉到主頁或儀表板
                 else:
                     # 密碼錯誤
                     return "密碼錯誤，請重新輸入。", 400
@@ -93,8 +93,6 @@ def login():
             cursor.close()
     return render_template('login.html')
 
-
-    return render_template('login.html')
 
 
 
