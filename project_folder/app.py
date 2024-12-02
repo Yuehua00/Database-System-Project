@@ -10,7 +10,7 @@ def conn():
         connect = pyodbc.connect(
             'DRIVER={SQL Server};'
             'SERVER=WIN-SQL5CNC3OSL\\SQLEXPRESS;'
-            'DATABASE=resturant;'
+            'DATABASE=Pasta;'
             'Trusted_Connection=yes;'
         )
         return connect
