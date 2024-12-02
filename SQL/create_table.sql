@@ -10,7 +10,7 @@ drop table Nutrition;
 drop table Comment;
 
 CREATE TABLE Customer (
-	Customer_ID INT,
+	Customer_ID INT IDENTITY(1,1),  /* 每次增加 1 */
 	Customer_name VARCHAR(100) NOT NULL,
 	Customer_phoneNumber VARCHAR(15) NOT NULL,
 	PWD VARCHAR(100) NOT NULL,
