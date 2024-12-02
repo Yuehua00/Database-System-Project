@@ -32,7 +32,7 @@
                     <div class="tab active" onclick="showForm('login')">登入</div>
                     <div class="tab" onclick="showForm('register')">註冊</div>
                 </div>
-    
+
                 <!-- 登入表單 -->
                 <form class="auth-form active" id="loginForm" action="/login" method="POST">
                     <div class="form-group">
@@ -45,10 +45,9 @@
                     </div>
                     <button type="submit" class="btn">登入</button>
                 </form>
-                
     
                 <!-- 註冊表單 -->
-                <form class="auth-form" id="registerForm" action="/login" method="POST">
+                <form class="auth-form" id="registerForm" action="/register" method="POST">
                     <div class="form-group">
                         <label for="Customer_name">姓名</label>
                         <input type="text" id="Customer_name" name="Customer_name" required>
@@ -57,10 +56,6 @@
                         <label for="Customer_phoneNumber">手機號碼</label>
                         <input type="tel" id="Customer_phoneNumber" name="Customer_phoneNumber" required>
                     </div>
-                    <!-- <div class="form-group">
-                        <label for="register-email">電子郵件</label>
-                        <input type="email" id="register-email" name="register-email" required>
-                    </div> -->
                     <div class="form-group">
                         <label for="PWD">密碼</label>
                         <input type="password" id="PWD" name="PWD" required>
@@ -69,7 +64,7 @@
                 </form>
             </div>
         </div>
-    
+
         <script>
             function showForm(formType) {
                 document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
