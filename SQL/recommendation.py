@@ -1,6 +1,7 @@
 import re
 from collections import defaultdict
 
+
 # 用來儲存所有評論資料的列表
 comments_data = []
 
@@ -13,6 +14,7 @@ with open('sql/comment.sql', 'r', encoding='utf-8') as file:
 
 # 使用正則表達式解析每條插入語句
 for line in lines:
+
     # 匹配 insert into comment values(18, '服務很好', 5, '2022/01/21', 2, 1664);
     match = re.match(
         r"insert into comment values\((\d+), '(.*?)', (\d+), '(.*?)', (\d+), (\d+)\);", line.strip())
@@ -46,6 +48,7 @@ for dish_id, ratings in dish_ratings.items():
 
 # 按照 dish_id 排序
 recommendations.sort(key=lambda x: x[0])  # 根據 dish_id 排序
+
 
 # 將每個 dish_id 的平均星等寫入 recommendation.sql
 with open('sql/recommendation.sql', 'w', encoding='utf-8') as file:
