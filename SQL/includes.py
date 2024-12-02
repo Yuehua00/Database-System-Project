@@ -22,7 +22,7 @@ dessert = {
 
 # 讀取 reservation 資料
 reservations = []
-with open('sql/data/reservation.sql', 'r', encoding='utf-8') as file:
+with open('sql/reservation.sql', 'r', encoding='utf-8') as file:
     for line in file:
         if line.strip().startswith("insert into reservation"):
             # 解析每行資料

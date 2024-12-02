@@ -20,7 +20,7 @@ neutral_comments = [
     "吃起來有點淡", "有點重鹹", "太甜"
 ]
 
-with open('sql/data/comment.sql', 'w', encoding='utf-8') as file:
+with open('sql/comment.sql', 'w', encoding='utf-8') as file:
     for id in range(1, 1001):
 
         # 根據評論內容決定星等
