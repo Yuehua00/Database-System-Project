@@ -61,38 +61,37 @@ def reservation():  # Change the function name here to 'reservation'
 
     return render_template('reservation.html')  # Render the correct reservation template
 
-# 註冊頁面
-@app.route('/register', methods=['GET', 'POST'])
-def register():
+# 登錄頁面
+@app.route('/login', methods=['GET', 'POST'])
+def login():
     if request.method == 'POST':
-        # 獲取用戶資料
-        Customer_name = request.form.get('Customer_name')
         Customer_phoneNumber = request.form.get('Customer_phoneNumber')
         PWD = request.form.get('PWD')
-
-        # 檢查用戶是否已經存在
+        
+        # 假設資料庫有一個用戶表格，檢查用戶名和密碼是否匹配
         conn_obj = conn()
         if conn_obj:
             cursor = conn_obj.cursor()
+            # 查詢用戶的資料
             query_check = "SELECT * FROM Customer WHERE Customer_phoneNumber = ?"
             cursor.execute(query_check, (Customer_phoneNumber,))
             existing_user = cursor.fetchone()
 
             if existing_user:
-                # 用戶已經註冊
-                return "該手機號碼已經註冊，請直接登入。", 400
+                # 檢查密碼是否正確
+                if existing_user['PWD'] == PWD:
+                    # 登入成功
+                    session['Customer_phoneNumber'] = Customer_phoneNumber  # 儲存用戶資料到 session
+                    session['message'] = '登入成功！'
+                    return render_template('index.html')  # 成功後跳轉到主頁或儀表板
+                else:
+                    # 密碼錯誤
+                    return "密碼錯誤，請重新輸入。", 400
             else:
-                # 用戶未註冊，執行註冊操作
-                insert_query = """
-                    INSERT INTO Customer (Customer_name, Customer_phoneNumber, PWD)
-                    VALUES (?, ?, ?)
-                """
-                cursor.execute(insert_query, (Customer_name, Customer_phoneNumber, PWD))
-                conn_obj.commit()
-                cursor.close()
-                return redirect(url_for('login'))  # 註冊成功後跳轉到登入頁面
-    return render_template('register.html')  # 顯示註冊頁面
-
+                # 用戶不存在
+                return "該手機號碼尚未註冊，請先註冊。", 400
+            cursor.close()
+    return render_template('login.html')
 
 
 
