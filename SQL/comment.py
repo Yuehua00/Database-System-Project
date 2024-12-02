@@ -20,7 +20,7 @@ neutral_comments = [
     "吃起來有點淡", "有點重鹹", "太甜"
 ]
 
-with open('comment.sql', 'w', encoding='utf-8') as file:
+with open('sql/data/comment.sql', 'w', encoding='utf-8') as file:
     for id in range(1, 1001):
 
         # 根據評論內容決定星等
@@ -50,6 +50,8 @@ with open('comment.sql', 'w', encoding='utf-8') as file:
 
         comment_time = last_comment_time.strftime('%Y/%m/%d')
 
+        dish_id = random.randint(1, 30)
+
         # 寫入 SQL 插入語句，加入評語欄
         file.write(f"insert into comment values({id}, '{comment}', {
-                   star}, '{comment_time}', {customer_id});\n")
+                   star}, '{comment_time}', {dish_id}, {customer_id});\n")
