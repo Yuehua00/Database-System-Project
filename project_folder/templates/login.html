@@ -85,46 +85,6 @@
             });
         </script>
         <script>
-            // 處理登入表單提交
-            const loginForm = document.getElementById('loginForm');
-            loginForm.addEventListener('submit', async (e) => {
-                e.preventDefault(); // 阻止表單默認提交行為
-        
-                const formData = new FormData(loginForm);
-                const response = await fetch('{{ url_for("login") }}', {
-                    method: 'POST',
-                    body: formData
-                });
-        
-                const result = await response.json();
-                if (result.status === 'success') {
-                    alert(result.message);
-                    window.location.href = '/'; // 登入成功後跳轉
-                } else {
-                    alert(result.message); // 顯示錯誤訊息
-                }
-            });
-        
-            // 處理註冊表單提交
-            const registerForm = document.getElementById('registerForm');
-            registerForm.addEventListener('submit', async (e) => {
-                e.preventDefault(); // 阻止表單默認提交行為
-        
-                const formData = new FormData(registerForm);
-                const response = await fetch('{{ url_for("register") }}', {
-                    method: 'POST',
-                    body: formData
-                });
-        
-                const result = await response.json();
-                alert(result.message); // 顯示伺服器返回的訊息
-        
-                if (result.status === 'success') {
-                    showForm('login'); // 註冊成功後切換到登入表單
-                }
-            });
-        
-            // 切換登入/註冊表單
             function showForm(formType) {
                 document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
                 document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
@@ -133,7 +93,6 @@
                 event.target.classList.add('active');
             }
         </script>
-        
     </main>
     <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
 </body>
