@@ -620,12 +620,19 @@ footer {
     background-color: white;
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    /* cursor: pointer; */
 }
+
 
 .menu-preview {
     padding: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.menu-preview:hover {
+    background-color: #f8f9fa;
 }
 
 .menu-preview img {
@@ -633,7 +640,13 @@ footer {
     height: 200px;
     object-fit: cover;
     border-radius: 8px;
+    transition: transform 0.3s ease;
 }
+
+.menu-preview:hover img {
+    transform: scale(1.02);
+}
+
 
 .menu-preview h3 {
     margin-top: 1rem;
@@ -641,18 +654,29 @@ footer {
     text-align: center;
 }
 
+
 .menu-details {
-    max-height: 0;
+    height: 0;
     overflow: hidden;
-    transition: max-height 0.3s ease-out;
+    transition: height 0.3s ease-out;
+    opacity: 0;
 }
 
 .menu-card.active .menu-details {
-    max-height: 1000px;
+    height: auto;
+    opacity: 1;
+    padding: 1.5rem;
+    border-top: 1px solid #eee;
 }
 
+
 .menu-content {
-    padding: 1.5rem;
+    transform: translateY(20px);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.menu-card.active .menu-content {
+    transform: translateY(0);
 }
 
 /* 修改登入/註冊頁面樣式 */
