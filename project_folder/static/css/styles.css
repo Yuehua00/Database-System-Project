@@ -22,7 +22,9 @@ body {
     padding: 10px;
 }
 
-.bar1, .bar2, .bar3 {
+.bar1,
+.bar2,
+.bar3 {
     width: 30px;
     height: 3px;
     background-color: #333;
@@ -48,7 +50,7 @@ body {
     top: 100%;
     right: 0;
     background-color: white;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     padding: 1rem 0;
     display: none;
@@ -75,7 +77,7 @@ body {
 /* 導航列樣式 */
 header {
     background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     position: fixed;
     width: 100%;
     top: 0;
@@ -147,7 +149,7 @@ main {
     padding: 6rem 0;
     background-color: #fff;
     border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .hero h1 {
@@ -209,7 +211,7 @@ main {
     background-color: white;
     padding: 2rem;
     border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .reservation-step.active {
@@ -333,6 +335,7 @@ main {
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -351,12 +354,19 @@ main {
     background-color: white;
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    /* cursor: pointer; */
 }
+
 
 .menu-preview {
     padding: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.menu-preview:hover {
+    background-color: #f8f9fa;
 }
 
 .menu-preview img {
@@ -364,7 +374,13 @@ main {
     height: 200px;
     object-fit: cover;
     border-radius: 8px;
+    transition: transform 0.3s ease;
 }
+
+.menu-preview:hover img {
+    transform: scale(1.02);
+}
+
 
 .menu-preview h3 {
     margin-top: 1rem;
@@ -372,20 +388,71 @@ main {
     text-align: center;
 }
 
+
 .menu-details {
-    max-height: 0;
+    height: 0;
     overflow: hidden;
-    transition: max-height 0.3s ease-out;
+    transition: height 0.3s ease-out;
+    opacity: 0;
 }
 
 .menu-card.active .menu-details {
-    max-height: 1000px;
+    height: auto;
+    opacity: 1;
+    padding: 1.5rem;
+    border-top: 1px solid #eee;
 }
+
 
 .menu-content {
-    padding: 1.5rem;
+    transform: translateY(20px);
+    transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
+.menu-card.active .menu-content {
+    transform: translateY(0);
+}
+
+.price {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #e67e22;
+    margin-bottom: 1rem;
+}
+
+.nutrition {
+    margin-bottom: 1.5rem;
+}
+
+.nutrition h4 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.reviews {
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+}
+
+.reviews h4 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.review-item {
+    margin-top: 0.5rem;
+}
+
+.review-text {
+    font-style: italic;
+    color: #666;
+}
+
+.review-author {
+    color: #999;
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+}
 
 /* 修改登入/註冊頁面樣式 */
 .auth-container {
@@ -393,7 +460,7 @@ main {
     margin: 2rem auto;
     background-color: white;
     border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     padding: 2rem;
     overflow: hidden;
 }
@@ -420,7 +487,8 @@ main {
     display: none;
     max-height: 300px;
     overflow-y: auto;
-    padding-right: 10px; /* 增加右側間距 */
+    padding-right: 10px;
+    /* 增加右側間距 */
 }
 
 .auth-form.active {
@@ -429,7 +497,8 @@ main {
 
 .auth-form::-webkit-scrollbar {
     width: 6px;
-    margin-left: 4px; /* 調整位置 */
+    margin-left: 4px;
+    /* 調整位置 */
 }
 
 .auth-form::-webkit-scrollbar-thumb {
@@ -446,7 +515,7 @@ main {
     background-color: #fff;
     padding: 2rem;
     border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     margin-bottom: 2rem;
 }
 
@@ -479,7 +548,7 @@ main {
     background-color: #fff;
     padding: 2rem;
     border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .order-history h2 {
@@ -531,6 +600,7 @@ main {
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
