@@ -13,12 +13,19 @@ document.addEventListener('click', function(e) {
 });
 
 // 菜單卡片點擊展開/收合
-document.querySelectorAll('.menu-card').forEach(card => {
-    card.addEventListener('click', function(e) {
-        // 檢查是否點擊了卡片內的展開內容
-        if (!e.target.closest('.menu-details')) {
-            this.classList.toggle('active');
-        }
+document.querySelectorAll('.menu-preview').forEach(preview => {
+    preview.addEventListener('click', function(e) {
+        // 關閉其他已開啟的卡片
+        document.querySelectorAll('.menu-card.active').forEach(card => {
+            if(card !== this.parentElement) {
+                card.classList.remove('active');
+            }
+        });
+        
+        // 切換當前卡片
+        this.parentElement.classList.toggle('active');
+        
+        e.stopPropagation(); // 防止事件冒泡
     });
 });
 
