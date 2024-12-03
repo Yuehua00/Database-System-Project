@@ -80,6 +80,7 @@ def login():
                     # 登入成功，儲存用戶名稱到 session
                     session['Customer_phoneNumber'] = Customer_phoneNumber
                     session['Customer_name'] = existing_user[1]  # 假設用戶名是第二個欄位
+                    # session['Customer_ID'] = existing_user[0]
                     return jsonify({'status': 'success', 'message': '登入成功！'})
                 else:
                     return jsonify({'status': 'error', 'message': '密碼錯誤，請重新輸入。'})
@@ -130,43 +131,111 @@ def member():
 def save_reservation():
     if 'Customer_name' not in session:
         return jsonify({'status': 'error', 'message': '請先登入'})
-    
-    # 获取订位信息
+
+    # 獲取訂位信息
     Number_of_People = request.form.get('Number_of_People')
     Reservation_Time = request.form.get('Reservation_Time')
     TimeSlots = request.form.get('TimeSlots')
-    Customer_ID = session['Customer_ID']  # 使用 session 中的用户 ID
+    Customer_ID = session.get('Customer_ID')  # 使用 session 中的用户 ID
 
-    # 获取桌位 ID
-    Table_ID = request.form.get('Table_ID')
-
-    if not Table_ID:
-        return jsonify({'status': 'error', 'message': '請選擇桌位'})
-
-    # 调试：输出接收到的表单数据
     print("Received Data:", {
         'Number_of_People': Number_of_People,
         'Reservation_Time': Reservation_Time,
         'TimeSlots': TimeSlots,
         'Customer_ID': Customer_ID,
-        'Table_ID': Table_ID
     })
 
-    # 存储数据到数据库
-    conn_obj = conn()
-    if conn_obj:
+    try:
+        conn_obj = conn()
+        if not conn_obj:
+            return jsonify({'status': 'error', 'message': '資料庫連線失敗'})
+
         cursor = conn_obj.cursor()
-        query = """
+
+        # 查詢空桌
+        query_available_table = """
+            SELECT TOP 1 Table_ID
+            FROM desk d
+            WHERE d.Number_of_Seat >= ?  -- 確保桌子有足夠的座位
+            AND d.Table_ID NOT IN (
+                SELECT r.Table_ID
+                FROM Reservation r
+                WHERE r.Reservation_Time = ?  -- 只匹配日期部分
+                AND r.TimeSlots = ?  -- 查找指定時段
+            )
+            ORDER BY d.Number_of_Seat ASC;  -- 優先分配最小的合適桌位
+        """
+        cursor.execute(query_available_table, (Number_of_People, Reservation_Time, TimeSlots))
+        available_table = cursor.fetchone()
+
+        if not available_table:
+            return jsonify({'status': 'error', 'message': '無可用桌位，請選擇其他時間'})
+
+        Table_ID = available_table[0]
+
+        # 插入訂位資訊到資料庫
+        query_insert_reservation = """
             INSERT INTO Reservation (TimeSlots, Number_of_People, Reservation_Time, Customer_ID, Table_ID)
             VALUES (?, ?, ?, ?, ?)
         """
-        cursor.execute(query, (TimeSlots, Number_of_People, Reservation_Time, Customer_ID, Table_ID))
+        cursor.execute(query_insert_reservation, (TimeSlots, Number_of_People, Reservation_Time, Customer_ID, Table_ID))
         conn_obj.commit()
+
         cursor.close()
-        
-        return jsonify({'status': 'success', 'message': '訂位資訊儲存成功'})
+        conn_obj.close()
+
+        return jsonify({'status': 'success', 'message': '訂位成功，桌號已分配', 'Table_ID': Table_ID})
+    except Exception as e:
+        print("Error:", e)
+        return jsonify({'status': 'error', 'message': '資料庫操作失敗'}), 500
+
+@app.route('/available_tables', methods=['GET'])
+def available_tables():
+    # 獲取請求參數
+    people_count = request.args.get('people_count')
+    reservation_date = request.args.get('reservation_time')
+    time_slot = request.args.get('time_slot')  # 接收時段參數
+    # print("Received parameters:", people_count, reservation_date, time_slot)
+    # print("Received GET parameters:", request.args)
+
+    if not people_count or not reservation_date or not time_slot:
+        return jsonify({'status': 'error', 'message': '缺少參數'}), 400
     
-    return jsonify({'status': 'error', 'message': '資料庫儲存失敗'})
+    try:
+        conn_obj = conn()  # 連接資料庫
+        cursor = conn_obj.cursor()
+
+        # 查詢空桌
+        query = """
+            SELECT Table_ID
+            FROM desk d
+            WHERE d.Number_of_Seat >= ?  -- 確保桌子有足夠的座位
+            AND d.Table_ID NOT IN (
+                SELECT r.Table_ID
+                FROM Reservation r
+                WHERE r.Reservation_Time = ?  -- 只匹配日期部分
+                AND r.TimeSlots = ?  -- 查找指定時段
+            );
+
+
+        """
+        cursor.execute(query, (people_count, reservation_date, time_slot))
+        available_tables = cursor.fetchall()
+
+        cursor.close()
+        conn_obj.close()
+
+        # 回傳可用桌
+        if available_tables:
+            table_ids = [row[0] for row in available_tables]
+            return jsonify({'status': 'success', 'available_tables': table_ids})
+        else:
+            return jsonify({'status': 'success', 'available_tables': []})
+    except Exception as e:
+        print("Error:", e)
+        return jsonify({'status': 'error', 'message': '資料庫查詢失敗'}), 500
+
+
 
 
 

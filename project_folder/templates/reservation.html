@@ -139,33 +139,52 @@
     </main>
     <script>
         document.getElementById("nextStepBtn").addEventListener("click", async () => {
-        const reservationForm = document.getElementById("reservationForm");
-        const formData = new FormData(reservationForm);
-        
-            // 確認表單是否正確填寫
-            if (formData.get('Number_of_People') && formData.get('Reservation_Time') && formData.get('TimeSlots')) {
-                try {
-                    const response = await fetch('/save_reservation', {
-                        method: 'POST',
-                        body: formData
-                    });
-                    const result = await response.json();
-                    
-                    if (result.status === 'success') {
-                        // 訂位資訊成功儲存後，進入 Step 2
-                        document.getElementById('step1').classList.remove('active');
-                        document.getElementById('step2').classList.add('active');
-                    } else {
-                        alert(result.message); // 顯示錯誤訊息
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
-                    alert(result.message);
+    const reservationForm = document.getElementById("reservationForm");
+    const formData = new FormData(reservationForm);
+
+    // 確認表單是否正確填寫
+    const numberOfPeople = formData.get('Number_of_People');
+    const reservationTime = formData.get('Reservation_Time');
+    const timeSlots = formData.get('TimeSlots');
+    
+
+    if (numberOfPeople && reservationTime && timeSlots) {
+        try {
+            // 查詢空桌
+            const availableTablesResponse = await fetch(`/available_tables?people_count=${numberOfPeople}&reservation_time=${reservationTime}&time_slot=${timeSlots}`)
+            const availableTablesResult = await availableTablesResponse.json();
+
+            if (availableTablesResult.status === 'success' && availableTablesResult.available_tables.length > 0) {
+                // 顯示可用桌號（選擇桌子的功能可以根據需求加入）
+                console.log("Available tables:", availableTablesResult.available_tables);
+
+                // 繼續提交訂位資訊
+                const saveReservationResponse = await fetch('/save_reservation', {
+                    method: 'POST',
+                    body: formData
+                });
+                const saveReservationResult = await saveReservationResponse.json();
+
+                if (saveReservationResult.status === 'success') {
+                    // 訂位資訊成功儲存後，進入 Step 2
+                    document.getElementById('step1').classList.remove('active');
+                    document.getElementById('step2').classList.add('active');
+                } else {
+                    alert(saveReservationResult.message); // 顯示錯誤訊息
                 }
             } else {
-                alert('請填寫所有必填欄位');
+                alert("目前無可用桌，請選擇其他時間或人數。");
             }
-        });
+        } catch (error) {
+            console.error('Error:', error);
+            alert("查詢或提交訂位資訊時發生錯誤。");
+        }
+    } else {
+        alert('請填寫所有必填欄位');
+    }
+});
+
+        
 
     </script>
     <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
