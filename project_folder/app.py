@@ -78,7 +78,8 @@ def login():
             existing_user = cursor.fetchone()
 
             if existing_user:
-                if existing_user[3] == PWD:
+                stored_password = existing_user[3]
+                if check_password_hash(stored_password, PWD):
                     # 登入成功，儲存用戶名稱到 session
                     session['Customer_phoneNumber'] = Customer_phoneNumber
                     session['Customer_name'] = existing_user[1]  # 假設用戶名是第二個欄位
@@ -99,7 +100,9 @@ def register():
     if request.method == 'POST':
         Customer_name = request.form.get('Customer_name')
         Customer_phoneNumber = request.form.get('Customer_phoneNumber')
-        PWD = request.form.get('PWD')
+        Ori_PWD = request.form.get('PWD')
+        PWD = generate_password_hash(Ori_PWD)
+        print(PWD)
         
         conn_obj = conn()
         if conn_obj:
@@ -359,15 +362,8 @@ def update_password():
     new_password = request.form.get('new_password')
     confirm_password = request.form.get('confirm_password')
 
-    # 檢查密碼是否相符
-    if new_password != confirm_password:
-        flash('兩次密碼輸入不相符', 'error')
-        return redirect(url_for('member'))  # 返回會員頁面
-
-    # 檢查密碼長度（例如：至少8個字符）
-    if len(new_password) < 8:
-        flash('密碼長度必須至少8個字符', 'error')
-        return redirect(url_for('member'))
+    # 將密碼加密後再存入資料庫
+    hashed_password = generate_password_hash(new_password)
 
     try:
         # 更新密碼
