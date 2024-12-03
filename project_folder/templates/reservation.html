@@ -59,35 +59,143 @@
             <div class="reservation-container">
                 <!-- 步驟1：訂位資訊 -->
                 <section class="reservation-step active" id="step1">
-                    <h2>訂位資訊</h2>
-                    <form id="reservationForm">
-                        <div class="form-group">
-                            <label for="Number_of_People">用餐人數</label>
-                            <select id="Number_of_People" name="Number_of_People" required>
-                                <option value="">請選擇人數</option>
-                                <option value="1">1人</option>
-                                <option value="2">2人</option>
-                                <option value="3">3人</option>
-                                <option value="4">4人</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="Reservation_Time">用餐日期</label>
-                            <input type="date" id="Reservation_Time" name="Reservation_Time" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="TimeSlots">用餐時段</label>
-                            <select id="TimeSlots" name="TimeSlots" required>
-                                <option value="">請選擇時段</option>
-                                <option value="lunch">午餐 (11:30-14:00)</option>
-                                <option value="afternoon">下午茶 (14:30-17:00)</option>
-                                <option value="dinner">晚餐 (17:30-21:00)</option>
-                            </select>
+                    <h2 class="section-title">訂位資訊</h2>
+                    <form id="reservationForm" class="elegant-form">
+                        <div class="form-grid">
+                            <div class="form-group people-select">
+                                <label for="Number_of_People">
+                                    <class="icon-people">👥</i> 用餐人數
+                                </label>
+                                <div class="select-wrapper">
+                                    <select id="Number_of_People" name="Number_of_People" required>
+                                        <option value="">請選擇人數</option>
+                                        <option value="1">1人</option>
+                                        <option value="2">2人</option>
+                                        <option value="3">3人</option>
+                                        <option value="4">4人</option>
+                                    </select>
+                                    <span class="select-arrow">▼</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group date-select">
+                                <label for="Reservation_Time">
+                                    <class="icon-calendar">📅</i> 用餐日期
+                                </label>
+                                <div class="date-wrapper">
+                                    <input type="date" id="Reservation_Time" name="Reservation_Time" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group time-select">
+                                <label for="TimeSlots">
+                                    <class="icon-clock">🕒</i> 用餐時段
+                                </label>
+                                <div class="select-wrapper">
+                                    <select id="TimeSlots" name="TimeSlots" required>
+                                        <option value="">請選擇時段</option>
+                                        <option value="lunch">午餐 (11:30-14:00)</option>
+                                        <option value="afternoon">下午茶 (14:30-17:00)</option>
+                                        <option value="dinner">晚餐 (17:30-21:00)</option>
+                                    </select>
+                                    <span class="select-arrow">▼</span>
+                                </div>
+                            </div>
                         </div>
                         <button type="button" class="btn next-step" id="nextStepBtn">繼續</button>
                     </form>
                 </section>
 
+                <style>
+                    .section-title {
+                        text-align: center;
+                        color: #e67e22;
+                        margin-bottom: 1.5rem;
+                    }
+
+                    .elegant-form {
+                        background-color: #f9f9f9;
+                        padding: 2rem;
+                        border-radius: 10px;
+                        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                    }
+
+                    .form-grid {
+                        display: grid;
+                        grid-template-columns: 1fr 1fr 1fr;
+                        gap: 1rem;
+                    }
+
+                    .form-group {
+                        display: flex;
+                        flex-direction: column;
+                    }
+
+                    .form-group label {
+                        display: flex;
+                        align-items: center;
+                        margin-bottom: 0.5rem;
+                        color: #333;
+                        font-weight: 500;
+                    }
+
+                    .form-group label i {
+                        margin-right: 0.5rem;
+                        font-size: 1.2rem;
+                    }
+
+                    .select-wrapper,
+                    .date-wrapper {
+                        position: relative;
+                    }
+
+                    .select-wrapper select,
+                    .date-wrapper input {
+                        width: 100%;
+                        padding: 0.75rem;
+                        border: 1px solid #ddd;
+                        border-radius: 6px;
+                        appearance: none;
+                        transition: all 0.3s ease;
+                    }
+
+                    .select-arrow {
+                        position: absolute;
+                        top: 50%;
+                        right: 10px;
+                        transform: translateY(-50%);
+                        pointer-events: none;
+                        color: #888;
+                    }
+
+                    .select-wrapper select:focus,
+                    .date-wrapper input:focus {
+                        outline: none;
+                        border-color: #e67e22;
+                        box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+                    }
+
+                    .btn.next-step {
+                        margin-top: 1.5rem;
+                        background-color: #e67e22;
+                        color: white;
+                        border: none;
+                        padding: 0.75rem;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        transition: background-color 0.3s ease;
+                    }
+
+                    .btn.next-step:hover {
+                        background-color: #e67e22;
+                    }
+
+                    @media (max-width: 768px) {
+                        .form-grid {
+                            grid-template-columns: 1fr;
+                        }
+                    }
+                </style>
 
                 <!-- 步驟2：選擇餐點 -->
                 <section class="reservation-step" id="step2">

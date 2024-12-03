@@ -1,123 +1,302 @@
 <!-- reservation.html -->
 <!DOCTYPE html>
 <html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>線上訂位</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <header>
-        <nav>
-            <a href="index.html" class="logo">大義麵親</a>
-            <div class="menu-icon">
-                <div class="bar1"></div>
-                <div class="bar2"></div>
-                <div class="bar3"></div>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>線上訂位</title>
+        <link rel="stylesheet" href="styles.css">
+        <style>
+            .welcome-message {
+                color: #4CAF50;
+                font-size: 18px;
+                font-weight: 600;
+                margin-bottom: 20px;
+                margin-left: 15px;
+                /* 這個值可以根據需要調整，確保不會碰到邊框 */
+                text-align: left;
+                /* 將文本向左對齊 */
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <nav>
+                <a href="index.html" class="logo">大義麵親</a>
+                <div class="menu-icon">
+                    <div class="bar1"></div>
+                    <div class="bar2"></div>
+                    <div class="bar3"></div>
+                </div>
+                <div class="dropdown-menu">
+                    {% if 'Customer_name' in session %}
+                    <span class="welcome-message">歡迎, {{ session['Customer_name'] }}!</span>
+                    {% endif %}
+
+                    <a href="menu.html">菜單</a>
+                    <a href="reservation.html">訂位</a>
+                    <a href="cart.html">查看購物車</a>
+
+                    {% if 'Customer_name' in session %}
+                    <!-- 已登入顯示的內容 -->
+                    <a href="member.html">會員頁面</a>
+                    <a href="logout.html">登出</a>
+                    {% else %}
+                    <!-- 未登入顯示的內容 -->
+                    <a href="login.html">登入/註冊</a>
+                    {% endif %}
+                </div>
+            </nav>
+        </header>
+
+        <main class="reservation-main">
+            <div class="reservation-progress">
+                <div class="progress-step active" data-step="1">基本資訊</div>
+                <div class="progress-step" data-step="2">選擇餐點</div>
+                <div class="progress-step" data-step="3">確認訂單</div>
             </div>
-            <div class="dropdown-menu">
-                <a href="menu.html">菜單</a>
-                <a href="reservation.html">訂位</a>
-                <a href="login.html">登入/註冊</a>
+
+            <div class="reservation-container">
+                <!-- 步驟1：訂位資訊 -->
+                <section class="reservation-step active" id="step1">
+                    <h2 class="section-title">訂位資訊</h2>
+                    <form id="reservationForm" class="elegant-form">
+                        <div class="form-grid">
+                            <div class="form-group people-select">
+                                <label for="Number_of_People">
+                                    <class="icon-people">👥</i> 用餐人數
+                                </label>
+                                <div class="select-wrapper">
+                                    <select id="Number_of_People" name="Number_of_People" required>
+                                        <option value="">請選擇人數</option>
+                                        <option value="1">1人</option>
+                                        <option value="2">2人</option>
+                                        <option value="3">3人</option>
+                                        <option value="4">4人</option>
+                                    </select>
+                                    <span class="select-arrow">▼</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group date-select">
+                                <label for="Reservation_Time">
+                                    <class="icon-calendar">📅</i> 用餐日期
+                                </label>
+                                <div class="date-wrapper">
+                                    <input type="date" id="Reservation_Time" name="Reservation_Time" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group time-select">
+                                <label for="TimeSlots">
+                                    <class="icon-clock">🕒</i> 用餐時段
+                                </label>
+                                <div class="select-wrapper">
+                                    <select id="TimeSlots" name="TimeSlots" required>
+                                        <option value="">請選擇時段</option>
+                                        <option value="lunch">午餐 (11:30-14:00)</option>
+                                        <option value="afternoon">下午茶 (14:30-17:00)</option>
+                                        <option value="dinner">晚餐 (17:30-21:00)</option>
+                                    </select>
+                                    <span class="select-arrow">▼</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn next-step" id="nextStepBtn">繼續</button>
+                    </form>
+                </section>
+
+                <style>
+                    .section-title {
+                        text-align: center;
+                        color: #e67e22;
+                        margin-bottom: 1.5rem;
+                    }
+
+                    .elegant-form {
+                        background-color: #f9f9f9;
+                        padding: 2rem;
+                        border-radius: 10px;
+                        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                    }
+
+                    .form-grid {
+                        display: grid;
+                        grid-template-columns: 1fr 1fr 1fr;
+                        gap: 1rem;
+                    }
+
+                    .form-group {
+                        display: flex;
+                        flex-direction: column;
+                    }
+
+                    .form-group label {
+                        display: flex;
+                        align-items: center;
+                        margin-bottom: 0.5rem;
+                        color: #333;
+                        font-weight: 500;
+                    }
+
+                    .form-group label i {
+                        margin-right: 0.5rem;
+                        font-size: 1.2rem;
+                    }
+
+                    .select-wrapper,
+                    .date-wrapper {
+                        position: relative;
+                    }
+
+                    .select-wrapper select,
+                    .date-wrapper input {
+                        width: 100%;
+                        padding: 0.75rem;
+                        border: 1px solid #ddd;
+                        border-radius: 6px;
+                        appearance: none;
+                        transition: all 0.3s ease;
+                    }
+
+                    .select-arrow {
+                        position: absolute;
+                        top: 50%;
+                        right: 10px;
+                        transform: translateY(-50%);
+                        pointer-events: none;
+                        color: #888;
+                    }
+
+                    .select-wrapper select:focus,
+                    .date-wrapper input:focus {
+                        outline: none;
+                        border-color: #e67e22;
+                        box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+                    }
+
+                    .btn.next-step {
+                        margin-top: 1.5rem;
+                        background-color: #e67e22;
+                        color: white;
+                        border: none;
+                        padding: 0.75rem;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        transition: background-color 0.3s ease;
+                    }
+
+                    .btn.next-step:hover {
+                        background-color: #e67e22;
+                    }
+
+                    @media (max-width: 768px) {
+                        .form-grid {
+                            grid-template-columns: 1fr;
+                        }
+                    }
+                </style>
+
+                <!-- 步驟2：選擇餐點 -->
+                <section class="reservation-step" id="step2">
+                    <h2>選擇餐點</h2>
+                    <div class="menu-selection">
+                        <!-- 菜單項目會由JavaScript動態生成 -->
+                    </div>
+                    <div class="cart-preview">
+                        <h3>已選餐點</h3>
+                        <div class="cart-items">
+                            <!-- 購物車內容會由JavaScript動態生成 -->
+                        </div>
+                    </div>
+                    <button type="button" class="btn prev-step" data-prev="1">返回</button>
+                    <button type="button" class="btn next-step" data-next="3">繼續</button>
+                </section>
+
+                <!-- 步驟3：確認訂單 -->
+                <section class="reservation-step" id="step3">
+                    <h2>確認訂單</h2>
+                    <div class="order-summary">
+                        <div class="reservation-details">
+                            <h3>訂位資訊</h3>
+                            <p>用餐人數: <span id="summary-people"></span></p>
+                            <p>用餐日期: <span id="summary-date"></span></p>
+                            <p>用餐時段: <span id="summary-time"></span></p>
+                        </div>
+                        <div class="order-details">
+                            <h3>訂購餐點</h3>
+                            <div id="summary-items">
+                                <!-- 訂單內容會由JavaScript動態生成 -->
+                            </div>
+                        </div>
+                        <div class="total-section">
+                            <div class="points-info">
+                                <p>可用點數: <span id="available-points">0</span></p>
+                                <label>
+                                    <input type="checkbox" id="use-points"> 使用點數折抵
+                                </label>
+                            </div>
+                            <div class="total-amount">
+                                <p>小計: NT$ <span id="subtotal">0</span></p>
+                                <p>點數折抵: -NT$ <span id="points-discount">0</span></p>
+                                <p class="final-total">總計: NT$ <span id="total">0</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn prev-step" data-prev="2">返回</button>
+                    <button type="button" class="btn confirm-order">確認訂位</button>
+                </section>
             </div>
-        </nav>
-    </header>
+        </main>
+        <script>
+            document.getElementById("nextStepBtn").addEventListener("click", async () => {
+                const reservationForm = document.getElementById("reservationForm");
+                const formData = new FormData(reservationForm);
 
-    <main class="reservation-main">
-        <div class="reservation-progress">
-            <div class="progress-step active" data-step="1">基本資訊</div>
-            <div class="progress-step" data-step="2">選擇餐點</div>
-            <div class="progress-step" data-step="3">確認訂單</div>
-        </div>
+                // 確認表單是否正確填寫
+                const numberOfPeople = formData.get('Number_of_People');
+                const reservationTime = formData.get('Reservation_Time');
+                const timeSlots = formData.get('TimeSlots');
 
-        <div class="reservation-container">
-            <!-- 步驟1：訂位資訊 -->
-            <section class="reservation-step active" id="step1">
-                <h2>訂位資訊</h2>
-                <form class="booking-form" action="/" method="POST">
-                <form id="reservationForm">
-                    <div class="form-group">
-                        <label for="people">用餐人數</label>
-                        <select id="people" required>
-                            <option value="">請選擇人數</option>
-                            <option value="1">1人</option>
-                            <option value="2">2人</option>
-                            <option value="3">3人</option>
-                            <option value="4">4人</option>
-                            <option value="5">5人</option>
-                            <option value="6">6人</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="date">用餐日期</label>
-                        <input type="date" id="date" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="timeSlot">用餐時段</label>
-                        <select id="timeSlot" required>
-                            <option value="">請選擇時段</option>
-                            <option value="lunch">午餐 (11:30-14:00)</option>
-                            <option value="afternoon">下午茶 (14:30-17:00)</option>
-                            <option value="dinner">晚餐 (17:30-21:00)</option>
-                        </select>
-                    </div>
-                    <button type="button" class="btn next-step" data-next="2">繼續</button>
-                </form>
-            </section>
 
-            <!-- 步驟2：選擇餐點 -->
-            <section class="reservation-step" id="step2">
-                <h2>選擇餐點</h2>
-                <div class="menu-selection">
-                    <!-- 菜單項目會由JavaScript動態生成 -->
-                </div>
-                <div class="cart-preview">
-                    <h3>已選餐點</h3>
-                    <div class="cart-items">
-                        <!-- 購物車內容會由JavaScript動態生成 -->
-                    </div>
-                </div>
-                <button type="button" class="btn prev-step" data-prev="1">返回</button>
-                <button type="button" class="btn next-step" data-next="3">繼續</button>
-            </section>
+                if (numberOfPeople && reservationTime && timeSlots) {
+                    try {
+                        // 查詢空桌
+                        const availableTablesResponse = await fetch(`/available_tables?people_count=${numberOfPeople}&reservation_time=${reservationTime}&time_slot=${timeSlots}`)
+                        const availableTablesResult = await availableTablesResponse.json();
 
-            <!-- 步驟3：確認訂單 -->
-            <section class="reservation-step" id="step3">
-                <h2>確認訂單</h2>
-                <div class="order-summary">
-                    <div class="reservation-details">
-                        <h3>訂位資訊</h3>
-                        <p>用餐人數: <span id="summary-people"></span></p>
-                        <p>用餐日期: <span id="summary-date"></span></p>
-                        <p>用餐時段: <span id="summary-time"></span></p>
-                    </div>
-                    <div class="order-details">
-                        <h3>訂購餐點</h3>
-                        <div id="summary-items">
-                            <!-- 訂單內容會由JavaScript動態生成 -->
-                        </div>
-                    </div>
-                    <div class="total-section">
-                        <div class="points-info">
-                            <p>可用點數: <span id="available-points">0</span></p>
-                            <label>
-                                <input type="checkbox" id="use-points"> 使用點數折抵
-                            </label>
-                        </div>
-                        <div class="total-amount">
-                            <p>小計: NT$ <span id="subtotal">0</span></p>
-                            <p>點數折抵: -NT$ <span id="points-discount">0</span></p>
-                            <p class="final-total">總計: NT$ <span id="total">0</span></p>
-                        </div>
-                    </div>
-                </div>
-                <button type="button" class="btn prev-step" data-prev="2">返回</button>
-                <button type="button" class="btn confirm-order">確認訂位</button>
-            </section>
-        </div>
-    </main>
-    <script src="reservation.js"></script>
-    <script src="menu.js"></script>
-</body>
+                        if (availableTablesResult.status === 'success' && availableTablesResult.available_tables.length > 0) {
+                            // 顯示可用桌號（選擇桌子的功能可以根據需求加入）
+                            console.log("Available tables:", availableTablesResult.available_tables);
+
+                            // 繼續提交訂位資訊
+                            const saveReservationResponse = await fetch('/save_reservation', {
+                                method: 'POST',
+                                body: formData
+                            });
+                            const saveReservationResult = await saveReservationResponse.json();
+
+                            if (saveReservationResult.status === 'success') {
+                                // 訂位資訊成功儲存後，進入 Step 2
+                                document.getElementById('step1').classList.remove('active');
+                                document.getElementById('step2').classList.add('active');
+                            } else {
+                                alert(saveReservationResult.message); // 顯示錯誤訊息
+                            }
+                        } else {
+                            alert("目前無可用桌，請選擇其他時間或人數。");
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert("查詢或提交訂位資訊時發生錯誤。");
+                    }
+                } else {
+                    alert('請填寫所有必填欄位');
+                }
+            });
+
+        </script>
+        <script src="reservation.js"></script>
+        <script src="menu.js"></script>
+    </body>
 </html>
