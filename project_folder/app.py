@@ -280,16 +280,23 @@ def get_menu():
         # 假設已經有連接資料庫的 `conn()` 函數
         conn_obj = conn()
         if not conn_obj:
-            return jsonify({'status': 'error', 'message': '資料庫連接失敗'})
+            return jsonify({'status': 'error', 'message': '資料庫連接失敗'}), 500
 
         cursor = conn_obj.cursor()
-        
-        # 更新的 SQL 查詢，從 Dish 表取得所需資料
-        cursor.execute("""
-            SELECT Dish_ID, Dish_name, Dish_price, Category, TimeSlots, Recommendation
-            FROM Dish 
-        """)
-        dishes = cursor.fetchall()
+
+        # 嘗試執行 SQL 查詢，並加上更多的錯誤捕捉
+        try:
+            cursor.execute("""
+                SELECT Dish_ID, Dish_name, Dish_price, Category, TimeSlots, Recommendation
+                FROM Dish
+            """)
+            dishes = cursor.fetchall()
+        except Exception as sql_error:
+            print(f"SQL Error: {sql_error}")
+            return jsonify({'status': 'error', 'message': '資料庫查詢失敗', 'error': str(sql_error)}), 500
+
+        if not dishes:
+            return jsonify({'status': 'error', 'message': '無菜單資料'}), 404  # 若無資料，回應404
 
         # 將資料整理為 JSON 格式
         menu_data = [
@@ -299,11 +306,11 @@ def get_menu():
                 'price': dish[2],
                 'category': dish[3],
                 'timeSlots': dish[4],
+                # 'nutritionFacts': dish[5],
                 'recommendation': dish[5]
             }
             for dish in dishes
         ]
-        print(menu_data)
         cursor.close()
         conn_obj.close()
         return jsonify({'status': 'success', 'menu': menu_data})
@@ -318,6 +325,7 @@ def get_menu():
             cursor.close()
         if conn_obj:
             conn_obj.close()
+
 
 def query_order_history(customer_id):
     try:
