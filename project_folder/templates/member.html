@@ -8,11 +8,12 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
         <style>
             .welcome-message {
-                font-size: 16px;
                 color: #4CAF50;
-                /* 綠色 */
-                font-weight: bold;
-                margin-right: 20px;
+                font-size: 18px;
+                font-weight: 600;
+                margin-bottom: 20px;
+                padding-bottom: 12px;
+                border-bottom: 1px solid #eee;
             }
         </style>
     </head>
@@ -69,7 +70,7 @@
                 <div id="password-change-form" style="display: none;">
                     <label for="new-password">新密碼:</label>
                     <input type="password" id="new-password" name="new-password" required>
-                    
+
                     <label for="confirm-password">確認密碼:</label>
                     <input type="password" id="confirm-password" name="confirm-password" required>
 
@@ -86,38 +87,38 @@
                 <h2>訂單查詢</h2>
                 <div class="orders">
                     {% if orders %}
-                        <ul>
-                            {% for order in orders %}
-                            <li>
-                                訂單編號: {{ order['id'] }}<br>
-                                訂單日期: {{ order['date'] }}<br>
-                                總金額: NT$ {{ order['total'] }}
-                            </li>
-                            {% endfor %}
-                        </ul>
+                    <ul>
+                        {% for order in orders %}
+                        <li>
+                            訂單編號: {{ order['id'] }}<br>
+                            訂單日期: {{ order['date'] }}<br>
+                            總金額: NT$ {{ order['total'] }}
+                        </li>
+                        {% endfor %}
+                    </ul>
                     {% else %}
-                        <p>尚無訂單記錄。</p>
+                    <p>尚無訂單記錄。</p>
                     {% endif %}
                 </div>
             </section>
-            
+
         </main>
         <script>
             // 顯示修改密碼表單
             function showPasswordChangeForm() {
                 document.getElementById('password-change-form').style.display = 'block';
             }
-        
+
             // 隱藏修改密碼表單
             function hidePasswordChangeForm() {
                 document.getElementById('password-change-form').style.display = 'none';
             }
-        
+
             // 提交修改密碼表單
             function submitPasswordChange() {
                 var newPassword = document.getElementById('new-password').value;
                 var confirmPassword = document.getElementById('confirm-password').value;
-        
+
                 if (newPassword === confirmPassword) {
                     // 發送修改密碼的請求到後端
                     fetch('/change-password', {
@@ -129,12 +130,12 @@
                             new_password: newPassword
                         })
                     }).then(response => response.json())
-                      .then(data => {
-                          alert(data.message);
-                          if (data.success) {
-                              hidePasswordChangeForm();
-                          }
-                      });
+                        .then(data => {
+                            alert(data.message);
+                            if (data.success) {
+                                hidePasswordChangeForm();
+                            }
+                        });
                 } else {
                     alert("密碼不匹配，請重新輸入。");
                 }

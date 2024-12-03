@@ -6,8 +6,18 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>餐廳首頁</title>
         <link rel="stylesheet" href="styles.css">
+        <style>
+            .welcome-message {
+                color: #4CAF50;
+                font-size: 18px;
+                font-weight: 600;
+                margin-bottom: 20px;
+                padding-bottom: 12px;
+                border-bottom: 1px solid #eee;
+            }
+        </style>
     </head>
-    <body class="index">
+    <body>
         <header>
             <nav>
                 <a href="index.html" class="logo">大義麵親</a>
@@ -17,9 +27,22 @@
                     <div class="bar3"></div>
                 </div>
                 <div class="dropdown-menu">
+                    {% if 'Customer_name' in session %}
+                    <span class="welcome-message">歡迎, {{ session['Customer_name'] }}!</span>
+                    {% endif %}
+
                     <a href="menu.html">菜單</a>
                     <a href="reservation.html">訂位</a>
+                    <a href="cart.html">登入/註冊</a>
+
+                    {% if 'Customer_name' in session %}
+                    <!-- 已登入顯示的內容 -->
+                    <a href="member.html">會員頁面</a>
+                    <a href="logout.html">登出</a>
+                    {% else %}
+                    <!-- 未登入顯示的內容 -->
                     <a href="login.html">登入/註冊</a>
+                    {% endif %}
                 </div>
             </nav>
         </header>
