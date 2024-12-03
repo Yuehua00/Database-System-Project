@@ -7,38 +7,42 @@
 //     { id: 5, name: '臘腸番茄義大利麵', price: 270 },
 //     { id: 6, name: '白酒蛤蠣義大利麵', price: 300 }
 // ];
+let menuItems = [];  // 定義 menuItems 變數
+
 function renderMenuItems() {
     fetch('/get_menu')
         .then(response => response.json())
         .then(data => {
-            console.log(data); // 確認資料是否正確
-            renderMenuItems(data.menu);
-            // if (data.status === 'success') {
-            //     const container = document.querySelector('.menu-selection');
-            //     if (container) {
-            //         container.innerHTML = data.menu.map(item => `
-            //             <div class="menu-item" data-id="${item.id}">
-            //                 <div class="menu-item-header">
-            //                     <div>
-            //                         <h3>${item.name}</h3>
-            //                         <p class="price">NT$ ${item.price}</p>
-            //                         <p class="category">類別: ${item.category}</p>
-            //                         <p class="time-slots">時段: ${item.timeSlots}</p>
-            //                         <p class="nutrition-facts">營養成分: ${item.nutritionFacts}</p>
-            //                         <p class="recommendation">推薦: ${item.recommendation ? '是' : '否'}</p>
-            //                     </div>
-            //                     <div class="quantity-control">
-            //                         <button class="quantity-btn decrease" onclick="updateCart(${item.id}, -1)">-</button>
-            //                         <span class="quantity">0</span>
-            //                         <button class="quantity-btn increase" onclick="updateCart(${item.id}, 1)">+</button>
-            //                     </div>
-            //                 </div>
-            //             </div>
-            //         `).join('');
-            //     }
-            // } else {
-            //     alert('無法獲取菜單資料：' + data.message);
-            // }
+            console.log(data);  // 顯示後端回應
+            if (data.status === 'success') {
+                menuItems = data.menu;  // 將後端資料賦值給 menuItems
+                alert("success");
+
+                const container = document.querySelector('.menu-selection');
+                if (container) {
+                    container.innerHTML = menuItems.map(item => `
+                        <div class="menu-item" data-id="${item.id}">
+                            <div class="menu-item-header">
+                                <div>
+                                    <h3>${item.name}</h3>
+                                    <p class="price">NT$ ${item.price}</p>
+                                    <p class="category">類別: ${item.category}</p>
+                                    <p class="time-slots">時段: ${item.timeSlots}</p>
+                                    // <p class="nutrition-facts">營養成分: ${item.nutritionFacts}</p>
+                                    <p class="recommendation">推薦: ${item.recommendation ? '是' : '否'}</p>
+                                </div>
+                                <div class="quantity-control">
+                                    <button class="quantity-btn decrease" onclick="updateCart(${item.id}, -1)">-</button>
+                                    <span class="quantity">0</span>
+                                    <button class="quantity-btn increase" onclick="updateCart(${item.id}, 1)">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } else {
+                alert('無法獲取菜單資料：' + data.message);
+            }
         })
         .catch(error => {
             console.error('Error fetching menu:', error);
@@ -110,7 +114,7 @@ function validateStep(step) {
             const timeSlot = document.querySelector('.form-group select:last-child')?.value;
             
             if (!people || !date || !timeSlot) {
-                alert('請填寫所有必要資訊');
+                // alert('請填寫所有必要資訊');
                 return false;
             }
             return true;
@@ -149,27 +153,27 @@ function moveToStep(step) {
     currentStep = step;
 }
 
-// 渲染菜單項目
-function renderMenuItems() {
-    const container = document.querySelector('.menu-selection');
-    if (container) {
-        container.innerHTML = menuItems.map(item => `
-            <div class="menu-item" data-id="${item.id}">
-                <div class="menu-item-header">
-                    <div>
-                        <h3>${item.name}</h3>
-                        <p class="price">NT$ ${item.price}</p>
-                    </div>
-                    <div class="quantity-control">
-                        <button class="quantity-btn decrease" onclick="updateCart(${item.id}, -1)">-</button>
-                        <span class="quantity">0</span>
-                        <button class="quantity-btn increase" onclick="updateCart(${item.id}, 1)">+</button>
-                    </div>
-                </div>
-            </div>
-        `).join('');
-    }
-}
+// // 渲染菜單項目
+// function renderMenuItems() {
+//     const container = document.querySelector('.menu-selection');
+//     if (container) {
+//         container.innerHTML = menuItems.map(item => `
+//             <div class="menu-item" data-id="${item.id}">
+//                 <div class="menu-item-header">
+//                     <div>
+//                         <h3>${item.name}</h3>
+//                         <p class="price">NT$ ${item.price}</p>
+//                     </div>
+//                     <div class="quantity-control">
+//                         <button class="quantity-btn decrease" onclick="updateCart(${item.id}, -1)">-</button>
+//                         <span class="quantity">0</span>
+//                         <button class="quantity-btn increase" onclick="updateCart(${item.id}, 1)">+</button>
+//                     </div>
+//                 </div>
+//             </div>
+//         `).join('');
+//     }
+// }
 
 // 更新購物車
 function updateCart(itemId, change) {

@@ -175,12 +175,12 @@ def save_reservation():
     Customer_ID = session['Customer_ID']  # 使用 session 中的用户 ID
     # print("Session Data:", session)
 
-    # print("Received Data:", {
-    #     'Number_of_People': Number_of_People,
-    #     'Reservation_Time': Reservation_Time,
-    #     'TimeSlots': TimeSlots,
-    #     'Customer_ID': Customer_ID,
-    # })
+    print("Received Data:", {
+        'Number_of_People': Number_of_People,
+        'Reservation_Time': Reservation_Time,
+        'TimeSlots': TimeSlots,
+        'Customer_ID': Customer_ID,
+    })
 
     try:
         conn_obj = conn()
@@ -283,10 +283,11 @@ def get_menu():
             return jsonify({'status': 'error', 'message': '資料庫連接失敗'})
 
         cursor = conn_obj.cursor()
+        
         # 更新的 SQL 查詢，從 Dish 表取得所需資料
         cursor.execute("""
-            SELECT Dish_ID, Dish_name, Dish_price, Category, TimeSlots, Nutrition_facts, Recommendation
-            FROM Dish
+            SELECT Dish_ID, Dish_name, Dish_price, Category, TimeSlots, Recommendation
+            FROM Dish 
         """)
         dishes = cursor.fetchall()
 
@@ -298,19 +299,25 @@ def get_menu():
                 'price': dish[2],
                 'category': dish[3],
                 'timeSlots': dish[4],
-                'nutritionFacts': dish[5],
-                'recommendation': dish[6]
+                'recommendation': dish[5]
             }
             for dish in dishes
         ]
-        
+        print(menu_data)
         cursor.close()
         conn_obj.close()
-
         return jsonify({'status': 'success', 'menu': menu_data})
+
     except Exception as e:
         print("Error:", e)
-        return jsonify({'status': 'error', 'message': '資料庫操作失敗'}), 500
+        return jsonify({'status': 'error', 'message': '資料庫操作失敗', 'error': str(e)}), 500
+
+    finally:
+        # 確保資源正確釋放
+        if cursor:
+            cursor.close()
+        if conn_obj:
+            conn_obj.close()
 
 def query_order_history(customer_id):
     try:
