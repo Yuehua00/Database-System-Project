@@ -158,6 +158,23 @@ main {
     animation: fadeIn 0.3s ease-out;
 }
 
+/* 動畫 */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+/* 進度條相關步驟 */
+.progress-step.active {
+    background-color: #e67e22;
+    color: white;
+}
+
 /* 菜單選擇樣式 */
 .menu-selection {
     display: grid;
