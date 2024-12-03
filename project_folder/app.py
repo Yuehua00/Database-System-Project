@@ -80,7 +80,8 @@ def login():
                     # 登入成功，儲存用戶名稱到 session
                     session['Customer_phoneNumber'] = Customer_phoneNumber
                     session['Customer_name'] = existing_user[1]  # 假設用戶名是第二個欄位
-                    # session['Customer_ID'] = existing_user[0]
+                    session['Customer_ID'] = existing_user[0]
+                    # print("Login Success: Session Data:", session)
                     return jsonify({'status': 'success', 'message': '登入成功！'})
                 else:
                     return jsonify({'status': 'error', 'message': '密碼錯誤，請重新輸入。'})
@@ -129,14 +130,15 @@ def member():
 
 @app.route('/save_reservation', methods=['POST'])
 def save_reservation():
-    if 'Customer_name' not in session:
+    if 'Customer_name' not in session or 'Customer_ID' not in session:
         return jsonify({'status': 'error', 'message': '請先登入'})
-
+    
     # 獲取訂位信息
     Number_of_People = request.form.get('Number_of_People')
     Reservation_Time = request.form.get('Reservation_Time')
     TimeSlots = request.form.get('TimeSlots')
-    Customer_ID = session.get('Customer_ID')  # 使用 session 中的用户 ID
+    Customer_ID = session['Customer_ID']  # 使用 session 中的用户 ID
+    print("Session Data:", session)
 
     print("Received Data:", {
         'Number_of_People': Number_of_People,
