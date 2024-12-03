@@ -263,3 +263,39 @@ function confirmOrder() {
         window.location.href = 'member.html';
     }
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const nextStepBtn = document.getElementById('nextStepBtn');
+    const progressSteps = document.querySelectorAll('.progress-step');
+    const reservationSteps = document.querySelectorAll('.reservation-step');
+    let currentStep = 0;
+
+    nextStepBtn.addEventListener('click', function() {
+        // 驗證當前步驟的表單
+        const currentStepElement = reservationSteps[currentStep];
+        const inputs = currentStepElement.querySelectorAll('input, select');
+        let isValid = true;
+
+        inputs.forEach(input => {
+            if (!input.value) {
+                isValid = false;
+                input.classList.add('error');
+            } else {
+                input.classList.remove('error');
+            }
+        });
+
+        if (isValid) {
+            // 移除當前步驟的 active 狀態
+            progressSteps[currentStep].classList.remove('active');
+            reservationSteps[currentStep].classList.remove('active');
+
+            // 移動到下一步
+            currentStep++;
+
+            // 添加下一步的 active 狀態
+            progressSteps[currentStep].classList.add('active');
+            reservationSteps[currentStep].classList.add('active');
+        }
+    });
+});
