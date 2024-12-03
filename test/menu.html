@@ -1,60 +1,823 @@
 <!-- menu.html -->
 <!DOCTYPE html>
 <html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>大義麵親 - 菜單</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <!-- index.html 的 header 部分 -->
-    <header>
-        <nav>
-            <a href="index.html" class="logo">大義麵親</a>
-            <div class="menu-icon">
-                <div class="bar1"></div>
-                <div class="bar2"></div>
-                <div class="bar3"></div>
-            </div>
-            <div class="dropdown-menu">
-                <a href="menu.html">菜單</a>
-                <a href="reservation.html">訂位</a>
-                <a href="login.html">登入/註冊</a>
-            </div>
-        </nav>
-    </header>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>大義麵親 - 菜單</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+        <style>
+            .menu-details {
+                display: none;
+                background-color: white;
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 90%;
+                max-width: 500px;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+                z-index: 1000;
+            }
 
-    <main class="menu-main">
-        <section class="menu-grid">
-            <article class="menu-card">
-                <div class="menu-preview">
-                    <img src="pasta1.jpg" alt="香蒜培根義大利麵">
-                    <h3>香蒜培根義大利麵</h3>
-                </div>
-                <div class="menu-details">
-                    <div class="menu-content">
-                        <p class="price">NT$ 280</p>
-                        <div class="nutrition">
-                            <h4>營養標示</h4>
-                            <p>熱量: 650 kcal</p>
-                            <p>蛋白質: 25g</p>
-                            <p>脂肪: 18g</p>
-                            <p>碳水化合物: 95g</p>
-                        </div>
-                        <div class="reviews">
-                            <h4>顧客評論</h4>
-                            <div class="review-item">
-                                <p class="review-text">「麵條彈性十足，醬料香氣四溢！」</p>
-                                <p class="review-author">- 王小明</p>
+            .menu-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 999;
+            }
+
+            .close-button {
+                position: absolute;
+                right: 15px;
+                top: 15px;
+                background: none;
+                border: none;
+                font-size: 24px;
+                cursor: pointer;
+                color: #333;
+            }
+
+            .close-button:hover {
+                color: #e67e22;
+            }
+
+            body.modal-open {
+                overflow: hidden;
+            }
+
+            .menu-preview {
+                cursor: pointer;
+                transition: transform 0.3s ease;
+            }
+
+            .menu-preview:hover {
+                transform: translateY(-5px);
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <!-- 保持原有的 header 內容 -->
+        </header>
+
+        <main class="menu-main">
+            <div class="menu-overlay"></div>
+            <section class="menu-grid">
+                <article class="menu-card">
+                    <div class="menu-preview">
+                        <img src="static/images/主餐/白醬香蒜培根義大利麵.jpg" alt="白醬香蒜培根義大利麵">
+                        <h3>白醬香蒜培根義大利麵</h3>
+                    </div>
+                    <div class="menu-details">
+                        <button class="close-button">&times;</button>
+                        <div class="menu-content">
+                            <h3>白醬香蒜培根義大利麵</h3>
+                            <p class="price">NT$ 280</p>
+                            <div class="nutrition">
+                                <h4>營養標示</h4>
+                                <p>熱量: 650 kcal</p>
+                                <p>蛋白質: 25g</p>
+                                <p>脂肪: 18g</p>
+                                <p>碳水化合物: 95g</p>
+                            </div>
+                            <div class="reviews">
+                                <h4>顧客評論</h4>
+                                <div class="review-item">
+                                    <p class="review-text">「麵條彈性十足，醬料香氣四溢！」</p>
+                                    <p class="review-author">- 王小明</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </article>
-            <!-- 更多菜單項目 -->
-        </section>
-    </main>
-    <script src="menu.js"></script>
-</body>
+                </article><!-- 更多菜單項目 -->
+                <article class="menu-card">
+                    <div class="menu-preview">
+                        <img src="static/images/主餐/白醬野菇燻雞義大利麵.jpg" alt="白醬野菇燻雞義大利麵">
+                        <h3>白醬野菇燻雞義大利麵</h3>
+                    </div>
+                    <div class="menu-details">
+                        <div class="menu-content">
+                            <p class="price">NT$ 280</p>
+                            <div class="nutrition">
+                                <h4>營養標示</h4>
+                                <p>熱量: 650 kcal</p>
+                                <p>蛋白質: 25g</p>
+                                <p>脂肪: 18g</p>
+                                <p>碳水化合物: 95g</p>
+                            </div>
+                            <div class="reviews">
+                                <h4>顧客評論</h4>
+                                <div class="review-item">
+                                    <p class="review-text">「麵條彈性十足，醬料香氣四溢！」</p>
+                                    <p class="review-author">- 王小明</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <!-- 更多菜單項目 -->
+                <article class="menu-card">
+                    <div class="menu-preview">
+                        <img src="static/images/主餐/白醬煙燻鮭魚義大利麵.webp" alt="白醬煙燻鮭魚義大利麵">
+                        <h3>白醬煙燻鮭魚義大利麵</h3>
+                    </div>
+                    <div class="menu-details">
+                        <div class="menu-content">
+                            <p class="price">NT$ 280</p>
+                            <div class="nutrition">
+                                <h4>營養標示</h4>
+                                <p>熱量: 650 kcal</p>
+                                <p>蛋白質: 25g</p>
+                                <p>脂肪: 18g</p>
+                                <p>碳水化合物: 95g</p>
+                            </div>
+                            <div class="reviews">
+                                <h4>顧客評論</h4>
+                                <div class="review-item">
+                                    <p class="review-text">「麵條彈性十足，醬料香氣四溢！」</p>
+                                    <p class="review-author">- 王小明</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <!-- 更多菜單項目 -->
+                <article class="menu-card">
+                    <div class="menu-preview">
+                        <img src="static/images/主餐/白酒蛤蜊義大利麵.jpg" alt="白酒蛤蜊義大利麵">
+                        <h3>白酒蛤蜊義大利麵</h3>
+                    </div>
+                    <div class="menu-details">
+                        <div class="menu-content">
+                            <p class="price">NT$ 280</p>
+                            <div class="nutrition">
+                                <h4>營養標示</h4>
+                                <p>熱量: 650 kcal</p>
+                                <p>蛋白質: 25g</p>
+                                <p>脂肪: 18g</p>
+                                <p>碳水化合物: 95g</p>
+                            </div>
+                            <div class="reviews">
+                                <h4>顧客評論</h4>
+                                <div class="review-item">
+                                    <p class="review-text">「麵條彈性十足，醬料香氣四溢！」</p>
+                                    <p class="review-author">- 王小明</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <!-- 更多菜單項目 -->
+                <article class="menu-card">
+                    <div class="menu-preview">
+                        <img src="static/images/主餐/紅醬香蒜培根義大利麵.jpg" alt="紅醬香蒜培根義大利麵">
+                        <h3>紅醬香蒜培根義大利麵</h3>
+                    </div>
+                    <div class="menu-details">
+                        <div class="menu-content">
+                            <p class="price">NT$ 280</p>
+                            <div class="nutrition">
+                                <h4>營養標示</h4>
+                                <p>熱量: 650 kcal</p>
+                                <p>蛋白質: 25g</p>
+                                <p>脂肪: 18g</p>
+                                <p>碳水化合物: 95g</p>
+                            </div>
+                            <div class="reviews">
+                                <h4>顧客評論</h4>
+                                <div class="review-item">
+                                    <p class="review-text">「麵條彈性十足，醬料香氣四溢！」</p>
+                                    <p class="review-author">- 王小明</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <!-- 更多菜單項目 -->
+                <article class="menu-card">
+                    <div class="menu-preview">
+                        <img src="static/images/主餐/紅醬野菇燻雞義大利麵.jpg" alt="紅醬野菇燻雞義大利麵">
+                        <h3>紅醬野菇燻雞義大利麵</h3>
+                    </div>
+                    <div class="menu-details">
+                        <div class="menu-content">
+                            <p class="price">NT$ 280</p>
+                            <div class="nutrition">
+                                <h4>營養標示</h4>
+                                <p>熱量: 650 kcal</p>
+                                <p>蛋白質: 25g</p>
+                                <p>脂肪: 18g</p>
+                                <p>碳水化合物: 95g</p>
+                            </div>
+                            <div class="reviews">
+                                <h4>顧客評論</h4>
+                                <div class="review-item">
+                                    <p class="review-text">「麵條彈性十足，醬料香氣四溢！」</p>
+                                    <p class="review-author">- 王小明</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <!-- 更多菜單項目 -->
+                <article class="menu-card">
+                    <div class="menu-preview">
+                        <img src="static/images/主餐/紅醬煙燻鮭魚義大利麵.jpg" alt="紅醬煙燻鮭魚義大利麵">
+                        <h3>紅醬煙燻鮭魚義大利麵</h3>
+                    </div>
+                    <div class="menu-details">
+                        <div class="menu-content">
+                            <p class="price">NT$ 280</p>
+                            <div class="nutrition">
+                                <h4>營養標示</h4>
+                                <p>熱量: 650 kcal</p>
+                                <p>蛋白質: 25g</p>
+                                <p>脂肪: 18g</p>
+                                <p>碳水化合物: 95g</p>
+                            </div>
+                            <div class="reviews">
+                                <h4>顧客評論</h4>
+                                <div class="review-item">
+                                    <p class="review-text">「麵條彈性十足，醬料香氣四溢！」</p>
+                                    <p class="review-author">- 王小明</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <!-- 更多菜單項目 -->
+                <article class="menu-card">
+                    <div class="menu-preview">
+                        <img src="static/images/主餐/番茄肉醬義大利麵.jpg" alt="番茄肉醬義大利麵">
+                        <h3>番茄肉醬義大利麵</h3>
+                    </div>
+                    <div class="menu-details">
+                        <div class="menu-content">
+                            <p class="price">NT$ 280</p>
+                            <div class="nutrition">
+                                <h4>營養標示</h4>
+                                <p>熱量: 650 kcal</p>
+                                <p>蛋白質: 25g</p>
+                                <p>脂肪: 18g</p>
+                                <p>碳水化合物: 95g</p>
+                            </div>
+                            <div class="reviews">
+                                <h4>顧客評論</h4>
+                                <div class="review-item">
+                                    <p class="review-text">「麵條彈性十足，醬料香氣四溢！」</p>
+                                    <p class="review-author">- 王小明</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <!-- 更多菜單項目 -->
+                <article class="menu-card">
+                    <div class="menu-preview">
+                        <img src="static/images/主餐/青醬香蒜培根義大利麵.jpg" alt="青醬香蒜培根義大利麵">
+                        <h3>青醬香蒜培根義大利麵</h3>
+                    </div>
+                    <div class="menu-details">
+                        <div class="menu-content">
+                            <p class="price">NT$ 280</p>
+                            <div class="nutrition">
+                                <h4>營養標示</h4>
+                                <p>熱量: 650 kcal</p>
+                                <p>蛋白質: 25g</p>
+                                <p>脂肪: 18g</p>
+                                <p>碳水化合物: 95g</p>
+                            </div>
+                            <div class="reviews">
+                                <h4>顧客評論</h4>
+                                <div class="review-item">
+                                    <p class="review-text">「麵條彈性十足，醬料香氣四溢！」</p>
+                                    <p class="review-author">- 王小明</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <!-- 更多菜單項目 -->
+                <article class="menu-card">
+                    <div class="menu-preview">
+                        <img src="static/images/主餐/青醬野菇燻雞義大利麵.jpg" alt="青醬野菇燻雞義大利麵">
+                        <h3>青醬野菇燻雞義大利麵</h3>
+                    </div>
+                    <div class="menu-details">
+                        <div class="menu-content">
+                            <p class="price">NT$ 280</p>
+                            <div class="nutrition">
+                                <h4>營養標示</h4>
+                                <p>熱量: 650 kcal</p>
+                                <p>蛋白質: 25g</p>
+                                <p>脂肪: 18g</p>
+                                <p>碳水化合物: 95g</p>
+                            </div>
+                            <div class="reviews">
+                                <h4>顧客評論</h4>
+                                <div class="review-item">
+                                    <p class="review-text">「麵條彈性十足，醬料香氣四溢！」</p>
+                                    <p class="review-author">- 王小明</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <!-- 更多菜單項目 -->
+                <article class="menu-card">
+                    <div class="menu-preview">
+                        <img src="static/images/主餐/青醬煙燻鮭魚義大利麵.webp" alt="青醬煙燻鮭魚義大利麵">
+                        <h3>青醬煙燻鮭魚義大利麵</h3>
+                    </div>
+                    <div class="menu-details">
+                        <div class="menu-content">
+                            <p class="price">NT$ 280</p>
+                            <div class="nutrition">
+                                <h4>營養標示</h4>
+                                <p>熱量: 650 kcal</p>
+                                <p>蛋白質: 25g</p>
+                                <p>脂肪: 18g</p>
+                                <p>碳水化合物: 95g</p>
+                            </div>
+                            <div class="reviews">
+                                <h4>顧客評論</h4>
+                                <div class="review-item">
+                                    <p class="review-text">「麵條彈性十足，醬料香氣四溢！」</p>
+                                    <p class="review-author">- 王小明</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <!-- 更多菜單項目 -->
+                <article class="menu-card">
+                    <div class="menu-preview">
+                        <img src="static/images/主餐/青醬海鮮義大利麵.jpg" alt="青醬海鮮義大利麵">
+                        <h3>青醬海鮮義大利麵</h3>
+                    </div>
+                    <div class="menu-details">
+                        <div class="menu-content">
+                            <p class="price">NT$ 280</p>
+                            <div class="nutrition">
+                                <h4>營養標示</h4>
+                                <p>熱量: 650 kcal</p>
+                                <p>蛋白質: 25g</p>
+                                <p>脂肪: 18g</p>
+                                <p>碳水化合物: 95g</p>
+                            </div>
+                            <div class="reviews">
+                                <h4>顧客評論</h4>
+                                <div class="review-item">
+                                    <p class="review-text">「麵條彈性十足，醬料香氣四溢！」</p>
+                                    <p class="review-author">- 王小明</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <!-- 更多菜單項目 -->
+                <article class="menu-card">
+                    <div class="menu-preview">
+                        <img src="static/images/主餐/玉米濃湯.jpg" alt="玉米濃湯">
+                        <h3>玉米濃湯</h3>
+                    </div>
+                    <div class="menu-details">
+                        <div class="menu-content">
+                            <p class="price">NT$ 280</p>
+                            <div class="nutrition">
+                                <h4>營養標示</h4>
+                                <p>熱量: 650 kcal</p>
+                                <p>蛋白質: 25g</p>
+                                <p>脂肪: 18g</p>
+                                <p>碳水化合物: 95g</p>
+                            </div>
+                            <div class="reviews">
+                                <h4>顧客評論</h4>
+                                <div class="review-item">
+                                    <p class="review-text">「麵條彈性十足，醬料香氣四溢！」</p>
+                                    <p class="review-author">- 王小明</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <!-- 更多菜單項目 -->
+                <article class="menu-card">
+                    <div class="menu-preview">
+                        <img src="static/images/主餐/羅宋湯.jpg" alt="羅宋湯">
+                        <h3>羅宋湯</h3>
+                    </div>
+                    <div class="menu-details">
+                        <div class="menu-content">
+                            <p class="price">NT$ 280</p>
+                            <div class="nutrition">
+                                <h4>營養標示</h4>
+                                <p>熱量: 650 kcal</p>
+                                <p>蛋白質: 25g</p>
+                                <p>脂肪: 18g</p>
+                                <p>碳水化合物: 95g</p>
+                            </div>
+                            <div class="reviews">
+                                <h4>顧客評論</h4>
+                                <div class="review-item">
+                                    <p class="review-text">「麵條彈性十足，醬料香氣四溢！」</p>
+                                    <p class="review-author">- 王小明</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <!-- 更多菜單項目 -->
+                <article class="menu-card">
+                    <div class="menu-preview">
+                        <img src="static/images/主餐/布朗尼.jpg" alt="布朗尼">
+                        <h3>布朗尼</h3>
+                    </div>
+                    <div class="menu-details">
+                        <div class="menu-content">
+                            <p class="price">NT$ 280</p>
+                            <div class="nutrition">
+                                <h4>營養標示</h4>
+                                <p>熱量: 650 kcal</p>
+                                <p>蛋白質: 25g</p>
+                                <p>脂肪: 18g</p>
+                                <p>碳水化合物: 95g</p>
+                            </div>
+                            <div class="reviews">
+                                <h4>顧客評論</h4>
+                                <div class="review-item">
+                                    <p class="review-text">「麵條彈性十足，醬料香氣四溢！」</p>
+                                    <p class="review-author">- 王小明</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <!-- 更多菜單項目 -->
+                <article class="menu-card">
+                    <div class="menu-preview">
+                        <img src="static/images/主餐/提拉米蘇.jpg" alt="提拉米蘇">
+                        <h3>提拉米蘇</h3>
+                    </div>
+                    <div class="menu-details">
+                        <div class="menu-content">
+                            <p class="price">NT$ 280</p>
+                            <div class="nutrition">
+                                <h4>營養標示</h4>
+                                <p>熱量: 650 kcal</p>
+                                <p>蛋白質: 25g</p>
+                                <p>脂肪: 18g</p>
+                                <p>碳水化合物: 95g</p>
+                            </div>
+                            <div class="reviews">
+                                <h4>顧客評論</h4>
+                                <div class="review-item">
+                                    <p class="review-text">「麵條彈性十足，醬料香氣四溢！」</p>
+                                    <p class="review-author">- 王小明</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <!-- 更多菜單項目 -->
+                <article class="menu-card">
+                    <div class="menu-preview">
+                        <img src="static/images/主餐/波士頓派.jpg" alt="波士頓派">
+                        <h3>波士頓派</h3>
+                    </div>
+                    <div class="menu-details">
+                        <div class="menu-content">
+                            <p class="price">NT$ 280</p>
+                            <div class="nutrition">
+                                <h4>營養標示</h4>
+                                <p>熱量: 650 kcal</p>
+                                <p>蛋白質: 25g</p>
+                                <p>脂肪: 18g</p>
+                                <p>碳水化合物: 95g</p>
+                            </div>
+                            <div class="reviews">
+                                <h4>顧客評論</h4>
+                                <div class="review-item">
+                                    <p class="review-text">「麵條彈性十足，醬料香氣四溢！」</p>
+                                    <p class="review-author">- 王小明</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <!-- 更多菜單項目 -->
+                <article class="menu-card">
+                    <div class="menu-preview">
+                        <img src="static/images/主餐/起司蛋糕.jpg" alt="起司蛋糕">
+                        <h3>起司蛋糕</h3>
+                    </div>
+                    <div class="menu-details">
+                        <div class="menu-content">
+                            <p class="price">NT$ 280</p>
+                            <div class="nutrition">
+                                <h4>營養標示</h4>
+                                <p>熱量: 650 kcal</p>
+                                <p>蛋白質: 25g</p>
+                                <p>脂肪: 18g</p>
+                                <p>碳水化合物: 95g</p>
+                            </div>
+                            <div class="reviews">
+                                <h4>顧客評論</h4>
+                                <div class="review-item">
+                                    <p class="review-text">「麵條彈性十足，醬料香氣四溢！」</p>
+                                    <p class="review-author">- 王小明</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <!-- 更多菜單項目 -->
+                <article class="menu-card">
+                    <div class="menu-preview">
+                        <img src="static/images/主餐/焦糖烤布雷.jpg" alt="焦糖烤布雷">
+                        <h3>焦糖烤布蕾</h3>
+                    </div>
+                    <div class="menu-details">
+                        <div class="menu-content">
+                            <p class="price">NT$ 280</p>
+                            <div class="nutrition">
+                                <h4>營養標示</h4>
+                                <p>熱量: 650 kcal</p>
+                                <p>蛋白質: 25g</p>
+                                <p>脂肪: 18g</p>
+                                <p>碳水化合物: 95g</p>
+                            </div>
+                            <div class="reviews">
+                                <h4>顧客評論</h4>
+                                <div class="review-item">
+                                    <p class="review-text">「麵條彈性十足，醬料香氣四溢！」</p>
+                                    <p class="review-author">- 王小明</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <!-- 更多菜單項目 -->
+                <article class="menu-card">
+                    <div class="menu-preview">
+                        <img src="static/images/主餐/煙燻鮭魚沙拉.jpg" alt="煙燻鮭魚沙拉">
+                        <h3>煙燻鮭魚沙拉</h3>
+                    </div>
+                    <div class="menu-details">
+                        <div class="menu-content">
+                            <p class="price">NT$ 280</p>
+                            <div class="nutrition">
+                                <h4>營養標示</h4>
+                                <p>熱量: 650 kcal</p>
+                                <p>蛋白質: 25g</p>
+                                <p>脂肪: 18g</p>
+                                <p>碳水化合物: 95g</p>
+                            </div>
+                            <div class="reviews">
+                                <h4>顧客評論</h4>
+                                <div class="review-item">
+                                    <p class="review-text">「麵條彈性十足，醬料香氣四溢！」</p>
+                                    <p class="review-author">- 王小明</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <!-- 更多菜單項目 -->
+                <article class="menu-card">
+                    <div class="menu-preview">
+                        <img src="static/images/主餐/經典凱薩沙拉.jpg" alt="經典凱薩沙拉">
+                        <h3>經典凱薩沙拉</h3>
+                    </div>
+                    <div class="menu-details">
+                        <div class="menu-content">
+                            <p class="price">NT$ 280</p>
+                            <div class="nutrition">
+                                <h4>營養標示</h4>
+                                <p>熱量: 650 kcal</p>
+                                <p>蛋白質: 25g</p>
+                                <p>脂肪: 18g</p>
+                                <p>碳水化合物: 95g</p>
+                            </div>
+                            <div class="reviews">
+                                <h4>顧客評論</h4>
+                                <div class="review-item">
+                                    <p class="review-text">「麵條彈性十足，醬料香氣四溢！」</p>
+                                    <p class="review-author">- 王小明</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <!-- 更多菜單項目 -->
+                <article class="menu-card">
+                    <div class="menu-preview">
+                        <img src="static/images/主餐/紅茶.jpg" alt="紅茶">
+                        <h3>紅茶</h3>
+                    </div>
+                    <div class="menu-details">
+                        <div class="menu-content">
+                            <p class="price">NT$ 280</p>
+                            <div class="nutrition">
+                                <h4>營養標示</h4>
+                                <p>熱量: 650 kcal</p>
+                                <p>蛋白質: 25g</p>
+                                <p>脂肪: 18g</p>
+                                <p>碳水化合物: 95g</p>
+                            </div>
+                            <div class="reviews">
+                                <h4>顧客評論</h4>
+                                <div class="review-item">
+                                    <p class="review-text">「麵條彈性十足，醬料香氣四溢！」</p>
+                                    <p class="review-author">- 王小明</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <!-- 更多菜單項目 -->
+                <article class="menu-card">
+                    <div class="menu-preview">
+                        <img src="static/images/主餐/綠茶.jpg" alt="綠茶">
+                        <h3>綠茶</h3>
+                    </div>
+                    <div class="menu-details">
+                        <div class="menu-content">
+                            <p class="price">NT$ 280</p>
+                            <div class="nutrition">
+                                <h4>營養標示</h4>
+                                <p>熱量: 650 kcal</p>
+                                <p>蛋白質: 25g</p>
+                                <p>脂肪: 18g</p>
+                                <p>碳水化合物: 95g</p>
+                            </div>
+                            <div class="reviews">
+                                <h4>顧客評論</h4>
+                                <div class="review-item">
+                                    <p class="review-text">「麵條彈性十足，醬料香氣四溢！」</p>
+                                    <p class="review-author">- 王小明</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <!-- 更多菜單項目 -->
+                <article class="menu-card">
+                    <div class="menu-preview">
+                        <img src="static/images/主餐/奶茶.jpg" alt="奶茶">
+                        <h3>奶茶</h3>
+                    </div>
+                    <div class="menu-details">
+                        <div class="menu-content">
+                            <p class="price">NT$ 280</p>
+                            <div class="nutrition">
+                                <h4>營養標示</h4>
+                                <p>熱量: 650 kcal</p>
+                                <p>蛋白質: 25g</p>
+                                <p>脂肪: 18g</p>
+                                <p>碳水化合物: 95g</p>
+                            </div>
+                            <div class="reviews">
+                                <h4>顧客評論</h4>
+                                <div class="review-item">
+                                    <p class="review-text">「麵條彈性十足，醬料香氣四溢！」</p>
+                                    <p class="review-author">- 王小明</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <!-- 更多菜單項目 -->
+                <article class="menu-card">
+                    <div class="menu-preview">
+                        <img src="static/images/主餐/可爾必思.jpg" alt="可爾必思">
+                        <h3>可爾必思</h3>
+                    </div>
+                    <div class="menu-details">
+                        <div class="menu-content">
+                            <p class="price">NT$ 280</p>
+                            <div class="nutrition">
+                                <h4>營養標示</h4>
+                                <p>熱量: 650 kcal</p>
+                                <p>蛋白質: 25g</p>
+                                <p>脂肪: 18g</p>
+                                <p>碳水化合物: 95g</p>
+                            </div>
+                            <div class="reviews">
+                                <h4>顧客評論</h4>
+                                <div class="review-item">
+                                    <p class="review-text">「麵條彈性十足，醬料香氣四溢！」</p>
+                                    <p class="review-author">- 王小明</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <!-- 更多菜單項目 -->
+                <article class="menu-card">
+                    <div class="menu-preview">
+                        <img src="static/images/主餐/可樂.jpg" alt="可樂">
+                        <h3>可樂</h3>
+                    </div>
+                    <div class="menu-details">
+                        <div class="menu-content">
+                            <p class="price">NT$ 280</p>
+                            <div class="nutrition">
+                                <h4>營養標示</h4>
+                                <p>熱量: 650 kcal</p>
+                                <p>蛋白質: 25g</p>
+                                <p>脂肪: 18g</p>
+                                <p>碳水化合物: 95g</p>
+                            </div>
+                            <div class="reviews">
+                                <h4>顧客評論</h4>
+                                <div class="review-item">
+                                    <p class="review-text">「麵條彈性十足，醬料香氣四溢！」</p>
+                                    <p class="review-author">- 王小明</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <!-- 更多菜單項目 -->
+                <article class="menu-card">
+                    <div class="menu-preview">
+                        <img src="static/images/主餐/雪碧.jpg" alt="雪碧">
+                        <h3>雪碧</h3>
+                    </div>
+                    <div class="menu-details">
+                        <div class="menu-content">
+                            <p class="price">NT$ 280</p>
+                            <div class="nutrition">
+                                <h4>營養標示</h4>
+                                <p>熱量: 650 kcal</p>
+                                <p>蛋白質: 25g</p>
+                                <p>脂肪: 18g</p>
+                                <p>碳水化合物: 95g</p>
+                            </div>
+                            <div class="reviews">
+                                <h4>顧客評論</h4>
+                                <div class="review-item">
+                                    <p class="review-text">「麵條彈性十足，醬料香氣四溢！」</p>
+                                    <p class="review-author">- 王小明</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </section>
+        </main>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const menuPreviews = document.querySelectorAll('.menu-preview');
+                const overlay = document.querySelector('.menu-overlay');
+                const closeButtons = document.querySelectorAll('.close-button');
+
+                // 打開菜單詳情
+                menuPreviews.forEach(preview => {
+                    preview.addEventListener('click', function () {
+                        const card = this.closest('.menu-card');
+                        const details = card.querySelector('.menu-details');
+
+                        details.style.display = 'block';
+                        overlay.style.display = 'block';
+                        document.body.classList.add('modal-open');
+                    });
+                });
+
+                // 關閉菜單詳情
+                function closeModal() {
+                    const activeDetails = document.querySelectorAll('.menu-details[style="display: block"]');
+                    activeDetails.forEach(details => {
+                        details.style.display = 'none';
+                    });
+                    overlay.style.display = 'none';
+                    document.body.classList.remove('modal-open');
+                }
+
+                // 點擊關閉按鈕
+                closeButtons.forEach(button => {
+                    button.addEventListener('click', closeModal);
+                });
+
+                // 點擊遮罩層關閉
+                overlay.addEventListener('click', closeModal);
+
+                // ESC 鍵關閉
+                document.addEventListener('keydown', function (e) {
+                    if (e.key === 'Escape') {
+                        closeModal();
+                    }
+                });
+            });
+        </script>
+    </body>
 </html>
