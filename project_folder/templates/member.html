@@ -46,8 +46,6 @@
             button {
                 margin-top: 10px;
             }
-            
-
         </style>
     </head>
     <body>
@@ -108,8 +106,6 @@
                     <button class="btn" onclick="cancelEdit()">取消</button>
                 </div>
             </section>
-            
-            
 
             <section class="order-history">
                 <h2>訂單查詢</h2>
@@ -177,45 +173,6 @@
                     console.error('Error:', error);
                     alert('更新失敗，請稍後重試。');
                 });
-            }
-
-
-            // 提交修改密碼表單
-            // 提交修改密碼表單
-            function submitPasswordChange() {
-                var newPassword = document.getElementById('new-password').value;
-                var confirmPassword = document.getElementById('confirm-password').value;
-
-                if (newPassword.length < 6) {
-                    alert("密碼長度至少需6個字元。");
-                    return;
-                }
-
-                if (newPassword === confirmPassword) {
-                    // 發送修改密碼的請求到後端
-                    fetch('/update_password', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            new_password: newPassword,
-                            confirm_password: confirmPassword
-                        })
-                    }).then(response => response.json())
-                    .then(data => {
-                        alert(data.message);  // 顯示伺服器返回的訊息
-                        if (data.success) {
-                            hidePasswordChangeForm();
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('無法修改密碼，請稍後再試。');
-                    });
-                } else {
-                    alert("密碼不匹配，請重新輸入。");
-                }
             }
 
         </script>
