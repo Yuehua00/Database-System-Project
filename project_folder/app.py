@@ -432,6 +432,50 @@ def update_password():
         print(f"Error updating password: {e}")
         return jsonify({'success': False, 'message': '修改密碼失敗'}), 500
 
+@app.route('/update_customer_info', methods=['POST'])
+def update_customer_info():
+    if 'Customer_ID' not in session:
+        return jsonify({'success': False, 'message': '未登入，請先登入！'})
+
+    customer_id = session['Customer_ID']
+    data = request.json
+
+    name = data.get('name')
+    phone = data.get('phone')
+    new_password = data.get('password')
+
+    try:
+        conn_obj = conn()
+        if not conn_obj:
+            return jsonify({'success': False, 'message': '資料庫連線失敗！'})
+
+        cursor = conn_obj.cursor()
+
+        # 更新姓名和手機號碼
+        update_query = """
+            UPDATE Customer
+            SET Customer_name = ?, Customer_phoneNumber = ?
+        """
+        params = [name, phone]
+
+        # 如果提供了新密碼，則加密後一起更新
+        if new_password:
+            hashed_password = generate_password_hash(new_password)
+            update_query += ", PWD = ?"
+            params.append(hashed_password)
+
+        update_query += " WHERE Customer_ID = ?"
+        params.append(customer_id)
+
+        cursor.execute(update_query, tuple(params))
+        conn_obj.commit()
+        cursor.close()
+        conn_obj.close()
+
+        return jsonify({'success': True, 'message': '會員資料更新成功！'})
+    except Exception as e:
+        print(f"Error updating customer info: {e}")
+        return jsonify({'success': False, 'message': '更新失敗，請稍後重試。'})
 
 if __name__ == '__main__':
     app.run(debug=True)

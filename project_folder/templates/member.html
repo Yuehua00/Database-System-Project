@@ -14,6 +14,37 @@
                 margin-bottom: 20px;
                 text-align: center;
             }
+            .info-group {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 10px;
+            }
+
+            label {
+                flex: 1;
+                font-weight: bold;
+            }
+
+            p, input {
+                flex: 2;
+                margin: 0;
+                padding: 5px;
+                text-align: right;
+            }
+
+            input {
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                padding: 8px 12px; /* 增加內部間距 */
+                width: 95%;       /* 調整輸入框的寬度，使其略大於默認 */
+                box-sizing: border-box; /* 確保 padding 不會影響寬度計算 */
+            }
+
+            button {
+                margin-top: 10px;
+            }
+            
+
         </style>
     </head>
     <body>
@@ -51,36 +82,31 @@
                 <h2>會員資料</h2>
                 <div class="info-group">
                     <label>姓名</label>
-                    <p id="member-name">{{ customer.name }}</p>
+                    <p class="display-only" id="name-display">{{ customer.name }}</p>
+                    <input type="text" class="edit-only" id="name-input" value="{{ customer.name }}" style="display: none;">
                 </div>
                 <div class="info-group">
                     <label>手機號碼</label>
-                    <p id="member-phone">{{ customer.phone }}</p>
+                    <p class="display-only" id="phone-display">{{ customer.phone }}</p>
+                    <input type="text" class="edit-only" id="phone-input" value="{{ customer.phone }}" style="display: none;">
                 </div>
-                <!-- <div class="info-group">
-                    <label>電子郵件</label>
-                    <p id="member-email"></p>
-                </div> -->
                 <div class="info-group">
                     <label>密碼</label>
-                    <button class="btn change-password" onclick="showPasswordChangeForm()">修改密碼</button>
-                </div>
-                <!-- 修改密碼表單，隱藏狀態 -->
-                <div id="password-change-form" style="display: none;">
-                    <label for="new-password">新密碼:</label>
-                    <input type="password" id="new-password" name="new-password" required>
-
-                    <label for="confirm-password">確認密碼:</label>
-                    <input type="password" id="confirm-password" name="confirm-password" required>
-
-                    <button class="btn" onclick="submitPasswordChange()">提交修改</button>
-                    <button class="btn" onclick="hidePasswordChangeForm()">取消</button>
+                    <p class="display-only" id="password-display">********</p>
+                    <input type="password" class="edit-only" id="password-input" placeholder="輸入新密碼" style="display: none;">
                 </div>
                 <div class="info-group">
                     <label>點數</label>
-                    <p id="member-points">{{ customer.point }}</p>
+                    <p id="points-display">{{ customer.point }}</p>
+                </div>
+                <button class="btn display-only" onclick="enableEdit()">修改資料</button>
+                <div class="edit-only" style="display: none;">
+                    <button class="btn" onclick="submitEdit()">提交</button>
+                    <button class="btn" onclick="cancelEdit()">取消</button>
                 </div>
             </section>
+            
+            
 
             <section class="order-history">
                 <h2>訂單查詢</h2>
@@ -103,20 +129,64 @@
 
         </main>
         <script>
-            // 顯示修改密碼表單
-            function showPasswordChangeForm() {
-                document.getElementById('password-change-form').style.display = 'block';
+            function enableEdit() {
+                // 切換到編輯模式
+                document.querySelectorAll('.display-only').forEach(element => element.style.display = 'none');
+                document.querySelectorAll('.edit-only').forEach(element => element.style.display = 'block');
             }
 
-            // 隱藏修改密碼表單
-            function hidePasswordChangeForm() {
-                document.getElementById('password-change-form').style.display = 'none';
+            function cancelEdit() {
+                // 取消編輯，恢復顯示模式
+                document.querySelectorAll('.display-only').forEach(element => element.style.display = 'block');
+                document.querySelectorAll('.edit-only').forEach(element => element.style.display = 'none');
             }
 
+            function submitEdit() {
+                // 取得輸入值
+                const name = document.getElementById('name-input').value;
+                const phone = document.getElementById('phone-input').value;
+                const password = document.getElementById('password-input').value;
+
+                // 資料驗證（可選）
+                if (!name || !phone) {
+                    alert('姓名與手機號碼不可為空！');
+                    return;
+                }
+
+                // 發送請求到後端
+                const data = { name, phone, password };
+                fetch('/update_customer_info', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                }).then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        // 更新顯示資料
+                        document.getElementById('name-display').innerText = name;
+                        document.getElementById('phone-display').innerText = phone;
+                        alert('資料更新成功！');
+                        cancelEdit();
+                    } else {
+                        alert(result.message);
+                    }
+                }).catch(error => {
+                    console.error('Error:', error);
+                    alert('更新失敗，請稍後重試。');
+                });
+            }
+
+
+            // 提交修改密碼表單
             // 提交修改密碼表單
             function submitPasswordChange() {
                 var newPassword = document.getElementById('new-password').value;
                 var confirmPassword = document.getElementById('confirm-password').value;
+
+                if (newPassword.length < 6) {
+                    alert("密碼長度至少需6個字元。");
+                    return;
+                }
 
                 if (newPassword === confirmPassword) {
                     // 發送修改密碼的請求到後端
@@ -126,19 +196,25 @@
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
-                            new_password: newPassword
+                            new_password: newPassword,
+                            confirm_password: confirmPassword
                         })
                     }).then(response => response.json())
-                        .then(data => {
-                            alert(data.message);
-                            if (data.success) {
-                                hidePasswordChangeForm();
-                            }
-                        });
+                    .then(data => {
+                        alert(data.message);  // 顯示伺服器返回的訊息
+                        if (data.success) {
+                            hidePasswordChangeForm();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('無法修改密碼，請稍後再試。');
+                    });
                 } else {
                     alert("密碼不匹配，請重新輸入。");
                 }
             }
+
         </script>
         <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
     </body>
