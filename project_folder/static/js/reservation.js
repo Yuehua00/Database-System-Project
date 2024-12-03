@@ -1,12 +1,49 @@
 // 菜單資料
-const menuItems = [
-    { id: 1, name: '香蒜培根義大利麵', price: 280 },
-    { id: 2, name: '奶油蘑菇義大利麵', price: 260 },
-    { id: 3, name: '番茄海鮮義大利麵', price: 320 },
-    { id: 4, name: '青醬雞肉義大利麵', price: 290 },
-    { id: 5, name: '臘腸番茄義大利麵', price: 270 },
-    { id: 6, name: '白酒蛤蠣義大利麵', price: 300 }
-];
+// const menuItems = [
+//     { id: 1, name: '香蒜培根義大利麵', price: 280 },
+//     { id: 2, name: '奶油蘑菇義大利麵', price: 260 },
+//     { id: 3, name: '番茄海鮮義大利麵', price: 320 },
+//     { id: 4, name: '青醬雞肉義大利麵', price: 290 },
+//     { id: 5, name: '臘腸番茄義大利麵', price: 270 },
+//     { id: 6, name: '白酒蛤蠣義大利麵', price: 300 }
+// ];
+function renderMenuItems() {
+    fetch('/get_menu')
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                const container = document.querySelector('.menu-selection');
+                if (container) {
+                    container.innerHTML = data.menu.map(item => `
+                        <div class="menu-item" data-id="${item.id}">
+                            <div class="menu-item-header">
+                                <div>
+                                    <h3>${item.name}</h3>
+                                    <p class="price">NT$ ${item.price}</p>
+                                    <p class="category">類別: ${item.category}</p>
+                                    <p class="time-slots">時段: ${item.timeSlots}</p>
+                                    <p class="nutrition-facts">營養成分: ${item.nutritionFacts}</p>
+                                    <p class="recommendation">推薦: ${item.recommendation ? '是' : '否'}</p>
+                                </div>
+                                <div class="quantity-control">
+                                    <button class="quantity-btn decrease" onclick="updateCart(${item.id}, -1)">-</button>
+                                    <span class="quantity">0</span>
+                                    <button class="quantity-btn increase" onclick="updateCart(${item.id}, 1)">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } else {
+                alert('無法獲取菜單資料：' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching menu:', error);
+            alert('發生錯誤，無法獲取菜單資料');
+        });
+}
+
 
 // 購物車狀態
 let cart = [];

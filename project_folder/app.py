@@ -176,12 +176,12 @@ def save_reservation():
         Table_ID = available_table[0]
 
         # 插入訂位資訊到資料庫
-        query_insert_reservation = """
-            INSERT INTO Reservation (TimeSlots, Number_of_People, Reservation_Time, Customer_ID, Table_ID)
-            VALUES (?, ?, ?, ?, ?)
-        """
-        cursor.execute(query_insert_reservation, (TimeSlots, Number_of_People, Reservation_Time, Customer_ID, Table_ID))
-        conn_obj.commit()
+        # query_insert_reservation = """
+        #     INSERT INTO Reservation (TimeSlots, Number_of_People, Reservation_Time, Customer_ID, Table_ID)
+        #     VALUES (?, ?, ?, ?, ?)
+        # """
+        # cursor.execute(query_insert_reservation, (TimeSlots, Number_of_People, Reservation_Time, Customer_ID, Table_ID))
+        # conn_obj.commit()
 
         cursor.close()
         conn_obj.close()
@@ -237,6 +237,45 @@ def available_tables():
         print("Error:", e)
         return jsonify({'status': 'error', 'message': '資料庫查詢失敗'}), 500
 
+
+# 預約後呼叫品項提供選擇
+@app.route('/get_menu', methods=['GET'])
+def get_menu():
+    try:
+        # 假設已經有連接資料庫的 `conn()` 函數
+        conn_obj = conn()
+        if not conn_obj:
+            return jsonify({'status': 'error', 'message': '資料庫連接失敗'})
+
+        cursor = conn_obj.cursor()
+        # 更新的 SQL 查詢，從 Dish 表取得所需資料
+        cursor.execute("""
+            SELECT Dish_ID, Dish_name, Dish_price, Category, TimeSlots, Nutrition_facts, Recommendation
+            FROM Dish
+        """)
+        dishes = cursor.fetchall()
+
+        # 將資料整理為 JSON 格式
+        menu_data = [
+            {
+                'id': dish[0],
+                'name': dish[1],
+                'price': dish[2],
+                'category': dish[3],
+                'timeSlots': dish[4],
+                'nutritionFacts': dish[5],
+                'recommendation': dish[6]
+            }
+            for dish in dishes
+        ]
+        
+        cursor.close()
+        conn_obj.close()
+
+        return jsonify({'status': 'success', 'menu': menu_data})
+    except Exception as e:
+        print("Error:", e)
+        return jsonify({'status': 'error', 'message': '資料庫操作失敗'}), 500
 
 
 
