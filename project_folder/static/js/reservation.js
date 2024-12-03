@@ -11,32 +11,34 @@ function renderMenuItems() {
     fetch('/get_menu')
         .then(response => response.json())
         .then(data => {
-            if (data.status === 'success') {
-                const container = document.querySelector('.menu-selection');
-                if (container) {
-                    container.innerHTML = data.menu.map(item => `
-                        <div class="menu-item" data-id="${item.id}">
-                            <div class="menu-item-header">
-                                <div>
-                                    <h3>${item.name}</h3>
-                                    <p class="price">NT$ ${item.price}</p>
-                                    <p class="category">類別: ${item.category}</p>
-                                    <p class="time-slots">時段: ${item.timeSlots}</p>
-                                    <p class="nutrition-facts">營養成分: ${item.nutritionFacts}</p>
-                                    <p class="recommendation">推薦: ${item.recommendation ? '是' : '否'}</p>
-                                </div>
-                                <div class="quantity-control">
-                                    <button class="quantity-btn decrease" onclick="updateCart(${item.id}, -1)">-</button>
-                                    <span class="quantity">0</span>
-                                    <button class="quantity-btn increase" onclick="updateCart(${item.id}, 1)">+</button>
-                                </div>
-                            </div>
-                        </div>
-                    `).join('');
-                }
-            } else {
-                alert('無法獲取菜單資料：' + data.message);
-            }
+            console.log(data); // 確認資料是否正確
+            renderMenuItems(data.menu);
+            // if (data.status === 'success') {
+            //     const container = document.querySelector('.menu-selection');
+            //     if (container) {
+            //         container.innerHTML = data.menu.map(item => `
+            //             <div class="menu-item" data-id="${item.id}">
+            //                 <div class="menu-item-header">
+            //                     <div>
+            //                         <h3>${item.name}</h3>
+            //                         <p class="price">NT$ ${item.price}</p>
+            //                         <p class="category">類別: ${item.category}</p>
+            //                         <p class="time-slots">時段: ${item.timeSlots}</p>
+            //                         <p class="nutrition-facts">營養成分: ${item.nutritionFacts}</p>
+            //                         <p class="recommendation">推薦: ${item.recommendation ? '是' : '否'}</p>
+            //                     </div>
+            //                     <div class="quantity-control">
+            //                         <button class="quantity-btn decrease" onclick="updateCart(${item.id}, -1)">-</button>
+            //                         <span class="quantity">0</span>
+            //                         <button class="quantity-btn increase" onclick="updateCart(${item.id}, 1)">+</button>
+            //                     </div>
+            //                 </div>
+            //             </div>
+            //         `).join('');
+            //     }
+            // } else {
+            //     alert('無法獲取菜單資料：' + data.message);
+            // }
         })
         .catch(error => {
             console.error('Error fetching menu:', error);

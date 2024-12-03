@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask import request, flash, redirect, url_for
 import pyodbc
 
 app = Flask(__name__)
@@ -122,11 +124,6 @@ def logout():
     session.pop('Customer_name', None)  # 清除用戶名
     return redirect(url_for('index'))  # 重新導向到首頁
 
-@app.route('/member')
-def member():
-    if 'Customer_name' not in session:
-        return redirect(url_for('login'))  # 未登入則跳轉到登入頁面
-    return render_template('member.html', customer_name=session['Customer_name'])
 
 @app.route('/save_reservation', methods=['POST'])
 def save_reservation():
@@ -277,8 +274,125 @@ def get_menu():
         print("Error:", e)
         return jsonify({'status': 'error', 'message': '資料庫操作失敗'}), 500
 
+def query_order_history(customer_id):
+    try:
+        conn_obj = conn()  # 建立資料庫連線
+        if not conn_obj:
+            return []
+
+        cursor = conn_obj.cursor()
+        query = """
+            SELECT Order_ID, Order_Date, Total_Amount
+            FROM Orders
+            WHERE Customer_ID = ?
+            ORDER BY Order_Date DESC
+        """
+        cursor.execute(query, (customer_id,))
+        orders = cursor.fetchall()
+        cursor.close()
+        conn_obj.close()
+
+        # 整理數據為清單格式
+        return [
+            {
+                'order_id': order[0],
+                'order_date': order[1],
+                'total_amount': order[2],
+            }
+            for order in orders
+        ]
+    except Exception as e:
+        print(f"Error querying order history: {e}")
+        return []
+    
+def query_customer_data(customer_id):
+    try:
+        conn_obj = conn()  # 建立資料庫連線
+        if not conn_obj:
+            return None
+
+        cursor = conn_obj.cursor()
+        query = """
+            SELECT Customer_name, Customer_phoneNumber, PWD, Points
+            FROM Customer
+            WHERE Customer_ID = ?
+        """
+        cursor.execute(query, (customer_id,))
+        customer_data = cursor.fetchone()
+        cursor.close()
+        conn_obj.close()
+
+        if customer_data:
+            return {
+                'name': customer_data[0],
+                'phone': customer_data[1],
+                'PWD': customer_data[2],
+                'point': customer_data[3],
+            }
+        return None
+    except Exception as e:
+        print(f"Error querying customer data: {e}")
+        return None
 
 
+@app.route('/member')
+def member():
+    # 假設使用者資料存放在資料庫中
+    customer_id = session.get('Customer_ID')
+    customer_data = query_customer_data(customer_id)
+    order_history = query_order_history(customer_id)  # 也可以查詢訂單歷史
+    print("Customer Data:", customer_data)
+    print("Order History:", order_history)
+    return render_template(
+        'member.html',
+        customer=customer_data,
+        orders=order_history
+    )
+
+# 修改密碼
+@app.route('/update_password', methods=['POST'])
+def update_password():
+    if 'Customer_ID' not in session:
+        return redirect(url_for('login'))  # 如果未登入，跳轉到登入頁面
+
+    customer_id = session.get('Customer_ID')
+    new_password = request.form.get('new_password')
+    confirm_password = request.form.get('confirm_password')
+
+    # 檢查密碼是否相符
+    if new_password != confirm_password:
+        flash('兩次密碼輸入不相符', 'error')
+        return redirect(url_for('member'))  # 返回會員頁面
+
+    # 檢查密碼長度（例如：至少8個字符）
+    if len(new_password) < 8:
+        flash('密碼長度必須至少8個字符', 'error')
+        return redirect(url_for('member'))
+
+    try:
+        # 更新密碼
+        conn_obj = conn()  # 建立資料庫連線
+        if not conn_obj:
+            flash('資料庫連線失敗', 'error')
+            return redirect(url_for('member'))
+        
+        cursor = conn_obj.cursor()
+        query = """
+            UPDATE Customer
+            SET PWD = ?
+            WHERE Customer_ID = ?
+        """
+        cursor.execute(query, (new_password, customer_id))
+        conn_obj.commit()
+        cursor.close()
+        conn_obj.close()
+
+        flash('密碼已成功修改', 'success')
+        return redirect(url_for('member'))  # 返回會員頁面
+    except Exception as e:
+        print(f"Error updating password: {e}")
+        flash('修改密碼失敗', 'error')
+        return redirect(url_for('member'))
 
 if __name__ == '__main__':
     app.run(debug=True)

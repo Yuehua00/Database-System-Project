@@ -51,32 +51,45 @@
                 <h2>會員資料</h2>
                 <div class="info-group">
                     <label>姓名</label>
-                    <p id="member-name"></p>
+                    <p id="member-name">{{ customer.name }}</p>
                 </div>
                 <div class="info-group">
                     <label>手機號碼</label>
-                    <p id="member-phone"></p>
+                    <p id="member-phone">{{ customer.phone }}</p>
                 </div>
-                <div class="info-group">
+                <!-- <div class="info-group">
                     <label>電子郵件</label>
                     <p id="member-email"></p>
-                </div>
+                </div> -->
                 <div class="info-group">
                     <label>密碼</label>
                     <button class="btn change-password">修改密碼</button>
                 </div>
                 <div class="info-group">
                     <label>點數</label>
-                    <p id="member-points"></p>
+                    <p id="member-points">{{ customer.point }}</p>
                 </div>
             </section>
 
             <section class="order-history">
                 <h2>訂單查詢</h2>
                 <div class="orders">
-                    <!-- 訂單列表會動態產生 -->
+                    {% if orders %}
+                        <ul>
+                            {% for order in orders %}
+                            <li>
+                                訂單編號: {{ order['id'] }}<br>
+                                訂單日期: {{ order['date'] }}<br>
+                                總金額: NT$ {{ order['total'] }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>尚無訂單記錄。</p>
+                    {% endif %}
                 </div>
             </section>
+            
         </main>
         <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
     </body>
