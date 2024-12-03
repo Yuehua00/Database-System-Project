@@ -102,7 +102,7 @@ def register():
         Customer_phoneNumber = request.form.get('Customer_phoneNumber')
         Ori_PWD = request.form.get('PWD')
         PWD = generate_password_hash(Ori_PWD)
-        print(PWD)
+        
         
         conn_obj = conn()
         if conn_obj:
@@ -127,6 +127,41 @@ def logout():
     session.pop('Customer_name', None)  # 清除用戶名
     return redirect(url_for('index'))  # 重新導向到首頁
 
+@app.route('/change-password', methods=['POST'])
+def change_password():
+    # 確保使用者已登入
+    if 'Customer_ID' not in session:
+        return jsonify({"success": False, "message": "請先登入"})
+
+    customer_id = session.get('Customer_ID')
+    new_password = request.json.get('new_password')
+
+    # 驗證新密碼的合法性
+    if not new_password or len(new_password) < 6:
+        return jsonify({"success": False, "message": "密碼長度必須大於6個字符"})
+
+    try:
+        # 更新密碼到資料庫
+        conn_obj = conn()  # 資料庫連接
+        if not conn_obj:
+            return jsonify({"success": False, "message": "資料庫連接失敗"})
+
+        cursor = conn_obj.cursor()
+        query = """
+            UPDATE Customer
+            SET PWD = ?
+            WHERE Customer_ID = ?
+        """
+        cursor.execute(query, (new_password, customer_id))
+        conn_obj.commit()  # 提交更改
+        cursor.close()
+        conn_obj.close()
+
+        return jsonify({"success": True, "message": "密碼修改成功"})
+    
+    except Exception as e:
+        print(f"Error changing password: {e}")
+        return jsonify({"success": False, "message": "修改密碼時出錯"})
 
 @app.route('/save_reservation', methods=['POST'])
 def save_reservation():
@@ -138,14 +173,14 @@ def save_reservation():
     Reservation_Time = request.form.get('Reservation_Time')
     TimeSlots = request.form.get('TimeSlots')
     Customer_ID = session['Customer_ID']  # 使用 session 中的用户 ID
-    print("Session Data:", session)
+    # print("Session Data:", session)
 
-    print("Received Data:", {
-        'Number_of_People': Number_of_People,
-        'Reservation_Time': Reservation_Time,
-        'TimeSlots': TimeSlots,
-        'Customer_ID': Customer_ID,
-    })
+    # print("Received Data:", {
+    #     'Number_of_People': Number_of_People,
+    #     'Reservation_Time': Reservation_Time,
+    #     'TimeSlots': TimeSlots,
+    #     'Customer_ID': Customer_ID,
+    # })
 
     try:
         conn_obj = conn()
@@ -344,8 +379,8 @@ def member():
     customer_id = session.get('Customer_ID')
     customer_data = query_customer_data(customer_id)
     order_history = query_order_history(customer_id)  # 也可以查詢訂單歷史
-    print("Customer Data:", customer_data)
-    print("Order History:", order_history)
+    # print("Customer Data:", customer_data)
+    # print("Order History:", order_history)
     return render_template(
         'member.html',
         customer=customer_data,
@@ -356,11 +391,21 @@ def member():
 @app.route('/update_password', methods=['POST'])
 def update_password():
     if 'Customer_ID' not in session:
-        return redirect(url_for('login'))  # 如果未登入，跳轉到登入頁面
+        return jsonify({'success': False, 'message': '請先登入'}), 403  # 未登入
 
     customer_id = session.get('Customer_ID')
-    new_password = request.form.get('new_password')
-    confirm_password = request.form.get('confirm_password')
+
+    # 接收 JSON 數據
+    data = request.get_json()
+    new_password = data.get('new_password')
+    confirm_password = data.get('confirm_password')
+
+    # 檢查密碼是否一致
+    if new_password != confirm_password:
+        return jsonify({'success': False, 'message': '密碼不一致，請重新輸入。'}), 400
+
+    if not new_password or len(new_password) < 6:
+        return jsonify({'success': False, 'message': '密碼不得為空，且至少需6個字元'}), 400
 
     # 將密碼加密後再存入資料庫
     hashed_password = generate_password_hash(new_password)
@@ -369,26 +414,24 @@ def update_password():
         # 更新密碼
         conn_obj = conn()  # 建立資料庫連線
         if not conn_obj:
-            flash('資料庫連線失敗', 'error')
-            return redirect(url_for('member'))
-        
+            return jsonify({'success': False, 'message': '資料庫連線失敗'}), 500
+
         cursor = conn_obj.cursor()
         query = """
             UPDATE Customer
             SET PWD = ?
             WHERE Customer_ID = ?
         """
-        cursor.execute(query, (new_password, customer_id))
+        cursor.execute(query, (hashed_password, customer_id))
         conn_obj.commit()
         cursor.close()
         conn_obj.close()
 
-        flash('密碼已成功修改', 'success')
-        return redirect(url_for('member'))  # 返回會員頁面
+        return jsonify({'success': True, 'message': '密碼已成功修改'}), 200
     except Exception as e:
         print(f"Error updating password: {e}")
-        flash('修改密碼失敗', 'error')
-        return redirect(url_for('member'))
+        return jsonify({'success': False, 'message': '修改密碼失敗'}), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -121,7 +121,7 @@
 
                 if (newPassword === confirmPassword) {
                     // 發送修改密碼的請求到後端
-                    fetch('/change-password', {
+                    fetch('/update_password', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
