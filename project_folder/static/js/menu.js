@@ -13,29 +13,22 @@ document.addEventListener('click', function(e) {
 });
 
 // 菜單卡片點擊展開/收合
-document.querySelectorAll('.menu-preview').forEach(preview => {
-    preview.addEventListener('click', function(e) {
-        // 關閉其他已開啟的卡片
-        document.querySelectorAll('.menu-card.active').forEach(card => {
-            if(card !== this.parentElement) {
-                card.classList.remove('active');
-            }
+document.addEventListener('DOMContentLoaded', () => {
+    const cards = document.querySelectorAll('.menu-card');
+    
+    cards.forEach(card => {
+        card.addEventListener('click', () => {
+            // 先移除其他卡片的 active 狀態
+            cards.forEach(c => {
+                if (c !== card) {
+                    c.classList.remove('active');
+                }
+            });
+            
+            // 切換當前卡片的狀態
+            card.classList.toggle('active');
         });
-        
-        // 切換當前卡片
-        this.parentElement.classList.toggle('active');
-        
-        e.stopPropagation(); // 防止事件冒泡
     });
-});
-
-// 點擊空白處收合菜單卡片
-document.addEventListener('click', function(e) {
-    if (!e.target.closest('.menu-card')) {
-        document.querySelectorAll('.menu-card.active').forEach(card => {
-            card.classList.remove('active');
-        });
-    }
 });
 
 // 登入/註冊頁面標籤切換
