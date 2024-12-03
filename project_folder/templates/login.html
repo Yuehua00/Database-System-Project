@@ -1,139 +1,139 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>會員登入/註冊</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <style>
-        .welcome-message {
-            font-size: 16px;
-            color: #4CAF50; /* 綠色 */
-            font-weight: bold;
-            margin-right: 20px;
-        }
-
-    </style>
-</head>
-<body>
-    <header>
-        <nav>
-            <a href="{{ url_for('index') }}" class="logo">大義麵親</a>
-            <div class="menu-icon">
-                <div class="bar1"></div>
-                <div class="bar2"></div>
-                <div class="bar3"></div>
-            </div>
-            <div class="dropdown-menu">
-                {% if 'Customer_name' in session %}
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>會員登入/註冊</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+        <style>
+            .welcome-message {
+                font-size: 16px;
+                color: #4CAF50;
+                /* 綠色 */
+                font-weight: bold;
+                margin-right: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <nav>
+                <a href="{{ url_for('index') }}" class="logo">大義麵親</a>
+                <div class="menu-icon">
+                    <div class="bar1"></div>
+                    <div class="bar2"></div>
+                    <div class="bar3"></div>
+                </div>
+                <div class="dropdown-menu">
+                    {% if 'Customer_name' in session %}
                     <span class="welcome-message">歡迎, {{ session['Customer_name'] }}!</span>
-                {% endif %}
+                    {% endif %}
 
-                <a href="{{ url_for('menu') }}">菜單</a>
-                <a href="{{ url_for('reservation') }}">訂位</a>
-                <a href="{{ url_for('cart') }}">查看購物車</a>
-                
-                {% if 'Customer_name' in session %}
+                    <a href="{{ url_for('menu') }}">菜單</a>
+                    <a href="{{ url_for('reservation') }}">訂位</a>
+                    <a href="{{ url_for('cart') }}">查看購物車</a>
+
+                    {% if 'Customer_name' in session %}
                     <!-- 已登入顯示的內容 -->
                     <a href="{{ url_for('member') }}">會員頁面</a>
                     <a href="{{ url_for('logout') }}">登出</a>
-                {% else %}
+                    {% else %}
                     <!-- 未登入顯示的內容 -->
                     <a href="{{ url_for('login') }}">登入/註冊</a>
-                {% endif %}
-            </div>
-        </nav>
-    </header>
-    
-    
-
-    <main class="login-main">
-        <div class="main-content">
-            <div class="auth-container">
-                <div class="auth-tabs">
-                    <div class="tab active" onclick="showForm('login')">登入</div>
-                    <div class="tab" onclick="showForm('register')">註冊</div>
+                    {% endif %}
                 </div>
+            </nav>
+        </header>
 
-                <!-- 登入表單 -->
-                <form class="auth-form active" id="loginForm" action="/login" method="POST">
-                    <div class="form-group">
-                        <label for="Customer_phoneNumber">手機號碼</label>
-                        <input type="text" id="Customer_phoneNumber" name="Customer_phoneNumber" required>
+
+
+        <main class="login-main">
+            <div class="main-content">
+                <div class="auth-container">
+                    <div class="auth-tabs">
+                        <div class="tab active" onclick="showForm('login')">登入</div>
+                        <div class="tab" onclick="showForm('register')">註冊</div>
                     </div>
-                    <div class="form-group">
-                        <label for="PWD">密碼</label>
-                        <input type="password" id="PWD" name="PWD" required>
-                    </div>
-                    <button type="submit" class="btn">登入</button>
-                </form>
-    
-                <!-- 註冊表單 -->
-                <form class="auth-form" id="registerForm" action="/register" method="POST">
-                    <div class="form-group">
-                        <label for="Customer_name">姓名</label>
-                        <input type="text" id="Customer_name" name="Customer_name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="Customer_phoneNumber">手機號碼</label>
-                        <input type="tel" id="Customer_phoneNumber" name="Customer_phoneNumber" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="PWD">密碼</label>
-                        <input type="password" id="PWD" name="PWD" required>
-                    </div>
-                    <button type="submit" class="btn">註冊</button>
-                </form>
+
+                    <!-- 登入表單 -->
+                    <form class="auth-form active" id="loginForm" action="/login" method="POST">
+                        <div class="form-group">
+                            <label for="Customer_phoneNumber">手機號碼</label>
+                            <input type="text" id="Customer_phoneNumber" name="Customer_phoneNumber" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="PWD">密碼</label>
+                            <input type="password" id="PWD" name="PWD" required>
+                        </div>
+                        <button type="submit" class="btn">登入</button>
+                    </form>
+
+                    <!-- 註冊表單 -->
+                    <form class="auth-form" id="registerForm" action="/register" method="POST">
+                        <div class="form-group">
+                            <label for="Customer_name">姓名</label>
+                            <input type="text" id="Customer_name" name="Customer_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="Customer_phoneNumber">手機號碼</label>
+                            <input type="tel" id="Customer_phoneNumber" name="Customer_phoneNumber" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="PWD">密碼</label>
+                            <input type="password" id="PWD" name="PWD" required>
+                        </div>
+                        <button type="submit" class="btn">註冊</button>
+                    </form>
+                </div>
             </div>
-        </div>
 
-        <script>
-            // 處理登入表單提交
-            const loginForm = document.getElementById('loginForm');
-            loginForm.addEventListener('submit', async (e) => {
-                e.preventDefault(); // 防止表單默認提交行為
-        
-                const formData = new FormData(loginForm);
-                const response = await fetch('{{ url_for("login") }}', {
-                    method: 'POST',
-                    body: formData
+            <script>
+                // 處理登入表單提交
+                const loginForm = document.getElementById('loginForm');
+                loginForm.addEventListener('submit', async (e) => {
+                    e.preventDefault(); // 防止表單默認提交行為
+
+                    const formData = new FormData(loginForm);
+                    const response = await fetch('{{ url_for("login") }}', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    // 判斷回傳是否為 JSON 格式，並顯示提示訊息
+                    const result = await response.json();
+                    alert(result.message); // 顯示錯誤或成功訊息
+
+                    if (result.status === 'success') {
+                        window.location.href = '/'; // 登入成功後跳轉
+                    }
                 });
-        
-                // 判斷回傳是否為 JSON 格式，並顯示提示訊息
-                const result = await response.json();
-                alert(result.message); // 顯示錯誤或成功訊息
-        
-                if (result.status === 'success') {
-                    window.location.href = '/'; // 登入成功後跳轉
-                }
-            });
-        
-            // 處理註冊表單提交
-            const registerForm = document.getElementById('registerForm');
-            registerForm.addEventListener('submit', async (e) => {
-                e.preventDefault(); // 防止表單默認提交行為
-        
-                const formData = new FormData(registerForm);
-                const response = await fetch('{{ url_for("register") }}', { method: 'POST', body: formData });
-        
-                const result = await response.json(); // 獲取伺服器返回的 JSON 響應
-                alert(result.message); // 顯示錯誤或成功訊息
-        
-                if (result.status === 'success') {
-                    showForm('login'); // 註冊成功後切換到登入表單
-                }
-            });        
 
-            // 切換登入/註冊表單
-            function showForm(formType) {
-                document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
-                document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-                
-                document.getElementById(formType + 'Form').classList.add('active');
-                event.target.classList.add('active');
-            }
-        </script>
-    </main>
-    <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
-</body>
+                // 處理註冊表單提交
+                const registerForm = document.getElementById('registerForm');
+                registerForm.addEventListener('submit', async (e) => {
+                    e.preventDefault(); // 防止表單默認提交行為
+
+                    const formData = new FormData(registerForm);
+                    const response = await fetch('{{ url_for("register") }}', { method: 'POST', body: formData });
+
+                    const result = await response.json(); // 獲取伺服器返回的 JSON 響應
+                    alert(result.message); // 顯示錯誤或成功訊息
+
+                    if (result.status === 'success') {
+                        showForm('login'); // 註冊成功後切換到登入表單
+                    }
+                });
+
+                // 切換登入/註冊表單
+                function showForm(formType) {
+                    document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
+                    document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+
+                    document.getElementById(formType + 'Form').classList.add('active');
+                    event.target.classList.add('active');
+                }
+            </script>
+        </main>
+        <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
+    </body>
 </html>
