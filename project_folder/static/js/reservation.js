@@ -293,3 +293,48 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+
+// 繼續按鈕
+document.querySelectorAll('.btn.next-step').forEach(button => {
+    button.addEventListener('click', function () {
+        const nextStep = this.getAttribute('data-next');  // 獲取下一步驟
+        const currentStep = document.querySelector('.reservation-step.active');  // 當前步驟
+
+        // 隱藏當前步驟
+        currentStep.classList.remove('active');
+
+        // 顯示下一個步驟
+        const stepToShow = document.getElementById('step' + nextStep);
+        stepToShow.classList.add('active');
+
+        // 更新進度條
+        const progressSteps = document.querySelectorAll('.progress-step');
+        progressSteps.forEach(step => {
+            step.classList.remove('active');
+        });
+        document.querySelector(`.progress-step[data-step="${nextStep}"]`).classList.add('active');
+    });
+});
+
+// 返回按鈕
+document.querySelectorAll('.btn.prev-step').forEach(button => {
+    button.addEventListener('click', function () {
+        const prevStep = this.getAttribute('data-prev');  // 獲取上一個步驟
+        const currentStep = document.querySelector('.reservation-step.active');  // 當前步驟
+
+        // 隱藏當前步驟
+        currentStep.classList.remove('active');
+
+        // 顯示上一個步驟
+        const stepToShow = document.getElementById('step' + prevStep);
+        stepToShow.classList.add('active');
+
+        // 更新進度條
+        const progressSteps = document.querySelectorAll('.progress-step');
+        progressSteps.forEach(step => {
+            step.classList.remove('active');
+        });
+        document.querySelector(`.progress-step[data-step="${prevStep}"]`).classList.add('active');
+    });
+});

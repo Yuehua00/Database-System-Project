@@ -260,6 +260,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+
 // 繼續按鈕
 document.querySelectorAll('.btn.next-step').forEach(button => {
     button.addEventListener('click', function () {
