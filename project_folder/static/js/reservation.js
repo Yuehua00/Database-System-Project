@@ -13,7 +13,9 @@ let menuItems = [];  // 定義 menuItems 變數
 function renderMenuItems() {
     const container = document.querySelector('.menu-selection');
     if (container) {
-        fetch('/get_menu') // 從伺服器抓取菜單資料
+        const timeSlotElement = document.querySelector('#TimeSlots');
+        const timeSlot = timeSlotElement ? timeSlotElement.value : null;
+        fetch(`/get_menu?timeSlot=${timeSlot}`) // 從伺服器抓取菜單資料
             .then(response => response.json())
             .then(menuItems => {
                 // 確保從資料中提取出菜單陣列
@@ -31,7 +33,6 @@ function renderMenuItems() {
                                     <button class="quantity-btn decrease" onclick="updateCart(${item.id}, -1)">-</button>
                                     <span class="quantity">0</span>
                                     <button class="quantity-btn increase" onclick="updateCart(${item.id}, 1)">+</button>
-
                                 </div>
                             </div>
                         </div>

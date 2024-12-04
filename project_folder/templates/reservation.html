@@ -102,7 +102,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="button" class="btn next-step" data-next="2">繼續</button>
+                        <button type="button" class="btn next-step" id="nextStepBtn" data-next="2">继续</button>
                     </form>
                 </section>
 
@@ -191,12 +191,7 @@
                     <div class="menu-selection">
                         <!-- 菜單項目會由JavaScript動態生成 -->
                     </div>
-                    <div class="cart-preview">
-                        <h3>已選餐點</h3>
-                        <div class="cart-items">
-                            <!-- 購物車內容會由JavaScript動態生成 -->
-                        </div>
-                    </div>
+
                     <button type="button" class="btn prev-step" data-prev="1">返回</button>
                     <button type="button" class="btn next-step" data-next="3">繼續</button>
                 </section>
@@ -237,51 +232,77 @@
             </div>
         </main>
         <script>
-            document.getElementById("nextStepBtn").addEventListener("click", async () => {
-                const reservationForm = document.getElementById("reservationForm");
-                const formData = new FormData(reservationForm);
+            document.addEventListener("DOMContentLoaded", () => {
+    const nextStepBtn = document.getElementById("nextStepBtn");
+    if (nextStepBtn) {
+        nextStepBtn.addEventListener("click", async () => {
+            const reservationForm = document.getElementById("reservationForm");
+            const formData = new FormData(reservationForm);
 
-                // 確認表單是否正確填寫
-                const numberOfPeople = formData.get('Number_of_People');
-                const reservationTime = formData.get('Reservation_Time');
-                const timeSlots = formData.get('TimeSlots');
+            // 确认表单是否正确填写
+            const numberOfPeople = formData.get('Number_of_People');
+            const reservationTime = formData.get('Reservation_Time');
+            const timeSlots = formData.get('TimeSlots');
+            if (numberOfPeople && reservationTime && timeSlots) {
+    try {
+        // 查询空桌
+        const availableTablesResponse = await fetch(`/available_tables?people_count=${numberOfPeople}&reservation_time=${reservationTime}&time_slot=${timeSlots}`);
+        
+        if (!availableTablesResponse.ok) {
+            const errorText = await availableTablesResponse.text();
+            console.error('Error response:', errorText);
+            alert('查询空桌时发生错误，请稍后再试。');
+            return;
+        }
 
+        const availableTablesResult = await availableTablesResponse.json();
 
-                if (numberOfPeople && reservationTime && timeSlots) {
-                    try {
-                        // 查詢空桌
-                        const availableTablesResponse = await fetch(`/available_tables?people_count=${numberOfPeople}&reservation_time=${reservationTime}&time_slot=${timeSlots}`)
-                        const availableTablesResult = await availableTablesResponse.json();
+        if (availableTablesResult.status === 'success' && availableTablesResult.available_tables.length > 0) {
+            console.log("Available tables:", availableTablesResult.available_tables);
 
-                        if (availableTablesResult.status === 'success' && availableTablesResult.available_tables.length > 0) {
-                            // 顯示可用桌號（選擇桌子的功能可以根據需求加入）
-                            console.log("Available tables:", availableTablesResult.available_tables);
-
-                            // 繼續提交訂位資訊
-                            const saveReservationResponse = await fetch('/save_reservation', {
-                                method: 'POST',
-                                body: formData
-                            });
-                            const saveReservationResult = await saveReservationResponse.json();
-
-                            if (saveReservationResult.status === 'success') {
-                                // 訂位資訊成功儲存後，進入 Step 2
-                                document.getElementById('step1').classList.remove('active');
-                                document.getElementById('step2').classList.add('active');
-                            } else {
-                                alert(saveReservationResult.message); // 顯示錯誤訊息
-                            }
-                        } else {
-                            alert("目前無可用桌，請選擇其他時間或人數。");
-                        }
-                    } catch (error) {
-                        console.error('Error:', error);
-                        alert("查詢或提交訂位資訊時發生錯誤。");
-                    }
-                } else {
-                    alert('請填寫所有必填欄位');
-                }
+            // 提交订位信息
+            const saveReservationResponse = await fetch('/save_reservation', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // 確保是 JSON 格式
+                },
+                body: JSON.stringify({
+                    Number_of_People: numberOfPeople,
+                    Reservation_Time: reservationTime,
+                    TimeSlots: timeSlots
+                }),
             });
+
+            if (!saveReservationResponse.ok) {
+                const errorText = await saveReservationResponse.text();
+                console.error('Error response:', errorText);
+                alert('提交订位信息时发生错误，请稍后再试。');
+                return;
+            }
+
+            const saveReservationResult = await saveReservationResponse.json();
+
+            if (saveReservationResult.status === 'success') {
+                document.getElementById('step1').classList.remove('active');
+                document.getElementById('step2').classList.add('active');
+            } else {
+                alert(saveReservationResult.message);
+            }
+        } else {
+            alert("目前无可用桌，请选择其他时间或人数。");
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert("查询或提交订位信息时发生错误。");
+    }
+}
+
+        });
+    } else {
+        console.error('Element with id "nextStepBtn" not found.');
+    }
+});
+
 
         </script>
         <script src="{{ url_for('static', filename='js/reservation.js') }}"></script>
