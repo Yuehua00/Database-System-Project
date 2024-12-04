@@ -257,13 +257,15 @@
                             });
                             const saveReservationResult = await saveReservationResponse.json();
 
-                            if (saveReservationResult.status === 'success') {
-                                // 訂位資訊成功儲存後，進入 Step 2
-                                document.getElementById('step1').classList.remove('active');
-                                document.getElementById('step2').classList.add('active');
-                            } else {
-                                alert(saveReservationResult.message); // 顯示錯誤訊息
-                            }
+                            // if (saveReservationResult.status === 'success') {
+                            //     // 訂位資訊成功儲存後，進入 Step 2
+                            //     document.getElementById('step1').classList.remove('active');
+                            //     document.getElementById('step2').classList.add('active');
+                            // } else {
+                            //     alert(saveReservationResult.message); // 顯示錯誤訊息
+                            // }
+                            
+                            
                         } else {
                             alert("目前無可用桌，請選擇其他時間或人數。");
                         }
@@ -275,6 +277,7 @@
                     alert('請填寫所有必填欄位');
                 }
             });
+            
 
         </script>
         <script src="{{ url_for('static', filename='js/reservation.js') }}"></script>

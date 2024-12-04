@@ -16,25 +16,34 @@ function renderMenuItems() {
         fetch('/get_menu') // 從伺服器抓取菜單資料
             .then(response => response.json())
             .then(menuItems => {
-                // 根據從資料庫獲得的資料渲染菜單
-                container.innerHTML = menuItems.map(item => `
-                    <div class="menu-item" data-id="${item.id}">
-                        <div class="menu-item-header">
-                            <div>
-                                <h3>${item.name}</h3>
-                                <p class="price">NT$ ${item.price}</p>
-                            </div>
-                            <div class="quantity-control">
-                                <button class="quantity-btn decrease" onclick="updateCart(${item.id}, -1)">-</button>
-                                <span class="quantity">0</span>
-                                <button class="quantity-btn increase" onclick="updateCart(${item.id}, 1)">+</button>
+                // 確保從資料中提取出菜單陣列
+                const menuData = menuItems.menu;
+                if (Array.isArray(menuData)) {
+                    // 根據從資料庫獲得的資料渲染菜單
+                    container.innerHTML = menuData.map(item => `
+                        <div class="menu-item" data-id="${item.id}">
+                            <div class="menu-item-header">
+                                <div>
+                                    <h3>${item.name}</h3>
+                                    <p class="price">NT$ ${item.price}</p>
+                                </div>
+                                <div class="quantity-control">
+                                    <button class="quantity-btn decrease" onclick="updateCart(${item.id}, -1)">-</button>
+                                    <span class="quantity">0</span>
+                                    <button class="quantity-btn increase" onclick="updateCart(${item.id}, 1)">+</button>
+
+                                </div>
                             </div>
                         </div>
-                    </div>
-                `).join('');
+                    `).join('');
+                } else {
+                    console.error('menuItems.menu 不是陣列:', menuItems);
+                    container.innerHTML = '<p>菜單載入失敗。</p>';
+                }
             })
             .catch(error => {
                 console.error('無法獲取菜單資料:', error);
+                container.innerHTML = '<p>無法載入菜單，請稍後再試。</p>';
             });
     }
 }
@@ -166,26 +175,99 @@ function moveToStep(step) {
 // }
 
 // 更新購物車
-function updateCart(itemId, change) {
-    const item = menuItems.find(i => i.id === itemId);
-    const existingItem = cart.find(i => i.id === itemId);
+// function updateCart(itemId, change) {
+//     const item = menuItems.find(i => i.id === itemId);
+//     const existingItem = cart.find(i => i.id === itemId);
     
-    if (existingItem) {
-        existingItem.quantity += change;
-        if (existingItem.quantity <= 0) {
-            cart = cart.filter(i => i.id !== itemId);
-        }
-    } else if (change > 0) {
-        cart.push({
-            id: itemId,
-            name: item.name,
-            price: item.price,
-            quantity: 1
-        });
+//     if (existingItem) {
+//         existingItem.quantity += change;
+//         if (existingItem.quantity <= 0) {
+//             cart = cart.filter(i => i.id !== itemId);
+//         }
+//     } else if (change > 0) {
+//         cart.push({
+//             id: itemId,
+//             name: item.name,
+//             price: item.price,
+//             quantity: 1
+//         });
+//     }
+
+//     updateCartDisplay();
+// }
+function updateCart(itemId, change) {
+    // 檢查該餐點是否已在購物車中
+    if (!cart[itemId]) {
+        cart[itemId] = 0; // 如果不存在，初始化數量為 0
     }
 
-    updateCartDisplay();
+    // 更新數量，並確保數量不低於 0
+    cart[itemId] = Math.max(cart[itemId] + change, 0);
+
+    // 更新數量顯示
+    const quantityElement = document.querySelector(`.menu-item[data-id="${itemId}"] .quantity`);
+    if (quantityElement) {
+        quantityElement.textContent = cart[itemId];
+    }
+
+    // 更新購物車顯示
+    renderCart();
 }
+
+function renderCart() {
+    const cartContainer = document.querySelector('.cart-items');
+    cartContainer.innerHTML = ''; // 清空現有的購物車內容
+
+    Object.keys(cart).forEach(itemId => {
+        if (cart[itemId] > 0) { // 只顯示數量大於 0 的項目
+            const item = menuItems.find(menuItem => menuItem.id == itemId); // 假設 menuItems 是菜單資料
+            const cartItem = `
+                <div class="cart-item">
+                    <span>${item.name}</span>
+                    <span>數量: ${cart[itemId]}</span>
+                </div>
+            `;
+            cartContainer.innerHTML += cartItem;
+        }
+    });
+}
+
+
+function submitOrder() {
+    // 過濾掉數量為 0 的項目
+    const order = Object.entries(selectedItems)
+        .filter(([id, quantity]) => quantity > 0)
+        .map(([id, quantity]) => ({ id: Number(id), quantity }));
+
+    if (order.length === 0) {
+        alert("請選擇至少一項菜單！");
+        return;
+    }
+
+    // 將資料送到伺服器
+    fetch('/submit_order', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(order),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('訂單送出成功！');
+            selectedItems = {}; // 清空選擇資料
+            document.querySelectorAll('.quantity').forEach(el => el.textContent = 0); // 重置數量顯示
+        } else {
+            alert('訂單送出失敗，請稍後再試！');
+        }
+    })
+    .catch(error => {
+        console.error('訂單送出失敗:', error);
+        alert('伺服器錯誤，請稍後再試！');
+    });
+}
+
 
 // 更新購物車顯示
 function updateCartDisplay() {

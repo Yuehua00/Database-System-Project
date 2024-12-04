@@ -319,12 +319,12 @@ def get_menu():
         print("Error:", e)
         return jsonify({'status': 'error', 'message': '資料庫操作失敗', 'error': str(e)}), 500
 
-    finally:
-        # 確保資源正確釋放
-        if cursor:
-            cursor.close()
-        if conn_obj:
-            conn_obj.close()
+    # finally:
+    #     # 確保資源正確釋放
+    #     if cursor:
+    #         cursor.close()
+    #     if conn_obj:
+    #         conn_obj.close()
 
 
 def query_order_history(customer_id):
@@ -491,6 +491,27 @@ def update_customer_info():
     except Exception as e:
         print(f"Error updating customer info: {e}")
         return jsonify({'success': False, 'message': '更新失敗，請稍後重試。'})
+
+# 選擇品項
+@app.route('/submit_order', methods=['POST'])
+def submit_order():
+    try:
+        order_data = request.get_json()  # 接收訂單資料
+        # 例如： [{"id": 1, "quantity": 2}, {"id": 3, "quantity": 1}]
+
+        if not order_data:
+            return jsonify({'status': 'error', 'message': '訂單資料為空'}), 400
+
+        # 處理訂單資料，儲存到資料庫或執行其他操作
+        for item in order_data:
+            dish_id = item['id']
+            quantity = item['quantity']
+            # 在此處執行儲存或更新資料庫的操作
+
+        return jsonify({'status': 'success', 'message': '訂單已送出'})
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True)
