@@ -12,24 +12,41 @@ document.addEventListener('click', function(e) {
     }
 });
 
-// 菜單卡片點擊展開/收合
-document.addEventListener('DOMContentLoaded', () => {
-    const cards = document.querySelectorAll('.menu-card');
+// // 菜單卡片點擊展開/收合
+// document.addEventListener('DOMContentLoaded', () => {
+//     const cards = document.querySelectorAll('.menu-card');
     
-    cards.forEach(card => {
-        card.addEventListener('click', () => {
-            // 先移除其他卡片的 active 狀態
-            cards.forEach(c => {
-                if (c !== card) {
-                    c.classList.remove('active');
-                }
-            });
+//     cards.forEach(card => {
+//         card.addEventListener('click', () => {
+//             // 先移除其他卡片的 active 狀態
+//             cards.forEach(c => {
+//                 if (c !== card) {
+//                     c.classList.remove('active');
+//                 }
+//             });
             
-            // 切換當前卡片的狀態
-            card.classList.toggle('active');
-        });
+//             // 切換當前卡片的狀態
+//             card.classList.toggle('active');
+//         });
+//     });
+// });
+
+document.querySelectorAll('.menu-item').forEach(item => {
+    item.addEventListener('click', function () {
+        // 如果已展開，收起
+        if (this.classList.contains('active')) {
+            this.classList.remove('active');
+        } else {
+            // 收起其他卡片
+            document.querySelectorAll('.menu-item.active').forEach(activeItem => {
+                activeItem.classList.remove('active');
+            });
+            // 展開當前卡片
+            this.classList.add('active');
+        }
     });
 });
+
 
 // 登入/註冊頁面標籤切換
 document.querySelectorAll('.auth-tab').forEach(tab => {
