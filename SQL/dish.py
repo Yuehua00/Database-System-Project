@@ -106,10 +106,10 @@ with open('dish.sql', 'w', encoding='utf-8') as file:
             avg_rating = dish_avg_ratings.get(
                 cnt, 'NULL')  # 取得平均星等，若無則為 'NULL'
             # 寫入兩個時間段的 insert 語句
-            file.write(f"insert into dish (Dish_name, Dish_price, Category, TimeSlots, Recommendation) values('{
-                       n}義大利麵', {price}, '{category}', 'lunch', {avg_rating});\n")
-            file.write(f"insert into dish (Dish_name, Dish_price, Category, TimeSlots, Recommendation) values('{
-                       n}義大利麵', {price}, '{category}', 'dinner', {avg_rating});\n")
+            file.write(f"insert into dish (Dish_name, Dish_price, Category, Recommendation) values('{
+                       n}義大利麵', {price}, '{category}', {avg_rating});\n")
+            file.write(f"insert into dish (Dish_name, Dish_price, Category, Recommendation) values('{
+                       n}義大利麵', {price}, '{category}', {avg_rating});\n")
 
     for i in c:
         cnt += 1
@@ -117,10 +117,10 @@ with open('dish.sql', 'w', encoding='utf-8') as file:
         category = categories["義大利麵"]["category"]  # 義大利麵類別
         avg_rating = dish_avg_ratings.get(cnt, 'NULL')  # 取得平均星等，若無則為 'NULL'
         # 寫入兩個時間段的 insert 語句
-        file.write(f"insert into dish (Dish_name, Dish_price, Category, TimeSlots, Recommendation) values('{
+        file.write(f"insert into dish (Dish_name, Dish_price, Category, Recommendation) values('{
                    i}', {price}, '{category}', 'lunch', {avg_rating});\n")
-        file.write(f"insert into dish (Dish_name, Dish_price, Category, TimeSlots, Recommendation) values('{
-                   i}', {price}, '{category}', 'dinner', {avg_rating});\n")
+        file.write(f"insert into dish (Dish_name, Dish_price, Category, Recommendation) values('{
+                   i}', {price}, '{category}', {avg_rating});\n")
 
     # 處理湯與沙拉項目
     for i in d:
@@ -129,10 +129,10 @@ with open('dish.sql', 'w', encoding='utf-8') as file:
         category = categories["湯與沙拉"]["category"]  # 湯與沙拉類別
         avg_rating = dish_avg_ratings.get(cnt, 'NULL')  # 取得平均星等，若無則為 'NULL'
         # 寫入兩個時間段的 insert 語句
-        file.write(f"insert into dish (Dish_name, Dish_price, Category, TimeSlots, Recommendation) values('{
-                   i}', {price}, '{category}', 'lunch', {avg_rating});\n")
-        file.write(f"insert into dish (Dish_name, Dish_price, Category, TimeSlots, Recommendation) values('{
-                   i}', {price}, '{category}', 'dinner', {avg_rating});\n")
+        file.write(f"insert into dish (Dish_name, Dish_price, Category, Recommendation) values('{
+                   i}', {price}, '{category}', {avg_rating});\n")
+        file.write(f"insert into dish (Dish_name, Dish_price, Category, Recommendation) values('{
+                   i}', {price}, '{category}', {avg_rating});\n")
 
     # 處理飲料項目
     for i in e:
@@ -141,12 +141,12 @@ with open('dish.sql', 'w', encoding='utf-8') as file:
         category = categories["飲料"]["category"]  # 飲料類別
         avg_rating = dish_avg_ratings.get(cnt, 'NULL')  # 取得平均星等，若無則為 'NULL'
         # 寫入三個時間段的 insert 語句
-        file.write(f"insert into dish (Dish_name, Dish_price, Category, TimeSlots, Recommendation) values('{
-                   i}', {price}, '{category}', 'afternoon', {avg_rating});\n")
-        file.write(f"insert into dish (Dish_name, Dish_price, Category, TimeSlots, Recommendation) values('{
-                   i}', {price}, '{category}', 'dinner', {avg_rating});\n")
-        file.write(f"insert into dish (Dish_name, Dish_price, Category, TimeSlots, Recommendation) values('{
-                   i}', {price}, '{category}', 'lunch', {avg_rating});\n")
+        file.write(f"insert into dish (Dish_name, Dish_price, Category, Recommendation) values('{
+                   i}', {price}, '{category}', {avg_rating});\n")
+        file.write(f"insert into dish (Dish_name, Dish_price, Category, Recommendation) values('{
+                   i}', {price}, '{category}', {avg_rating});\n")
+        file.write(f"insert into dish (Dish_name, Dish_price, Category, Recommendation) values('{
+                   i}', {price}, '{category}', {avg_rating});\n")
 
     # 處理甜點項目
     for i in f:
@@ -155,12 +155,12 @@ with open('dish.sql', 'w', encoding='utf-8') as file:
         category = categories["甜點"]["category"]  # 甜點類別
         avg_rating = dish_avg_ratings.get(cnt, 'NULL')  # 取得平均星等，若無則為 'NULL'
         # 寫入三個時間段的 insert 語句
-        file.write(f"insert into dish (Dish_name, Dish_price, Category, TimeSlots, Recommendation) values('{
-                   i}', {price}, '{category}', 'afternoon', {avg_rating});\n")
-        file.write(f"insert into dish (Dish_name, Dish_price, Category, TimeSlots, Recommendation) values('{
-                   i}', {price}, '{category}', 'dinner', {avg_rating});\n")
-        file.write(f"insert into dish (Dish_name, Dish_price, Category, TimeSlots, Recommendation) values('{
-                   i}', {price}, '{category}', 'lunch', {avg_rating});\n")
+        file.write(f"insert into dish (Dish_name, Dish_price, Category, Recommendation) values('{
+                   i}', {price}, '{category}', {avg_rating});\n")
+        file.write(f"insert into dish (Dish_name, Dish_price, Category, Recommendation) values('{
+                   i}', {price}, '{category}', {avg_rating});\n")
+        file.write(f"insert into dish (Dish_name, Dish_price, Category, Recommendation) values('{
+                   i}', {price}, '{category}', {avg_rating});\n")
 
 
 print("Dish data has been written to dish.sql")
