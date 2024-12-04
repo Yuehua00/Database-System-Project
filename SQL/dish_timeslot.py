@@ -46,8 +46,8 @@ for dish_id, dish_name, dish_price, category in dishes:
     if category in categories:
         for time_slot in categories[category]:
             cnt += 1
-            insert_statements.append(f"insert into dish_timeslot(TimeSlot_ID, Dish_ID, TimeSlot) values({
-                                     cnt}, {dish_id}, '{time_slot}');")
+            insert_statements.append(f"insert into dish_timeslot(Dish_ID, TimeSlot) values({
+                                     dish_id}, '{time_slot}');")
 
 # 將 SQL 語句寫入到 'dish_timeslot.sql' 檔案
 with open('dish_timeslot.sql', 'w', encoding='utf-8') as file:
