@@ -263,10 +263,19 @@ main {
     margin-top: 2rem;
 }
 
+
+
+/* reservation 的繼續按鈕*/
+.next-step {
+    background-color: #e67e22;
+}
+
+/* reservation 的返回按鈕*/
 .prev-step {
     background-color: #6c757d;
 }
 
+/* reservation 的確認訂位按鈕 */
 .confirm-order {
     background-color: #28a745;
 }
