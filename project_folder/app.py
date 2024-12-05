@@ -380,18 +380,18 @@ def member():
     reservations = cursor.fetchall()
 
     reservation_details = []
-    for reservation in reservations:
-        cursor.execute("""
-            SELECT d.Dish_name, od.Quantity, od.Price
-            FROM OrderDetails od
-            JOIN Dish d ON od.Dish_ID = d.Dish_ID
-            WHERE od.Reservation_ID = ?
-        """, (reservation[0],))
-        items = cursor.fetchall()
-        reservation_details.append({
-            'reservation': reservation,
-            'items': [{'name': item[0], 'quantity': item[1], 'price': item[2]} for item in items]
-        })
+    # for reservation in reservations:
+    #     cursor.execute("""
+    #         SELECT d.Dish_name, od.Quantity, od.Price
+    #         FROM OrderDetails od
+    #         JOIN Dish d ON od.Dish_ID = d.Dish_ID
+    #         WHERE od.Reservation_ID = ?
+    #     """, (reservation[0],))
+    #     items = cursor.fetchall()
+    #     reservation_details.append({
+    #         'reservation': reservation,
+    #         'items': [{'name': item[0], 'quantity': item[1], 'price': item[2]} for item in items]
+    #     })
 
     cursor.close()
     conn_obj.close()

@@ -50,9 +50,9 @@ function renderMenuItems() {
                                     <h3>${item.name}</h3>
                                     <p>價格：NT$${item.price}</p>
                                     <div class="quantity-control">
-                                        <button class="quantity-btn decrease" onclick="updateCart(${item.id}, -1)">-</button>
+                                        <button class="quantity-btn decrease" onclick="updateCart(1, -1)">-</button>
                                         <span class="quantity">0</span>
-                                        <button class="quantity-btn increase" onclick="updateCart(${item.id}, 1)">+</button>
+                                        <button class="quantity-btn increase" onclick="updateCart(1, 1)">+</button>
                                     </div>
                                 </div>
                             `).join('')}
@@ -73,11 +73,30 @@ function renderMenuItems() {
 
 
 document.addEventListener('DOMContentLoaded', () => {
+
     const timeSlotElement = document.querySelector('#TimeSlots');
     if (timeSlotElement) {
         timeSlotElement.addEventListener('change', renderMenuItems);
     }
+
+    const container = document.querySelector('.menu-selection');
+    if (container) {
+        container.addEventListener('click', event => {
+            if (event.target.classList.contains('quantity-btn')) {
+                const menuItemElement = event.target.closest('.menu-item');
+                if (!menuItemElement) return;
+
+                const itemId = parseInt(menuItemElement.dataset.id, 10);
+                const change = event.target.classList.contains('increase') ? 1 : -1;
+
+                console.log(`Item clicked: ${itemId}, Change: ${change}`);
+                updateCart(itemId, change);
+            }
+        });
+    }
+    renderCart(); // 渲染初始購物車
 });
+
 
 
 
@@ -86,6 +105,7 @@ function setupEventListeners() {
     // 繼續按鈕
     document.querySelectorAll('.reservation-step button:last-child').forEach(button => {
         button.addEventListener('click', function() {
+            console.log('Button clicked:', e.target.dataset.id);
             if (validateStep(currentStep)) {
                 moveToStep(currentStep + 1);
             }
@@ -197,42 +217,114 @@ function moveToStep(step) {
 
 //     updateCartDisplay();
 // }
+
+// 初始化購物車為空陣列
+let cart = [];
+
+// 更新購物車邏輯
 function updateCart(itemId, change) {
-    // 檢查該餐點是否已在購物車中
-    if (!cart[itemId]) {
-        cart[itemId] = 0; // 如果不存在，初始化數量為 0
+    const menuItem = menuItems.find(item => item.id === itemId);
+    if (!menuItem) return;
+    console.log("here");
+    const existingItem = cart.find(item => item.id === itemId);
+    console.log(existingItem);
+    if (existingItem) {
+        existingItem.quantity += change;
+        if (existingItem.quantity <= 0) {
+            cart = cart.filter(item => item.id !== itemId);
+        }
+    } else if (change > 0) {
+        
+        cart.push({
+            id: menuItem.id,
+            name: menuItem.name,
+            price: menuItem.price,
+            quantity: 1,
+        });
     }
 
-    // 更新數量，並確保數量不低於 0
-    cart[itemId] = Math.max(cart[itemId] + change, 0);
-
-    // 更新數量顯示
+    // 更新畫面數量
     const quantityElement = document.querySelector(`.menu-item[data-id="${itemId}"] .quantity`);
     if (quantityElement) {
-        quantityElement.textContent = cart[itemId];
+        console.log(`更新數量顯示: ${cart.find(item => item.id === itemId)?.quantity || 0}`);
+        quantityElement.textContent = cart.find(item => item.id === itemId)?.quantity || 0;
+    } else {
+        console.error('找不到數量元素');
     }
 
-    // 更新購物車顯示
+    // 渲染購物車
     renderCart();
 }
 
+
+// 渲染購物車
 function renderCart() {
     const cartContainer = document.querySelector('.cart-items');
-    cartContainer.innerHTML = ''; // 清空現有的購物車內容
+    if (!cartContainer) {
+        console.error('找不到 .cart-items 容器');
+        return;
+    }
 
-    Object.keys(cart).forEach(itemId => {
-        if (cart[itemId] > 0) { // 只顯示數量大於 0 的項目
-            const item = menuItems.find(menuItem => menuItem.id == itemId); // 假設 menuItems 是菜單資料
-            const cartItem = `
-                <div class="cart-item">
-                    <span>${item.name}</span>
-                    <span>數量: ${cart[itemId]}</span>
-                </div>
-            `;
-            cartContainer.innerHTML += cartItem;
-        }
+    console.log('購物車內容:', cart);
+    cartContainer.innerHTML = ''; // 清空內容
+
+    if (cart.length === 0) {
+        cartContainer.innerHTML = '<p>購物車目前沒有任何項目。</p>';
+        return;
+    }
+
+    cart.forEach(item => {
+        const cartItem = `
+            <div class="cart-item">
+                <span>${item.name} x ${item.quantity}</span>
+                <span>NT$ ${item.price * item.quantity}</span>
+            </div>
+        `;
+        cartContainer.innerHTML += cartItem;
     });
 }
+
+
+// 綁定事件
+// document.addEventListener('DOMContentLoaded', () => {
+//     const container = document.querySelector('.menu-selection');
+//     if (container) {
+//         container.addEventListener('click', event => {
+//             if (event.target.classList.contains('quantity-btn')) {
+//                 const itemId = parseInt(event.target.closest('.menu-item').dataset.id, 10);
+//                 const change = event.target.classList.contains('increase') ? 1 : -1;
+//                 updateCart(itemId, change);
+//             }
+//         });
+//     }
+// });
+
+
+
+// function renderCart() {
+//     const cartContainer = document.querySelector('.cart-items');
+//     if (!cartContainer) {
+//         console.error('找不到 .cart-items 容器');
+//         return;
+//     }
+
+//     cartContainer.innerHTML = ''; // 清空現有內容
+
+//     if (cart.length === 0) {
+//         cartContainer.innerHTML = '<p>購物車目前沒有任何項目。</p>';
+//         return;
+//     }
+
+//     cart.forEach(item => {
+//         const cartItem = `
+//             <div class="cart-item">
+//                 <span>${item.name} x ${item.quantity}</span>
+//                 <span>NT$ ${item.price * item.quantity}</span>
+//             </div>
+//         `;
+//         cartContainer.innerHTML += cartItem;
+//     });
+// }
 
 
 function submitOrder() {
