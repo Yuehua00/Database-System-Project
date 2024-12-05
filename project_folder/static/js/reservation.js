@@ -21,7 +21,6 @@ function renderMenuItems() {
     const timeSlot = timeSlotElement ? timeSlotElement.value.trim() : null;
 
     if (!timeSlot) {
-        console.log('尚未選擇時段');
         container.innerHTML = '<p>請先選擇用餐時段。</p>';
         return;
     }
@@ -32,7 +31,7 @@ function renderMenuItems() {
             const menuData = menuItems.menu;
 
             if (Array.isArray(menuData)) {
-                // 按 Category 分組
+                // Group menu items by category
                 const groupedMenu = menuData.reduce((acc, item) => {
                     if (!acc[item.category]) {
                         acc[item.category] = [];
@@ -41,7 +40,7 @@ function renderMenuItems() {
                     return acc;
                 }, {});
 
-                // 渲染分組菜單
+                // Render categories in vertical order
                 container.innerHTML = Object.entries(groupedMenu).map(([category, items]) => `
                     <div class="menu-category">
                         <h2>${category}</h2>
@@ -49,7 +48,7 @@ function renderMenuItems() {
                             ${items.map(item => `
                                 <div class="menu-item" data-id="${item.id}">
                                     <h3>${item.name}</h3>
-                                    <p>NT$ ${item.price}</p>
+                                    <p>價格：NT$${item.price}</p>
                                     <div class="quantity-control">
                                         <button class="quantity-btn decrease" onclick="updateCart(${item.id}, -1)">-</button>
                                         <span class="quantity">0</span>
@@ -58,11 +57,9 @@ function renderMenuItems() {
                                 </div>
                             `).join('')}
                         </div>
-                        <hr class="category-divider">
                     </div>
                 `).join('');
             } else {
-                console.error('menuItems.menu 不是陣列:', menuItems);
                 container.innerHTML = '<p>菜單載入失敗。</p>';
             }
         })
@@ -71,6 +68,8 @@ function renderMenuItems() {
             container.innerHTML = '<p>無法載入菜單，請稍後再試。</p>';
         });
 }
+
+
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -450,10 +449,6 @@ document.getElementById("nextStepBtn").addEventListener("click", async () => {
         });
 
         const result = await response.json();
-
-        if (response.ok && result.status === 'success') {
-            alert('Error: ' + result.message);
-        }
     } catch (error) {
         console.error('Error submitting reservation:', error);
         alert('An error occurred. Please try again later.');

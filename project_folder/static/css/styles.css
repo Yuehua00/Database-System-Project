@@ -732,15 +732,19 @@ footer {
 }
 
 /* 菜單排版 */
+.menu-selection {
+    display: block; /* Ensure categories stack vertically */
+}
+
 .menu-category {
-    margin-bottom: 20px;
+    margin-bottom: 30px; /* Add spacing between categories */
+    text-align: left;
 }
 
 .menu-category h2 {
     font-size: 24px;
     color: #333;
     margin-bottom: 10px;
-    text-align: left;
     border-bottom: 2px solid #e67e22;
     padding-bottom: 5px;
 }
@@ -748,33 +752,37 @@ footer {
 .menu-items {
     display: flex;
     flex-wrap: wrap;
-    gap: 15px;
+    gap: 20px; /* Add spacing between items */
 }
 
 .menu-item {
-    flex: 0 1 calc(33.33% - 15px);
+    flex: 0 1 calc(50% - 20px); /* Ensure two items per row */
+    max-width: calc(50% - 20px);
     background-color: #f9f9f9;
-    padding: 10px;
+    padding: 15px;
     border: 1px solid #ddd;
     border-radius: 5px;
-    text-align: center;
+    text-align: left; /* Align text to the left */
+    color: #333; /* Ensure text color remains */
 }
 
 .menu-item h3 {
     font-size: 18px;
-    margin: 5px 0;
+    margin: 10px 0;
+    color: #333; /* Maintain text color */
 }
 
 .menu-item p {
-    margin: 5px 0;
-    color: #555;
+    font-size: 16px;
+    margin: 10px 0;
+    color: #e67e22; /* Highlight price with a prominent color */
+    font-weight: bold;
 }
 
 .quantity-control {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 10px;
+    justify-content: space-between;
     margin-top: 10px;
 }
 
@@ -785,7 +793,6 @@ footer {
     padding: 5px 10px;
     border-radius: 3px;
     cursor: pointer;
-    transition: background-color 0.3s;
 }
 
 .quantity-btn:hover {
@@ -794,5 +801,5 @@ footer {
 
 .quantity {
     font-size: 16px;
-    font-weight: bold;
+    color: #333;
 }
