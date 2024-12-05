@@ -45,7 +45,7 @@ def reservation():  # Change the function name here to 'reservation'
         TimeSlots = request.form['TimeSlots']
         Reservation_Time = request.form['Reservation_Time']
         customer_id = session['Customer_ID']  # 從 session 獲取 Customer_ID
-        
+
         # 進行預約操作（插入資料）
         conn_obj = conn()
         if conn_obj:
@@ -218,7 +218,7 @@ def available_tables():
         """, (people_count, reservation_time, time_slot))
         available_tables = [row[0] for row in cursor.fetchall()]
         cursor.close()
-
+        print(available_tables)
         return jsonify({'status': 'success', 'available_tables': available_tables})
 
     except Exception as e:

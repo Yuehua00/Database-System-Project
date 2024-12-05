@@ -14,14 +14,25 @@ function renderMenuItems() {
     const container = document.querySelector('.menu-selection');
     if (container) {
         const timeSlotElement = document.querySelector('#TimeSlots');
-        const timeSlot = timeSlotElement ? timeSlotElement.value : null;
-        fetch(`/get_menu?timeSlot=${timeSlot}`) // 從伺服器抓取菜單資料
+        if (!timeSlotElement) {
+            console.error('無法找到 #TimeSlots 元素');
+            return;
+        }
+
+        const timeSlot = timeSlotElement.value.trim();
+        if (!timeSlot) {
+            console.log('尚未選擇時段');
+            container.innerHTML = '<p>請先選擇用餐時段。</p>';
+            return;
+        }
+
+        console.log('選擇的時段:', timeSlot);
+
+        fetch(`/get_menu?timeSlot=${timeSlot}`)
             .then(response => response.json())
             .then(menuItems => {
-                // 確保從資料中提取出菜單陣列
                 const menuData = menuItems.menu;
                 if (Array.isArray(menuData)) {
-                    // 根據從資料庫獲得的資料渲染菜單
                     container.innerHTML = menuData.map(item => `
                         <div class="menu-item" data-id="${item.id}">
                             <div class="menu-item-header">
@@ -49,36 +60,12 @@ function renderMenuItems() {
     }
 }
 
-
-
-// 購物車狀態
-let cart = [];
-let currentStep = 1;
-
-// DOM 載入完成後執行
-document.addEventListener('DOMContentLoaded', function() {
-    initializeReservation();
-});
-
-// 初始化訂位頁面
-function initializeReservation() {
-    // 設定日期限制
-    const dateInput = document.querySelector('input[type="date"]');
-    if (dateInput) {
-        const today = new Date();
-        const maxDate = new Date();
-        maxDate.setMonth(maxDate.getMonth() + 1);
-        
-        dateInput.min = today.toISOString().split('T')[0];
-        dateInput.max = maxDate.toISOString().split('T')[0];
+document.addEventListener('DOMContentLoaded', () => {
+    const timeSlotElement = document.querySelector('#TimeSlots');
+    if (timeSlotElement) {
+        timeSlotElement.addEventListener('change', renderMenuItems);
     }
-
-    // 渲染菜單項目
-    renderMenuItems();
-    
-    // 註冊事件監聽器
-    setupEventListeners();
-}
+});
 
 // 設置事件監聽器
 function setupEventListeners() {

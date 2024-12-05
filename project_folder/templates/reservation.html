@@ -233,75 +233,74 @@
         </main>
         <script>
             document.addEventListener("DOMContentLoaded", () => {
-    const nextStepBtn = document.getElementById("nextStepBtn");
-    if (nextStepBtn) {
-        nextStepBtn.addEventListener("click", async () => {
-            const reservationForm = document.getElementById("reservationForm");
-            const formData = new FormData(reservationForm);
+            const nextStepBtn = document.getElementById("nextStepBtn");
+            if (nextStepBtn) {
+                nextStepBtn.addEventListener("click", async () => {
+                    const reservationForm = document.getElementById("reservationForm");
+                    const formData = new FormData(reservationForm);
 
-            // 确认表单是否正确填写
-            const numberOfPeople = formData.get('Number_of_People');
-            const reservationTime = formData.get('Reservation_Time');
-            const timeSlots = formData.get('TimeSlots');
-            if (numberOfPeople && reservationTime && timeSlots) {
-    try {
-        // 查询空桌
-        const availableTablesResponse = await fetch(`/available_tables?people_count=${numberOfPeople}&reservation_time=${reservationTime}&time_slot=${timeSlots}`);
-        
-        if (!availableTablesResponse.ok) {
-            const errorText = await availableTablesResponse.text();
-            console.error('Error response:', errorText);
-            alert('查询空桌时发生错误，请稍后再试。');
-            return;
+                    // 确认表单是否正确填写
+                    const numberOfPeople = formData.get('Number_of_People');
+                    const reservationTime = formData.get('Reservation_Time');
+                    const timeSlots = formData.get('TimeSlots');
+                    if (numberOfPeople && reservationTime && timeSlots) {
+            try {
+                // 查询空桌
+                const availableTablesResponse = await fetch(`/available_tables?people_count=${numberOfPeople}&reservation_time=${reservationTime}&time_slot=${timeSlots}`);
+
+                if (!availableTablesResponse.ok) {
+                    const errorText = await availableTablesResponse.text();
+                    console.error('Error response:', errorText);
+                    alert('查询空桌时发生错误，请稍后再试。');
+                    return;
+                }
+
+                const availableTablesResult = await availableTablesResponse.json();
+                if (availableTablesResult.status === 'success' && availableTablesResult.available_tables.length > 0) {
+                    console.log("Available tables:", availableTablesResult.available_tables);
+
+                    // 提交订位信息
+                    const saveReservationResponse = await fetch('/save_reservation', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json', // 確保是 JSON 格式
+                        },
+                        body: JSON.stringify({
+                            Number_of_People: numberOfPeople,
+                            Reservation_Time: reservationTime,
+                            TimeSlots: timeSlots
+                        }),
+                    });
+
+                    if (!saveReservationResponse.ok) {
+                        const errorText = await saveReservationResponse.text();
+                        console.error('Error response:', errorText);
+                        alert('提交订位信息时发生错误，请稍后再试。');
+                        return;
+                    }
+
+                    const saveReservationResult = await saveReservationResponse.json();
+
+                    if (saveReservationResult.status === 'success') {
+                        document.getElementById('step1').classList.remove('active');
+                        document.getElementById('step2').classList.add('active');
+                    } else {
+                        alert(saveReservationResult.message);
+                    }
+                } else {
+                    alert("目前无可用桌，请选择其他时间或人数。");
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert("查询或提交订位信息时发生错误。");
+            }
         }
 
-        const availableTablesResult = await availableTablesResponse.json();
-
-        if (availableTablesResult.status === 'success' && availableTablesResult.available_tables.length > 0) {
-            console.log("Available tables:", availableTablesResult.available_tables);
-
-            // 提交订位信息
-            const saveReservationResponse = await fetch('/save_reservation', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json', // 確保是 JSON 格式
-                },
-                body: JSON.stringify({
-                    Number_of_People: numberOfPeople,
-                    Reservation_Time: reservationTime,
-                    TimeSlots: timeSlots
-                }),
-            });
-
-            if (!saveReservationResponse.ok) {
-                const errorText = await saveReservationResponse.text();
-                console.error('Error response:', errorText);
-                alert('提交订位信息时发生错误，请稍后再试。');
-                return;
-            }
-
-            const saveReservationResult = await saveReservationResponse.json();
-
-            if (saveReservationResult.status === 'success') {
-                document.getElementById('step1').classList.remove('active');
-                document.getElementById('step2').classList.add('active');
+                });
             } else {
-                alert(saveReservationResult.message);
+                console.error('Element with id "nextStepBtn" not found.');
             }
-        } else {
-            alert("目前无可用桌，请选择其他时间或人数。");
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        alert("查询或提交订位信息时发生错误。");
-    }
-}
-
         });
-    } else {
-        console.error('Element with id "nextStepBtn" not found.');
-    }
-});
 
 
         </script>
