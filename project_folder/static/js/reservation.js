@@ -84,13 +84,10 @@ document.addEventListener('DOMContentLoaded', () => {
         container.addEventListener('click', event => {
             if (event.target.classList.contains('quantity-btn')) {
                 const menuItemElement = event.target.closest('.menu-item');
-                if (!menuItemElement) return;
-
                 const itemId = parseInt(menuItemElement.dataset.id, 10);
                 const change = event.target.classList.contains('increase') ? 1 : -1;
-
                 console.log(`Item clicked: ${itemId}, Change: ${change}`);
-                updateCart(itemId, change);
+                updateCart(itemId, change); // 呼叫更新購物車
             }
         });
     }
@@ -105,7 +102,6 @@ function setupEventListeners() {
     // 繼續按鈕
     document.querySelectorAll('.reservation-step button:last-child').forEach(button => {
         button.addEventListener('click', function() {
-            console.log('Button clicked:', e.target.dataset.id);
             if (validateStep(currentStep)) {
                 moveToStep(currentStep + 1);
             }
@@ -225,9 +221,9 @@ let cart = [];
 function updateCart(itemId, change) {
     const menuItem = menuItems.find(item => item.id === itemId);
     if (!menuItem) return;
-    console.log("here");
+
     const existingItem = cart.find(item => item.id === itemId);
-    console.log(existingItem);
+    console.log(existingItem)
     if (existingItem) {
         existingItem.quantity += change;
         if (existingItem.quantity <= 0) {
@@ -264,6 +260,7 @@ function renderCart() {
         console.error('找不到 .cart-items 容器');
         return;
     }
+
 
     console.log('購物車內容:', cart);
     cartContainer.innerHTML = ''; // 清空內容
