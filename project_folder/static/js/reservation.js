@@ -12,53 +12,66 @@ let menuItems = [];  // 定義 menuItems 變數
 // 更新菜單項目，從資料庫中抓取資料
 function renderMenuItems() {
     const container = document.querySelector('.menu-selection');
-    if (container) {
-        const timeSlotElement = document.querySelector('#TimeSlots');
-        if (!timeSlotElement) {
-            console.error('無法找到 #TimeSlots 元素');
-            return;
-        }
-
-        const timeSlot = timeSlotElement.value.trim();
-        if (!timeSlot) {
-            console.log('尚未選擇時段');
-            container.innerHTML = '<p>請先選擇用餐時段。</p>';
-            return;
-        }
-
-        console.log('選擇的時段:', timeSlot);
-
-        fetch(`/get_menu?timeSlot=${timeSlot}`)
-            .then(response => response.json())
-            .then(menuItems => {
-                const menuData = menuItems.menu;
-                if (Array.isArray(menuData)) {
-                    container.innerHTML = menuData.map(item => `
-                        <div class="menu-item" data-id="${item.id}">
-                            <div class="menu-item-header">
-                                <div>
-                                    <h3>${item.name}</h3>
-                                    <p class="price">NT$ ${item.price}</p>
-                                </div>
-                                <div class="quantity-control">
-                                    <button class="quantity-btn decrease" onclick="updateCart(${item.id}, -1)">-</button>
-                                    <span class="quantity">0</span>
-                                    <button class="quantity-btn increase" onclick="updateCart(${item.id}, 1)">+</button>
-                                </div>
-                            </div>
-                        </div>
-                    `).join('');
-                } else {
-                    console.error('menuItems.menu 不是陣列:', menuItems);
-                    container.innerHTML = '<p>菜單載入失敗。</p>';
-                }
-            })
-            .catch(error => {
-                console.error('無法獲取菜單資料:', error);
-                container.innerHTML = '<p>無法載入菜單，請稍後再試。</p>';
-            });
+    if (!container) {
+        console.error('找不到 .menu-selection 容器');
+        return;
     }
+
+    const timeSlotElement = document.querySelector('#TimeSlots');
+    const timeSlot = timeSlotElement ? timeSlotElement.value.trim() : null;
+
+    if (!timeSlot) {
+        console.log('尚未選擇時段');
+        container.innerHTML = '<p>請先選擇用餐時段。</p>';
+        return;
+    }
+
+    fetch(`/get_menu?timeSlot=${timeSlot}`)
+        .then(response => response.json())
+        .then(menuItems => {
+            const menuData = menuItems.menu;
+
+            if (Array.isArray(menuData)) {
+                // 按 Category 分組
+                const groupedMenu = menuData.reduce((acc, item) => {
+                    if (!acc[item.category]) {
+                        acc[item.category] = [];
+                    }
+                    acc[item.category].push(item);
+                    return acc;
+                }, {});
+
+                // 渲染分組菜單
+                container.innerHTML = Object.entries(groupedMenu).map(([category, items]) => `
+                    <div class="menu-category">
+                        <h2>${category}</h2>
+                        <div class="menu-items">
+                            ${items.map(item => `
+                                <div class="menu-item" data-id="${item.id}">
+                                    <h3>${item.name}</h3>
+                                    <p>NT$ ${item.price}</p>
+                                    <div class="quantity-control">
+                                        <button class="quantity-btn decrease" onclick="updateCart(${item.id}, -1)">-</button>
+                                        <span class="quantity">0</span>
+                                        <button class="quantity-btn increase" onclick="updateCart(${item.id}, 1)">+</button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <hr class="category-divider">
+                    </div>
+                `).join('');
+            } else {
+                console.error('menuItems.menu 不是陣列:', menuItems);
+                container.innerHTML = '<p>菜單載入失敗。</p>';
+            }
+        })
+        .catch(error => {
+            console.error('無法獲取菜單資料:', error);
+            container.innerHTML = '<p>無法載入菜單，請稍後再試。</p>';
+        });
 }
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const timeSlotElement = document.querySelector('#TimeSlots');

@@ -730,3 +730,69 @@ footer {
         transform: translateY(0);
     }
 }
+
+/* 菜單排版 */
+.menu-category {
+    margin-bottom: 20px;
+}
+
+.menu-category h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+    text-align: left;
+    border-bottom: 2px solid #e67e22;
+    padding-bottom: 5px;
+}
+
+.menu-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.menu-item {
+    flex: 0 1 calc(33.33% - 15px);
+    background-color: #f9f9f9;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.menu-item h3 {
+    font-size: 18px;
+    margin: 5px 0;
+}
+
+.menu-item p {
+    margin: 5px 0;
+    color: #555;
+}
+
+.quantity-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.quantity-btn {
+    background-color: #e67e22;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.quantity-btn:hover {
+    background-color: #d35400;
+}
+
+.quantity {
+    font-size: 16px;
+    font-weight: bold;
+}
