@@ -67,6 +67,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+
+
 // 設置事件監聽器
 function setupEventListeners() {
     // 繼續按鈕
@@ -407,4 +409,40 @@ document.querySelectorAll('.btn.prev-step').forEach(button => {
         });
         document.querySelector(`.progress-step[data-step="${prevStep}"]`).classList.add('active');
     });
+});
+document.getElementById("nextStepBtn").addEventListener("click", async () => {
+    const reservationForm = document.getElementById("reservationForm");
+    const formData = new FormData(reservationForm);
+
+    const numberOfPeople = formData.get('Number_of_People');
+    const reservationTime = formData.get('Reservation_Time');
+    const timeSlots = formData.get('TimeSlots');
+
+    if (!numberOfPeople || !reservationTime || !timeSlots) {
+        alert("Please fill in all required fields.");
+        return;
+    }
+
+    try {
+        const response = await fetch('/save_reservation', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Number_of_People: numberOfPeople,
+                Reservation_Time: reservationTime,
+                TimeSlots: timeSlots
+            }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.status === 'success') {
+            alert('Error: ' + result.message);
+        }
+    } catch (error) {
+        console.error('Error submitting reservation:', error);
+        alert('An error occurred. Please try again later.');
+    }
 });
