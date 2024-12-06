@@ -90,6 +90,31 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     renderCart(); // 渲染初始購物車
+    fetch('/get_customer_info', {
+        credentials: 'include', // Ensures the request carries cookies
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then((data) => {
+            if (data.status === 'success') {
+                // Store the customer data locally
+                localStorage.setItem('Customer_name', data.name || '未指定');
+                localStorage.setItem('Customer_phone', data.phone || '未指定');
+                console.log('Customer data fetched successfully:', data);
+            } else {
+                console.error('Failed to fetch customer data:', data.message);
+                alert('請登入以繼續。');
+            }
+        })
+        .catch((error) => {
+            console.error('Error fetching customer data:', error);
+            alert('無法取得顧客資訊，請檢查您的登入狀態。');
+        });
+    
 });
 
 
@@ -391,16 +416,70 @@ function updateCartDisplay() {
 
 // 更新訂單摘要
 function updateOrderSummary() {
-    // 更新訂位資訊
-    document.getElementById('summary-people').textContent = 
-        document.querySelector('.form-group select')?.value || '';
-    document.getElementById('summary-date').textContent = 
-        document.querySelector('input[type="date"]')?.value || '';
-    document.getElementById('summary-time').textContent = 
-        document.querySelector('.form-group select:last-child')?.value || '';
+    const customerName = localStorage.getItem('Customer_name') || '未指定';
+    const customerPhone = localStorage.getItem('Customer_phone') || '未指定';
+    const tableNumber = localStorage.getItem('tableNumber') || '未指定';
 
-    // 更新訂購餐點
+    const people = document.querySelector('#Number_of_People')?.value || '未指定';
+    const date = document.querySelector('#Reservation_Time')?.value || '未指定';
+    const timeSlot = document.querySelector('#TimeSlots')?.value || '未指定';
+
+    document.getElementById('summary-name').textContent = `姓名: ${customerName}`;
+    document.getElementById('summary-phone').textContent = `電話: ${customerPhone}`;
+    document.getElementById('summary-table').textContent = `桌號: ${tableNumber}`;
+    document.getElementById('summary-people').textContent = `用餐人數: ${people}`;
+    document.getElementById('summary-date').textContent = `用餐日期: ${date}`;
+    document.getElementById('summary-time').textContent = `用餐時段: ${timeSlot}`;
+
+    const cartContainer = document.querySelector('.cart-items');
+    cartContainer.innerHTML = cart.length > 0
+        ? cart.map(item => `
+            <div class="cart-item">
+                <span>${item.name} x ${item.quantity}</span>
+                <span>NT$ ${item.price * item.quantity}</span>
+            </div>
+        `).join('')
+        : '<p>購物車目前沒有任何項目。</p>';
+
+    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    document.getElementById('subtotal').textContent = `NT$ ${subtotal}`;
+    document.getElementById('total').textContent = `NT$ ${subtotal}`;
+}
+
+// Fetch customer information and update on the page
+function fetchCustomerInfo() {
+    fetch('/get_customer_info', {
+        credentials: 'include' // 確保攜帶 cookie
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.status === 'success') {
+                document.getElementById('customer-name').textContent = data.name;
+                document.getElementById('customer-phone').textContent = data.phone;
+            } else {
+                console.error('無法獲取顧客資料:', data.message);
+                alert('請登入以繼續。');
+            }
+        })
+        .catch(error => {
+            console.error('無法獲取顧客資訊:', error);
+        });
+}
+
+// 在第三步顯示顧客資料及購物車內容
+function updateOrderSummary() {
+    // 顯示顧客資訊
+    fetchCustomerInfo();
+
+    // 顯示訂單明細
     const summaryItems = document.getElementById('summary-items');
+    const customerDetails = document.getElementById('customer-details');
+
     if (summaryItems) {
         summaryItems.innerHTML = cart.map(item => `
             <div class="summary-item">
@@ -410,33 +489,17 @@ function updateOrderSummary() {
         `).join('');
     }
 
-    // 計算總金額
+    // 總金額
     const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     document.getElementById('subtotal').textContent = subtotal;
     document.getElementById('total').textContent = subtotal;
 }
 
-// 確認訂單
-function confirmOrder() {
-    if (validateStep(3)) {
-        // 儲存訂單資訊
-        const orderInfo = {
-            reservation: {
-                people: document.querySelector('.form-group select')?.value,
-                date: document.querySelector('input[type="date"]')?.value,
-                timeSlot: document.querySelector('.form-group select:last-child')?.value
-            },
-            items: cart,
-            total: document.getElementById('total').textContent
-        };
+// 初始化時加載顧客資訊
+document.addEventListener('DOMContentLoaded', () => {
+    fetchCustomerInfo();
+});
 
-        // 儲存訂單資訊到 localStorage (實際應用中應該發送到伺服器)
-        localStorage.setItem('lastOrder', JSON.stringify(orderInfo));
-
-        // 導向會員頁面
-        window.location.href = 'member.html';
-    }
-}
 
 document.addEventListener('DOMContentLoaded', function() {
     const nextStepBtn = document.getElementById('nextStepBtn');
@@ -478,6 +541,8 @@ document.addEventListener('DOMContentLoaded', function() {
 // 繼續按鈕
 // 繼續按鈕的事件處理程序
 document.addEventListener('DOMContentLoaded', () => {
+    const customerName = localStorage.getItem('Customer_name') || '未指定';
+    const customerPhone = localStorage.getItem('Customer_phone') || '未指定';
     document.querySelectorAll('.btn.next-step').forEach(button => {
         button.addEventListener('click', function () {
             const currentStep = document.querySelector('.reservation-step.active');

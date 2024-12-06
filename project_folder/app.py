@@ -2,9 +2,11 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import request, flash, redirect, url_for
 import pyodbc
+from flask_cors import CORS
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # 設定 session 加密密鑰
+CORS(app, supports_credentials=True)
 
 # 資料庫連接
 def conn():
@@ -376,6 +378,16 @@ def member():
         reservations=reservation_details
     )
 
+@app.route('/get_customer_info')
+def get_customer_info():
+    if 'Customer_name' in session and 'Customer_phone' in session:
+        return jsonify({
+            'status': 'success',
+            'name': session['Customer_name'],
+            'phone': session['Customer_phone']
+        })
+    else:
+        return jsonify({'status': 'fail', 'message': 'User not logged in'}), 401
 
 # 修改密碼
 @app.route('/update_password', methods=['POST'])
