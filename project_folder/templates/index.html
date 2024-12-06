@@ -49,15 +49,16 @@
             </nav>
         </header>
 
-        <main class="home-main">
-            <section class="hero">
-                <h1>歡迎光臨 大義麵親</h1>
-                <div class="cta-buttons">
-                    <a href="{{ url_for('menu') }}" class="btn">查看菜單</a>
-                    <a href="{{ url_for('reservation') }}" class="btn">立即訂位</a>
-                </div>
-            </section>
-        </main>
+    <main class="home-main"  >
+        <section class="hero" style="background-image: url('{{ url_for('static', filename='images/主頁.jpg') }}');">
+            <h1>歡迎光臨 大義麵親</h1>
+            <div class="cta-buttons">
+                <a href="{{ url_for('menu') }}" class="btn">查看菜單</a>
+                <a href="{{ url_for('reservation') }}" class="btn">立即訂位</a>
+            </div>
+        </section>
+    </main>
+
         <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
     </body>
 </html>
