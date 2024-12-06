@@ -15,13 +15,18 @@ body {
 
 /* 導航列樣式 */
 header {
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    position: fixed;
-    width: 100%;
-    top: 0;
-    z-index: 1000;
+    background-color: #fff;  /* 保持白色背景 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);  /* 保持陰影效果 */
+    position: fixed;  /* 固定在頁面頂部 */
+    width: 100%;  /* 佔滿整個頁面寬度 */
+    top: 0;  /* 保持在頂部 */
+    z-index: 1000;  /* 保證層級在最上層 */
+    background-image: url('{{ url_for('static', filename='images/header-bg.jpg') }}');  /* 設置背景圖片 */
+    background-size: cover;  /* 背景圖片覆蓋整個區域 */
+    background-position: center center;  /* 背景圖片居中 */
+    background-repeat: no-repeat;  /* 不重複顯示背景圖片 */
 }
+
 
 nav {
     display: flex;
