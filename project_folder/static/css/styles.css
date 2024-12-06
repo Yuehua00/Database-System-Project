@@ -86,7 +86,7 @@ main {
 .hero {
     text-align: center;
     padding: 6rem 0;
-    background-image: url('{{ url_for('static', filename='images/主頁.jpg') }}');
+    background-image: url('{{ url_for('static', filename='images/主頁2.jpg') }}');
     background-size: cover;
     background-color: #fff;
     border-radius: 10px;
