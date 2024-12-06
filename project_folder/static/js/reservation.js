@@ -8,6 +8,7 @@
 //     { id: 6, name: '白酒蛤蠣義大利麵', price: 300 }
 // ];
 let menuItems = [];  // 定義 menuItems 變數
+let cart = [];
 
 // 更新菜單項目，從資料庫中抓取資料
 function renderMenuItems() {
@@ -26,54 +27,50 @@ function renderMenuItems() {
     }
 
     fetch(`/get_menu?timeSlot=${timeSlot}`)
-        .then(response => response.json())
-        .then(menuItems => {
-            const menuData = menuItems.menu;
+    .then(response => response.json())
+    .then(menuItemsData => {
+        menuItems = menuItemsData.menu; // 確保這裡更新全域變數
+        if (Array.isArray(menuItems)) {
+            const groupedMenu = menuItems.reduce((acc, item) => {
+                if (!acc[item.category]) {
+                    acc[item.category] = [];
+                }
+                acc[item.category].push(item);
+                return acc;
+            }, {});
 
-            if (Array.isArray(menuData)) {
-                // Group menu items by category
-                const groupedMenu = menuData.reduce((acc, item) => {
-                    if (!acc[item.category]) {
-                        acc[item.category] = [];
-                    }
-                    acc[item.category].push(item);
-                    return acc;
-                }, {});
-
-                // Render categories in vertical order
-                container.innerHTML = Object.entries(groupedMenu).map(([category, items]) => `
-                    <div class="menu-category">
-                        <h2>${category}</h2>
-                        <div class="menu-items">
-                            ${items.map(item => `
-                                <div class="menu-item" data-id="${item.id}">
-                                    <h3>${item.name}</h3>
-                                    <p>價格：NT$${item.price}</p>
-                                    <div class="quantity-control">
-                                        <button class="quantity-btn decrease" onclick="updateCart(1, -1)">-</button>
-                                        <span class="quantity">0</span>
-                                        <button class="quantity-btn increase" onclick="updateCart(1, 1)">+</button>
-                                    </div>
+            container.innerHTML = Object.entries(groupedMenu).map(([category, items]) => `
+                <div class="menu-category">
+                    <h2>${category}</h2>
+                    <div class="menu-items">
+                        ${items.map(item => `
+                            <div class="menu-item" data-id="${item.id}">
+                                <h3>${item.name}</h3>
+                                <p>價格：NT$${item.price}</p>
+                                <div class="quantity-control">
+                                    <button class="quantity-btn decrease" data-id="${item.id}" data-change="-1">-</button>
+                                    <span class="quantity">0</span>
+                                    <button class="quantity-btn increase" data-id="${item.id}" data-change="1">+</button>
                                 </div>
-                            `).join('')}
-                        </div>
+                            </div>
+                        `).join('')}
                     </div>
-                `).join('');
-            } else {
-                container.innerHTML = '<p>菜單載入失敗。</p>';
-            }
-        })
-        .catch(error => {
-            console.error('無法獲取菜單資料:', error);
-            container.innerHTML = '<p>無法載入菜單，請稍後再試。</p>';
-        });
+                </div>
+            `).join('');
+
+        } else {
+            console.error('菜單格式錯誤:', menuItemsData);
+        }
+    })
+    .catch(error => console.error('獲取菜單失敗:', error));
+
 }
 
 
 
 
 document.addEventListener('DOMContentLoaded', () => {
-
+    console.log('Menu items:', menuItems);
     const timeSlotElement = document.querySelector('#TimeSlots');
     if (timeSlotElement) {
         timeSlotElement.addEventListener('change', renderMenuItems);
@@ -88,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const change = event.target.classList.contains('increase') ? 1 : -1;
                 console.log(`Item clicked: ${itemId}, Change: ${change}`);
                 updateCart(itemId, change); // 呼叫更新購物車
+                console.log('Cart after update:', cart);
             }
         });
     }
@@ -124,21 +122,21 @@ function setupEventListeners() {
 
 // 驗證每個步驟
 function validateStep(step) {
-    switch(step) {
+    switch (step) {
         case 1:
             const people = document.querySelector('.form-group select')?.value;
             const date = document.querySelector('input[type="date"]')?.value;
             const timeSlot = document.querySelector('.form-group select:last-child')?.value;
-            
+
             if (!people || !date || !timeSlot) {
-                // alert('請填寫所有必要資訊');
+                alert('請填寫所有必要資訊');
                 return false;
             }
             return true;
 
         case 2:
             if (cart.length === 0) {
-                alert('請至少選擇一項餐點');
+                alert('請選擇至少一項品項');
                 return false;
             }
             return true;
@@ -147,6 +145,7 @@ function validateStep(step) {
             return true;
     }
 }
+
 
 // 切換步驟
 function moveToStep(step) {
@@ -215,7 +214,7 @@ function moveToStep(step) {
 // }
 
 // 初始化購物車為空陣列
-let cart = [];
+
 
 // 更新購物車邏輯
 function updateCart(itemId, change) {
@@ -223,14 +222,13 @@ function updateCart(itemId, change) {
     if (!menuItem) return;
 
     const existingItem = cart.find(item => item.id === itemId);
-    console.log(existingItem)
+
     if (existingItem) {
-        existingItem.quantity += change;
+        existingItem.quantity += change; // 增加或減少數量
         if (existingItem.quantity <= 0) {
-            cart = cart.filter(item => item.id !== itemId);
+            cart = cart.filter(item => item.id !== itemId); // 刪除數量為 0 的項目
         }
     } else if (change > 0) {
-        
         cart.push({
             id: menuItem.id,
             name: menuItem.name,
@@ -242,15 +240,14 @@ function updateCart(itemId, change) {
     // 更新畫面數量
     const quantityElement = document.querySelector(`.menu-item[data-id="${itemId}"] .quantity`);
     if (quantityElement) {
-        console.log(`更新數量顯示: ${cart.find(item => item.id === itemId)?.quantity || 0}`);
         quantityElement.textContent = cart.find(item => item.id === itemId)?.quantity || 0;
-    } else {
-        console.error('找不到數量元素');
     }
 
     // 渲染購物車
     renderCart();
 }
+
+
 
 
 // 渲染購物車
@@ -261,25 +258,16 @@ function renderCart() {
         return;
     }
 
-
-    console.log('購物車內容:', cart);
-    cartContainer.innerHTML = ''; // 清空內容
-
-    if (cart.length === 0) {
-        cartContainer.innerHTML = '<p>購物車目前沒有任何項目。</p>';
-        return;
-    }
-
-    cart.forEach(item => {
-        const cartItem = `
+    cartContainer.innerHTML = cart.length > 0
+        ? cart.map(item => `
             <div class="cart-item">
                 <span>${item.name} x ${item.quantity}</span>
                 <span>NT$ ${item.price * item.quantity}</span>
             </div>
-        `;
-        cartContainer.innerHTML += cartItem;
-    });
+          `).join('')
+        : '<p>購物車目前沒有任何項目。</p>';
 }
+
 
 
 // 綁定事件
@@ -469,10 +457,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // 繼續按鈕
+// 繼續按鈕的事件處理程序
 document.querySelectorAll('.btn.next-step').forEach(button => {
     button.addEventListener('click', function () {
-        const nextStep = this.getAttribute('data-next');  // 獲取下一步驟
-        const currentStep = document.querySelector('.reservation-step.active');  // 當前步驟
+        const nextStep = this.getAttribute('data-next'); // 獲取下一步驟
+        const currentStep = document.querySelector('.reservation-step.active'); // 當前步驟
+
+        // 如果是第 2 步，檢查購物車是否為空
+        if (currentStep.id === 'step2') {
+            if (cart.length === 0) {
+                alert('請選擇品項');
+                return; // 終止繼續執行
+            }
+        }
 
         // 隱藏當前步驟
         currentStep.classList.remove('active');
@@ -489,6 +486,7 @@ document.querySelectorAll('.btn.next-step').forEach(button => {
         document.querySelector(`.progress-step[data-step="${nextStep}"]`).classList.add('active');
     });
 });
+
 
 // 返回按鈕
 document.querySelectorAll('.btn.prev-step').forEach(button => {
