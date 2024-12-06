@@ -135,10 +135,10 @@ function validateStep(step) {
             return true;
 
         case 2:
-            if (cart.length === 0) {
-                alert('請選擇至少一項品項');
-                return false;
-            }
+            // if (cart.length === 0) {
+            //     alert('請選擇至少一項品項');
+            //     return false;
+            // }
             return true;
 
         default:
@@ -149,25 +149,45 @@ function validateStep(step) {
 
 // 切換步驟
 function moveToStep(step) {
+    // 隱藏所有步驟
+    document.querySelectorAll('.reservation-step').forEach(el => {
+        el.classList.remove('active');
+        el.style.display = 'none';
+    });
+
+    // 顯示當前步驟
+    const currentStep = document.getElementById(`step${step}`);
+    currentStep.classList.add('active');
+    currentStep.style.display = 'block';
+
     // 更新進度條
     document.querySelectorAll('.progress-step').forEach(el => {
         el.classList.remove('active');
     });
-    document.querySelector(`[data-step="${step}"]`).classList.add('active');
+    document.querySelector(`.progress-step[data-step="${step}"]`).classList.add('active');
 
-    // 切換表單
-    document.querySelectorAll('.reservation-step').forEach(el => {
-        el.classList.remove('active');
-    });
-    document.getElementById(`step${step}`).classList.add('active');
-
-    // 如果是最後一步，更新訂單摘要
+    // 如果從 step2 到 step3，檢查購物車是否為空
     if (step === 3) {
-        updateOrderSummary();
+        if (cart.length === 0) {
+            // alert("請選擇至少一項菜單！");
+            // 回到 step2
+            moveToStep(2);
+            return;
+        }
+        updateOrderSummary(); // 更新確認訂單資訊
     }
 
-    currentStep = step;
+    // 如果返回 step1，清空購物車
+    if (step === 1) {
+        cart = []; // 清空購物車
+        renderCart(); // 重新渲染購物車
+        document.querySelectorAll('.menu-item .quantity').forEach(el => {
+            el.textContent = '0';
+        });
+    }
 }
+
+
 
 // // 渲染菜單項目
 // function renderMenuItems() {
@@ -269,7 +289,6 @@ function renderCart() {
 }
 
 
-
 // 綁定事件
 // document.addEventListener('DOMContentLoaded', () => {
 //     const container = document.querySelector('.menu-selection');
@@ -319,7 +338,7 @@ function submitOrder() {
         .map(([id, quantity]) => ({ id: Number(id), quantity }));
 
     if (order.length === 0) {
-        alert("請選擇至少一項菜單！");
+        // alert("請選擇至少一項菜單！");
         return;
     }
 
@@ -458,57 +477,55 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // 繼續按鈕
 // 繼續按鈕的事件處理程序
-document.querySelectorAll('.btn.next-step').forEach(button => {
-    button.addEventListener('click', function () {
-        const nextStep = this.getAttribute('data-next'); // 獲取下一步驟
-        const currentStep = document.querySelector('.reservation-step.active'); // 當前步驟
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.btn.next-step').forEach(button => {
+        button.addEventListener('click', function () {
+            const currentStep = document.querySelector('.reservation-step.active');
 
-        // 如果是第 2 步，檢查購物車是否為空
-        if (currentStep.id === 'step2') {
-            if (cart.length === 0) {
-                alert('請選擇品項');
-                return; // 終止繼續執行
+            if (currentStep.id === 'step1') {
+                // 從第一步到第二步，直接跳轉
+                moveToStep(2);
+            } else if (currentStep.id === 'step2' && this.getAttribute('data-next') === '3') {
+                // 檢查購物車是否為空
+                if (cart.length === 0) {
+                    alert("請選擇至少一項菜單！");
+                    return; // 停止執行，防止跳轉到第三步
+                }
+                // 從第二步到第三步
+                moveToStep(3);
             }
-        }
-
-        // 隱藏當前步驟
-        currentStep.classList.remove('active');
-
-        // 顯示下一個步驟
-        const stepToShow = document.getElementById('step' + nextStep);
-        stepToShow.classList.add('active');
-
-        // 更新進度條
-        const progressSteps = document.querySelectorAll('.progress-step');
-        progressSteps.forEach(step => {
-            step.classList.remove('active');
         });
-        document.querySelector(`.progress-step[data-step="${nextStep}"]`).classList.add('active');
+    });
+
+    document.querySelectorAll('.btn.prev-step').forEach(button => {
+        button.addEventListener('click', function () {
+            const currentStep = document.querySelector('.reservation-step.active');
+            if (currentStep.id === 'step2') {
+                // 從第二步返回第一步
+                moveToStep(1);
+            } else if (currentStep.id === 'step3') {
+                // 從第三步返回第二步
+                moveToStep(2);
+            }
+        });
     });
 });
 
 
-// 返回按鈕
-document.querySelectorAll('.btn.prev-step').forEach(button => {
-    button.addEventListener('click', function () {
-        const prevStep = this.getAttribute('data-prev');  // 獲取上一個步驟
-        const currentStep = document.querySelector('.reservation-step.active');  // 當前步驟
 
-        // 隱藏當前步驟
-        currentStep.classList.remove('active');
 
-        // 顯示上一個步驟
-        const stepToShow = document.getElementById('step' + prevStep);
-        stepToShow.classList.add('active');
+// 更新進度條邏輯
+function updateProgress(stepId) {
+    const progressSteps = document.querySelectorAll('.progress-step');
+    progressSteps.forEach(step => step.classList.remove('active'));
 
-        // 更新進度條
-        const progressSteps = document.querySelectorAll('.progress-step');
-        progressSteps.forEach(step => {
-            step.classList.remove('active');
-        });
-        document.querySelector(`.progress-step[data-step="${prevStep}"]`).classList.add('active');
-    });
-});
+    // 根據當前步驟更新進度條
+    const stepIndex = stepId === 'step1' ? 0 : stepId === 'step2' ? 1 : 2;
+    for (let i = 0; i <= stepIndex; i++) {
+        progressSteps[i].classList.add('active');
+    }
+}
+
 document.getElementById("nextStepBtn").addEventListener("click", async () => {
     const reservationForm = document.getElementById("reservationForm");
     const formData = new FormData(reservationForm);

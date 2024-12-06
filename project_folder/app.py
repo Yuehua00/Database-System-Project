@@ -165,61 +165,35 @@ def change_password():
 
 @app.route('/save_reservation', methods=['POST'])
 def save_reservation():
-    if 'Customer_ID' not in session:
-        return jsonify({'status': 'error', 'message': 'Please log in to complete the reservation.'}), 401
-
-    data = request.get_json()
-    if not data:
-        return jsonify({'status': 'error', 'message': 'Invalid request format.'}), 400
-
-    customer_id = session['Customer_ID']
-    number_of_people = data.get('Number_of_People')
-    reservation_time = data.get('Reservation_Time')
-    time_slots = data.get('TimeSlots')
-
-    if not all([number_of_people, reservation_time, time_slots]):
-        return jsonify({'status': 'error', 'message': 'Missing required parameters.'}), 400
-
     try:
-        conn_obj = conn()
-        if not conn_obj:
-            return jsonify({'status': 'error', 'message': 'Database connection failed.'}), 500
+        data = request.get_json()
+        if not data:
+            return jsonify({'status': 'error', 'message': '無效的請求格式'}), 400
 
+        number_of_people = data.get('Number_of_People')
+        reservation_time = data.get('Reservation_Time')
+        time_slots = data.get('TimeSlots')
+
+        if not all([number_of_people, reservation_time, time_slots]):
+            return jsonify({'status': 'error', 'message': '缺少必要參數'}), 400
+
+        conn_obj = conn()
         cursor = conn_obj.cursor()
 
-        # Fetch an available table ID
+        # 查詢並插入邏輯
         cursor.execute("""
-            SELECT TOP 1 Table_ID
-            FROM desk
-            WHERE Number_of_Seat >= ? AND Table_ID NOT IN (
-                SELECT Table_ID FROM Reservation
-                WHERE Reservation_Time = ? AND TimeSlots = ?
-            )
-            ORDER BY Number_of_Seat
+            INSERT INTO Reservation (Number_of_People, Reservation_Time, TimeSlots)
+            VALUES (?, ?, ?)
         """, (number_of_people, reservation_time, time_slots))
-        table_row = cursor.fetchone()
-
-        if not table_row:
-            return jsonify({'status': 'error', 'message': 'No available tables for the selected time and people.'}), 400
-
-        table_id = table_row[0]
-
-        # Insert reservation into the database
-        cursor.execute("""
-            INSERT INTO Reservation (Number_of_People, Reservation_Time, TimeSlots, Customer_ID, Table_ID)
-            VALUES (?, ?, ?, ?, ?)
-        """, (number_of_people, reservation_time, time_slots, customer_id, table_id))
 
         conn_obj.commit()
         cursor.close()
-        conn_obj.close()
 
-        return jsonify({'status': 'success', 'message': 'Reservation saved successfully!', 'Table_ID': table_id})
+        return jsonify({'status': 'success', 'message': '預約成功！'})
 
     except Exception as e:
         print(f"Error saving reservation: {e}")
-        return jsonify({'status': 'error', 'message': 'Server error occurred.'}), 500
-
+        return jsonify({'status': 'error', 'message': '伺服器錯誤'}), 500
 
 @app.route('/available_tables', methods=['GET'])
 def available_tables():
@@ -380,18 +354,18 @@ def member():
     reservations = cursor.fetchall()
 
     reservation_details = []
-    # for reservation in reservations:
-    #     cursor.execute("""
-    #         SELECT d.Dish_name, od.Quantity, od.Price
-    #         FROM OrderDetails od
-    #         JOIN Dish d ON od.Dish_ID = d.Dish_ID
-    #         WHERE od.Reservation_ID = ?
-    #     """, (reservation[0],))
-    #     items = cursor.fetchall()
-    #     reservation_details.append({
-    #         'reservation': reservation,
-    #         'items': [{'name': item[0], 'quantity': item[1], 'price': item[2]} for item in items]
-    #     })
+    for reservation in reservations:
+        cursor.execute("""
+            SELECT d.Dish_name, od.Quantity, od.Price
+            FROM OrderDetails od
+            JOIN Dish d ON od.Dish_ID = d.Dish_ID
+            WHERE od.Reservation_ID = ?
+        """, (reservation[0],))
+        items = cursor.fetchall()
+        reservation_details.append({
+            'reservation': reservation,
+            'items': [{'name': item[0], 'quantity': item[1], 'price': item[2]} for item in items]
+        })
 
     cursor.close()
     conn_obj.close()
