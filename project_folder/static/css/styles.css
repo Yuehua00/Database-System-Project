@@ -21,7 +21,7 @@ header {
     width: 100%;  /* 佔滿整個頁面寬度 */
     top: 0;  /* 保持在頂部 */
     z-index: 1000;  /* 保證層級在最上層 */
-    background-image: url('{{ url_for('static', filename='images/header-bg.jpg') }}');  /* 設置背景圖片 */
+    background-image: url('{{ url_for('static', filename='images/主頁.jpg') }}');  /* 設置背景圖片 */
     background-size: cover;  /* 背景圖片覆蓋整個區域 */
     background-position: center center;  /* 背景圖片居中 */
     background-repeat: no-repeat;  /* 不重複顯示背景圖片 */
