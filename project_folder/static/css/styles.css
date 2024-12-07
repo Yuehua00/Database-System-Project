@@ -355,6 +355,7 @@ main {
     padding: 2rem;
 }
 
+/* 菜單卡片樣式 */
 .menu-card {
     display: flex;
     flex-direction: column;
@@ -362,8 +363,19 @@ main {
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    /* 添加過渡效果 */
 }
 
+/* 新增：當被選中時的樣式 */
+.menu-card.selected {
+    background-color: #f0f9f0;
+    /* 淺綠色背景 */
+    border: 1px solid #4CAF50;
+    /* 綠色邊框 */
+}
+
+/* 保持原有的 active 樣式 */
 .menu-card.active {
     grid-row-end: span 2;
 }
