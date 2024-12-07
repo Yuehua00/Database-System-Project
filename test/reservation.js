@@ -307,10 +307,18 @@ document.querySelectorAll('.btn.prev-step').forEach(button => {
 });
 
 
-function updateItemStyle(quantity, menuItem) {
+// 假設你有一個函數處理菜單項目的數量變動
+function updateMenuItemQuantity(menuItemId, quantity) {
+    const menuItem = document.getElementById(menuItemId);
+
+    // 根據數量變動來決定是否添加 selected 樣式
     if (quantity > 0) {
         menuItem.classList.add('selected');
     } else {
         menuItem.classList.remove('selected');
     }
+
+    // 更新選項數量顯示
+    const quantityElement = menuItem.querySelector('.quantity');
+    quantityElement.textContent = quantity;
 }
