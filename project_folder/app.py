@@ -461,42 +461,58 @@ def query_customer_data(customer_id):
 
 @app.route('/member')
 def member():
-    customer_id = session.get('Customer_ID')
-    customer_data = query_customer_data(customer_id)
+    try:
+        # 獲取當前用戶 ID
+        customer_id = session.get('Customer_ID')
+        if not customer_id:
+            return redirect(url_for('login'))
 
-    conn_obj = conn()
-    cursor = conn_obj.cursor()
+        conn_obj = conn()
+        cursor = conn_obj.cursor()
 
-    cursor.execute("""
-        SELECT r.Reservation_ID, r.Reservation_Time, r.TimeSlots, r.Table_ID, r.Number_of_People
-        FROM Reservation r WHERE r.Customer_ID = ?
-    """, (customer_id,))
-    reservations = cursor.fetchall()
+        # 獲取會員資料
+        cursor.execute("SELECT Customer_name, Customer_phoneNumber, Points FROM Customer WHERE Customer_ID = ?", (customer_id,))
+        customer = cursor.fetchone()
+        if not customer:
+            return jsonify({"status": "error", "message": "找不到會員資料"}), 404
 
-    reservation_details = []
-    for reservation in reservations:
+        customer_data = {
+            "name": customer[0],
+            "phone": customer[1],
+            "point": customer[2]
+        }
+
+        # 獲取訂單資訊
         cursor.execute("""
-            SELECT d.Dish_name, oi.Quantity, oi.Price
-            FROM Order_Items oi
-            JOIN Dish d ON oi.Dish_ID = d.Dish_ID
-            JOIN Order_rem o ON oi.Order_ID = o.Order_ID
-            WHERE o.Reservation_ID = ?
-        """, (reservation[0],))
-        items = cursor.fetchall()
-        reservation_details.append({
-            'reservation': reservation,
-            'items': [{'name': item[0], 'quantity': item[1], 'price': item[2]} for item in items]
-        })
+            SELECT o.Order_ID, r.Reservation_Time, o.Total_price
+            FROM Order_rem o
+            JOIN Reservation r ON o.Reservation_ID = r.Reservation_ID
+            WHERE r.Customer_ID = ?
+            ORDER BY r.Reservation_Time DESC
+        """, (customer_id,))
+        orders = cursor.fetchall()
 
+        order_list = []
+        for order in orders:
+            cursor.execute("""
+                SELECT d.Dish_name, oi.Quantity, oi.Price
+                FROM Order_Items oi
+                JOIN Dish d ON oi.Dish_ID = d.Dish_ID
+                WHERE oi.Order_ID = ?
+            """, (order[0],))
+            items = cursor.fetchall()
 
-    cursor.close()
-    conn_obj.close()
+            order_list.append({
+                "id": order[0],
+                "date": order[1],
+                "total": order[2],
+                "items": [{"name": item[0], "quantity": item[1], "price": item[2]} for item in items]
+            })
 
-    return render_template(
-        'member.html',
-        customer=customer_data,
-        reservations=reservation_details
-    )
+        return render_template('member.html', customer=customer_data, orders=order_list)
+    except Exception as e:
+        print(f"Error fetching member or order data: {e}")
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 
 # 修改密碼
