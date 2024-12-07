@@ -114,9 +114,15 @@
                     <ul>
                         {% for order in orders %}
                         <li>
-                            訂單編號: {{ order['id'] }}<br>
-                            訂單日期: {{ order['date'] }}<br>
-                            總金額: NT$ {{ order['total'] }}
+                            <strong>訂單編號:</strong> {{ order['id'] }}<br>
+                            <strong>訂單日期:</strong> {{ order['date'] }}<br>
+                            <strong>總金額:</strong> NT$ {{ order['total']|int }}<br>
+                            <strong>訂單明細:</strong>
+                            <ul>
+                                {% for item in order['items'] %}
+                                <li>{{ item['name'] }} x {{ item['quantity'] }} - NT$ {{ item['price'] }}</li>
+                                {% endfor %}
+                            </ul>
                         </li>
                         {% endfor %}
                     </ul>
@@ -125,6 +131,7 @@
                     {% endif %}
                 </div>
             </section>
+            
 
         </main>
         <script>
