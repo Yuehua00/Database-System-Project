@@ -250,9 +250,23 @@
                     const formData = new FormData(reservationForm);
 
                     // 確認表單是否正確填寫
-                    const numberOfPeople = formData.get('Number_of_People');
-                    const reservationTime = formData.get('Reservation_Time');
-                    const timeSlots = formData.get('TimeSlots');
+                    const numberOfPeople = document.querySelector('[name="Number_of_People"]').value;
+                    const reservationTime = document.querySelector('[name="Reservation_Time"]').value;
+                    const timeSlots = document.querySelector('[name="TimeSlots"]').value;
+
+                    sessionStorage.setItem('Number_of_People', numberOfPeople);
+                    sessionStorage.setItem('Reservation_Time', reservationTime);
+                    sessionStorage.setItem('TimeSlots', timeSlots);
+
+                    console.log('Saved to sessionStorage:', {
+                        numberOfPeople,
+                        reservationTime,
+                        timeSlots
+                    });
+
+                    // 確保切換到下一步
+                    document.getElementById('step1').classList.remove('active');
+                    document.getElementById('step2').classList.add('active');
 
                     if (numberOfPeople && reservationTime && timeSlots) {
                         try {
@@ -293,7 +307,7 @@
                                 if (!saveReservationResponse.ok) {
                                     const errorText = await saveReservationResponse.text();
                                     console.error("Error response:", errorText);
-                                    alert("提交訂位信息時發生錯誤，請稍後再試。");
+                                    //alert("提交訂位信息時發生錯誤，請稍後再試。");
                                     return;
                                 }
 

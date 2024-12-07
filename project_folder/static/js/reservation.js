@@ -167,10 +167,12 @@ function validateStep(step) {
 
 // 切換步驟
 function moveToStep(step) {
+    document.querySelectorAll('.reservation-step').forEach(el => el.classList.remove('active'));
+    document.getElementById(`step${step}`).classList.add('active');
     document.querySelectorAll('.reservation-step').forEach(el => {
         el.classList.remove('active');
         el.style.display = 'none';
-    });
+    });    
 
     const currentStep = document.getElementById(`step${step}`);
     currentStep.classList.add('active');
@@ -183,8 +185,25 @@ function moveToStep(step) {
             return;
         }
         updateOrderSummary(); // 渲染第三步的數據
+        updateOrderSummary(); // 更新數據顯示
     }
-
+    if (step === 2) {
+        const numberOfPeople = document.querySelector('[name="Number_of_People"]').value;
+        const reservationTime = document.querySelector('[name="Reservation_Time"]').value;
+        const timeSlot = document.querySelector('[name="TimeSlots"]').value;
+    
+        // 存儲用餐資訊
+        sessionStorage.setItem('Number_of_People', numberOfPeople);
+        sessionStorage.setItem('Reservation_Time', reservationTime);
+        sessionStorage.setItem('TimeSlots', timeSlot);
+    
+        console.log('Saved to sessionStorage:', {
+            numberOfPeople,
+            reservationTime,
+            timeSlot,
+        });
+    }
+    
     if (step === 1) {
         cart = []; // 僅在返回第一步時清空購物車
         renderCart();
@@ -398,15 +417,29 @@ function updateCartDisplay() {
 
 // 更新訂單摘要
 function updateOrderSummary() {
-    // 顯示顧客資訊
-    const customerName = sessionStorage.getItem('Customer_name') || '未指定';
-    const customerPhone = sessionStorage.getItem('Customer_phone') || '未指定';
+    console.log('Number_of_People:', sessionStorage.getItem('Number_of_People'));
+    console.log('Reservation_Time:', sessionStorage.getItem('Reservation_Time'));
+    console.log('TimeSlots:', sessionStorage.getItem('TimeSlots'));
+    console.log('Table_Number:', sessionStorage.getItem('Table_Number'));
 
-    document.querySelector('#summary-name').textContent = `姓名: ${customerName}`;
-    document.querySelector('#summary-phone').textContent = `電話: ${customerPhone}`;
+    // 更新用餐人數
+    const numberOfPeople = sessionStorage.getItem('Number_of_People') || '未指定';
+    document.getElementById('summary-people').textContent = `用餐人數: ${numberOfPeople}`;
 
-    // 渲染購物車內容
-    const cartSummary = document.querySelector('#summary-items');
+    // 更新用餐日期
+    const reservationTime = sessionStorage.getItem('Reservation_Time') || '未指定';
+    document.getElementById('summary-date').textContent = `用餐日期: ${reservationTime}`;
+
+    // 更新用餐時段
+    const timeSlot = sessionStorage.getItem('TimeSlots') || '未指定';
+    document.getElementById('summary-time').textContent = `用餐時段: ${timeSlot}`;
+
+    // 更新桌號（如果已選定）
+    const tableNumber = sessionStorage.getItem('Table_Number') || '未指定';
+    document.getElementById('summary-table').textContent = `桌號: ${tableNumber}`;
+    
+    // 更新購物車
+    const cartSummary = document.getElementById('summary-items');
     if (cartSummary) {
         cartSummary.innerHTML = cart.length > 0
             ? cart.map(item => `
@@ -420,9 +453,31 @@ function updateOrderSummary() {
 
     // 更新總金額
     const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    document.querySelector('#subtotal').textContent = subtotal;
-    document.querySelector('#total').textContent = subtotal;
+    document.getElementById('subtotal').textContent = subtotal;
+    document.getElementById('total').textContent = subtotal;
 }
+
+function saveReservationData() {
+    const numberOfPeople = document.querySelector('[name="Number_of_People"]').value;
+    const reservationTime = document.querySelector('[name="Reservation_Time"]').value;
+    const timeSlot = document.querySelector('[name="TimeSlots"]').value;
+    const tableNumber = "A01"; // 示例桌號，可以根據實際分配的桌號修改
+
+    // 保存數據到 sessionStorage
+    sessionStorage.setItem('Number_of_People', numberOfPeople);
+    sessionStorage.setItem('Reservation_Time', reservationTime);
+    sessionStorage.setItem('TimeSlots', timeSlot);
+    sessionStorage.setItem('Table_Number', tableNumber);
+    console.log('Reservation data saved:', {
+        numberOfPeople,
+        reservationTime,
+        timeSlot,
+        tableNumber,
+    });
+}
+
+
+
 
 
 // 呼叫此函式於切換到第三步時
@@ -455,28 +510,39 @@ function updateOrderSummary() {
 // }
 
 // 在第三步顯示顧客資料及購物車內容
-function updateOrderSummary() {
-    // 顯示顧客資訊
-    //fetchCustomerInfo();
+// function updateOrderSummary() {
+//     // 取得存儲的數據
+//     const numberOfPeople = sessionStorage.getItem('Number_of_People') || '未指定';
+//     const reservationTime = sessionStorage.getItem('Reservation_Time') || '未指定';
+//     const timeSlot = sessionStorage.getItem('TimeSlots') || '未指定';
+//     const tableNumber = sessionStorage.getItem('Table_Number') || '未指定';
 
-    // 顯示訂單明細
-    const summaryItems = document.getElementById('summary-items');
-    const customerDetails = document.getElementById('customer-details');
+//     // 更新畫面
+//     document.getElementById('summary-people').textContent = `用餐人數: ${numberOfPeople}`;
+//     document.getElementById('summary-date').textContent = `用餐日期: ${reservationTime}`;
+//     document.getElementById('summary-time').textContent = `用餐時段: ${timeSlot}`;
+//     document.getElementById('summary-table').textContent = `桌號: ${tableNumber}`;
 
-    if (summaryItems) {
-        summaryItems.innerHTML = cart.map(item => `
-            <div class="summary-item">
-                <span>${item.name} x ${item.quantity}</span>
-                <span>NT$ ${item.price * item.quantity}</span>
-            </div>
-        `).join('');
-    }
+//     // 更新購物車內容
+//     const cartSummary = document.getElementById('summary-items');
+//     if (cartSummary) {
+//         cartSummary.innerHTML = cart.length > 0
+//             ? cart.map(item => `
+//                 <div class="cart-item">
+//                     <span>${item.name} x ${item.quantity}</span>
+//                     <span>NT$ ${item.price * item.quantity}</span>
+//                 </div>
+//             `).join('')
+//             : '<p>購物車目前沒有任何項目。</p>';
+//     }
 
-    // 總金額
-    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    document.getElementById('subtotal').textContent = subtotal;
-    document.getElementById('total').textContent = subtotal;
-}
+//     // 計算小計和總金額
+//     const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+//     document.getElementById('subtotal').textContent = subtotal;
+//     document.getElementById('total').textContent = subtotal;
+// }
+
+
 
 
 
@@ -571,7 +637,146 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+async function ensureCustomerID() {
+    let customerId = sessionStorage.getItem('Customer_ID');
+    if (!customerId) {
+        try {
+            const response = await fetch('/get_customer_info', {
+                method: 'GET',
+                credentials: 'include',
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            if (data.status === 'success') {
+                customerId = data.Customer_ID;
+                sessionStorage.setItem('Customer_ID', customerId); // 存入 sessionStorage
+                console.log("Customer_ID 已更新:", customerId);
+            } else {
+                console.error("無法獲取顧客資訊:", data.message);
+            }
+        } catch (error) {
+            console.error("獲取 Customer_ID 時發生錯誤:", error);
+        }
+    }
+    return customerId;
+}
+document.addEventListener("DOMContentLoaded", async () => {
+    const customerId = await ensureCustomerID();
+    if (!customerId) {
+        alert("無法獲取顧客資訊，請重新登入。");
+    }
+});
 
+document.addEventListener("DOMContentLoaded", () => {
+    // 確認訂單按鈕的邏輯
+    const confirmOrderButton = document.querySelector('.confirm-order');
+    confirmOrderButton.addEventListener('click', async () => {
+        const numberOfPeople = sessionStorage.getItem('Number_of_People');
+        const reservationTime = sessionStorage.getItem('Reservation_Time');
+        const timeSlots = sessionStorage.getItem('TimeSlots');
+        const tableNumber = sessionStorage.getItem('Table_Number');
+        const cartItems = cart;
+        const customerId = await ensureCustomerID();
+        // Debug 輸出提交數據
+        console.log("Submitting reservation data:", {
+            Customer_ID: customerId,
+            Number_of_People: numberOfPeople,
+            Reservation_Time: reservationTime,
+            TimeSlots: timeSlots,
+            Table_Number: tableNumber,
+            Cart: cartItems,
+        });
+    
+        // 檢查是否有缺少必要字段
+        if (!numberOfPeople || !reservationTime || !timeSlots || !tableNumber || !customerId) {
+            alert('請確認所有資訊已完整填寫。');
+            return;
+        }
+    
+        try {
+            // 發送訂單數據
+            const response = await fetch('/save_reservation', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    Customer_ID: customerId, 
+                    Number_of_People: numberOfPeople,
+                    Reservation_Time: reservationTime,
+                    TimeSlots: timeSlots,
+                    Table_Number: tableNumber,
+                    Cart: cartItems,
+                }),
+            });
+    
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Error response:', errorText);
+                alert('儲存訂單時發生錯誤，請稍後再試。');
+                return;
+            }
+    
+            const result = await response.json();
+            if (result.status === 'success') {
+                alert('訂位成功！');
+                window.location.href = '/member';
+            } else {
+                alert(result.message || '儲存失敗，請稍後再試。');
+            }
+        } catch (error) {
+            console.error('提交訂單時發生錯誤:', error);
+            //alert('伺服器錯誤，請稍後再試。');
+        }
+    });
+    const nextStepBtn = document.getElementById("nextStepBtn");
+    if (nextStepBtn) {
+        nextStepBtn.addEventListener("click", async () => {
+            const reservationForm = document.getElementById("reservationForm");
+            const formData = new FormData(reservationForm);
+
+            // 獲取用戶填寫的數據
+            const numberOfPeople = formData.get('Number_of_People');
+            const reservationTime = formData.get('Reservation_Time');
+            const timeSlots = formData.get('TimeSlots');
+
+            // 確認所有字段是否正確填寫
+            if (!numberOfPeople || !reservationTime || !timeSlots) {
+                alert("請填寫所有必填項目");
+                return;
+            }
+
+            try {
+                // 查詢可用桌子
+                const availableTablesResponse = await fetch(`/available_tables?people_count=${numberOfPeople}&reservation_time=${reservationTime}&time_slot=${timeSlots}`);
+                if (!availableTablesResponse.ok) {
+                    throw new Error(`HTTP error! status: ${availableTablesResponse.status}`);
+                }
+
+                const availableTablesResult = await availableTablesResponse.json();
+                if (availableTablesResult.status === 'success' && availableTablesResult.available_tables.length > 0) {
+                    // 分配第一個可用桌號
+                    const assignedTable = availableTablesResult.available_tables[0];
+                    sessionStorage.setItem('Table_Number', assignedTable); // 儲存桌號到 sessionStorage
+
+                    console.log("分配的桌號:", assignedTable);
+
+                    // 進入下一步
+                    document.getElementById('step1').classList.remove('active');
+                    document.getElementById('step2').classList.add('active');
+                } else {
+                    alert("目前無可用桌，請重新選擇時間或人數。");
+                }
+            } catch (error) {
+                console.error("查詢可用桌子時發生錯誤:", error);
+                alert("查詢可用桌子時發生錯誤，請稍後再試。");
+            }
+        });
+    }
+    
+});
 
 
 // 更新進度條邏輯
@@ -600,21 +805,49 @@ document.getElementById("nextStepBtn").addEventListener("click", async () => {
     }
 
     try {
+        const tableNumber = sessionStorage.getItem('Table_Number') || '未指定';
+        const cartItems = cart || [];
+
+        // Debug 輸出提交數據
+        console.log("Submitting reservation data:", {
+            Number_of_People: numberOfPeople,
+            Reservation_Time: reservationTime,
+            TimeSlots: timeSlots,
+            Table_Number: tableNumber,
+            Cart: cartItems,
+        });
+        const customerID = sessionStorage.getItem('Customer_ID');
+        if (!customerID) {
+            alert("請先登入");
+            return;
+        }
         const saveReservationResponse = await fetch('/save_reservation', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
+                Customer_ID: customerID,
                 Number_of_People: numberOfPeople,
                 Reservation_Time: reservationTime,
                 TimeSlots: timeSlots,
+                Table_Number: tableNumber || '未指定',
+                Cart: cartItems || [], // 確保 Cart 是數組
             }),
         });
     
-        if (!saveReservationResponse) {
-            console.error('saveReservationResponse is undefined.');
-            alert('未能收到伺服器響應，請稍後重試。');
+        console.log("提交數據:", {
+            Number_of_People: numberOfPeople,
+            Reservation_Time: reservationTime,
+            TimeSlots: timeSlots,
+            Table_Number: tableNumber,
+            Cart: cartItems || [],
+        });
+
+        if (!saveReservationResponse.ok) {
+            const errorText = await saveReservationResponse.text();
+            console.error('Error response:', errorText);
+            //alert('提交訂單時發生錯誤，請檢查您的輸入資訊並稍後再試。');
             return;
         }
     

@@ -17,6 +17,7 @@ def conn():
             'DATABASE=resturant;'
             'Trusted_Connection=yes;'
         )
+        print("Hello Database")
         return connect
     except Exception as e:
         print(f"連線失敗: {e}")
@@ -169,51 +170,180 @@ def change_password():
 def save_reservation():
     try:
         data = request.get_json()
+        print("接收到的數據:", data)  # 調試用
         if not data:
             return jsonify({"status": "error", "message": "缺少請求數據"}), 400
-        
-        number_of_people = data.get("Number_of_People")
-        reservation_time = data.get("Reservation_Time")
-        time_slots = data.get("TimeSlots")
 
-        if not number_of_people or not reservation_time or not time_slots:
+        # 檢查必要字段
+        required_fields = ['Number_of_People', 'Reservation_Time', 'TimeSlots', 'Table_Number', 'Cart']
+        missing_fields = [field for field in required_fields if field not in data or not data[field]]
+        if missing_fields:
+            return jsonify({
+                "status": "error",
+                "message": f"缺少必要字段: {', '.join(missing_fields)}"
+            }), 400
+
+        # 獲取字段
+        customer_id = session.get('Customer_ID')
+        number_of_people = data['Number_of_People']
+        reservation_time = data['Reservation_Time']
+        time_slots = data['TimeSlots']
+        table_number = data['Table_Number']
+        cart = data['Cart']
+
+        print("Customer_ID:", customer_id)
+
+        # 驗證字段是否完整
+        if not all([customer_id, number_of_people, reservation_time, time_slots, table_number]):
             return jsonify({"status": "error", "message": "缺少必要字段"}), 400
 
-        # 模擬成功返回
+        conn_obj = conn()
+        if not conn_obj:
+            return jsonify({"status": "error", "message": "資料庫連接失敗"}), 500
+
+        cursor = conn_obj.cursor()
+
+        # 插入 Reservation 並獲取 Reservation_ID
+        cursor.execute("""
+            INSERT INTO Reservation (Number_of_People, Reservation_Time, TimeSlots, Customer_ID, Table_ID)
+            OUTPUT INSERTED.Reservation_ID
+            VALUES (?, ?, ?, ?, ?);
+        """, (number_of_people, reservation_time, time_slots, customer_id, table_number))
+        reservation_id_row = cursor.fetchone()
+        if not reservation_id_row:
+            raise Exception("無法獲取 Reservation_ID")
+        reservation_id = reservation_id_row[0]
+        print("Reservation_ID:", reservation_id)
+
+        # 計算總價
+        total_price = sum(item['quantity'] * item['price'] for item in cart)
+
+        # 插入 Order_rem 並獲取 Order_ID
+        cursor.execute("""
+            INSERT INTO Order_rem (Reservation_ID, Total_price)
+            OUTPUT INSERTED.Order_ID
+            VALUES (?, ?);
+        """, (reservation_id, total_price))
+        order_id_row = cursor.fetchone()
+        if not order_id_row:
+            raise Exception("無法獲取 Order_ID")
+        order_id = order_id_row[0]
+        print("Order_ID:", order_id)
+
+        # 插入 Order_Items
+        for item in cart:
+            cursor.execute("""
+                INSERT INTO Order_Items (Order_ID, Dish_ID, Quantity, Price)
+                VALUES (?, ?, ?, ?);
+            """, (order_id, item['id'], item['quantity'], item['price']))
+
+        # 提交交易
+        conn_obj.commit()
+
         return jsonify({"status": "success", "message": "訂位成功"})
+
     except Exception as e:
+        print(f"保存訂位信息時發生錯誤: {e}")
         return jsonify({"status": "error", "message": str(e)}), 500
 
+    
+# @app.route('/get_customer_info', methods=['GET'])
+# def get_customer_info():
+#     try:
+#         customer_id = session.get('Customer_ID')  # 從 session 中抓取 Customer_ID
+#         if not customer_id:
+#             return jsonify({"status": "error", "message": "未登入或無法找到顧客資訊"}), 401
+
+#         # 模擬查詢用戶信息
+#         customer_info = {
+#             "Customer_ID": customer_id,
+#             "name": "John Doe",
+#             "phone": "123456789"
+#         }
+#         return jsonify({"status": "success", **customer_info})
+#     except Exception as e:
+#         print("獲取顧客資訊時發生錯誤:", e)
+#         return jsonify({"status": "error", "message": str(e)}), 500
+@app.route('/get_customer_info')
+def get_customer_info():
+    if 'Customer_name' in session and 'Customer_phoneNumber' in session:
+        return jsonify({
+            'status': 'success',
+            'name': session['Customer_name'],
+            'phone': session['Customer_phoneNumber']
+        })
+    else:
+        return jsonify({'status': 'fail', 'message': 'User not logged in'}), 401
+
 @app.route('/available_tables', methods=['GET'])
+# def get_available_tables():
+#     try:
+#         people_count = request.args.get('people_count', type=int)
+#         reservation_time = request.args.get('reservation_time')
+#         time_slot = request.args.get('time_slot')
+#         if not people_count or not reservation_time or not time_slot:
+#             return jsonify({'status': 'error', 'message': '缺少必需的參數'}), 400
+
+#         query = """
+#             SELECT Table_ID
+#             FROM desk d
+#             WHERE d.Number_of_Seat >= ?
+#             AND d.Table_ID NOT IN (
+#                 SELECT r.Table_ID
+#                 FROM Reservation r
+#                 WHERE r.Reservation_Time = ?
+#                 AND r.TimeSlots = ?
+#             )
+#         """
+#         params = (people_count, reservation_time, time_slot)
+#         print("查詢參數:", params)
+#         print("可用桌子:", available_tables)
+
+#         cursor = conn.cursor()
+#         cursor.execute(query, params)
+#         available_tables = [row[0] for row in cursor.fetchall()]
+#         return jsonify({'status': 'success', 'available_tables': available_tables})
+    
+#     except Exception as e:
+#         print("Error fetching available tables:", e)
+#         return jsonify({'status': 'error', 'message': '查詢可用桌子時發生錯誤。'}), 500
 def available_tables():
+    people_count = request.args.get('people_count')
+    reservation_time = request.args.get('reservation_time')
+    time_slot = request.args.get('time_slot')
+
+    print("查詢參數:", (people_count, reservation_time, time_slot))
+
+    conn_obj = conn()
+    if not conn_obj:
+        print("資料庫連接失敗")
+        return jsonify({'status': 'error', 'message': '資料庫連接失敗'}), 500
+
+    available_tables = []  # 初始化 available_tables
+
     try:
-        people_count = request.args.get('people_count')
-        reservation_time = request.args.get('reservation_time')
-        time_slot = request.args.get('time_slot')
-
-        if not all([people_count, reservation_time, time_slot]):
-            return jsonify({'status': 'error', 'message': '缺少必要參數'}), 400
-
-        conn_obj = conn()
         cursor = conn_obj.cursor()
-        cursor.execute("""
-            SELECT Table_ID
-            FROM desk
-            WHERE Number_of_Seat >= ? AND Table_ID NOT IN (
-                SELECT Table_ID FROM Reservation WHERE Reservation_Time = ? AND TimeSlots = ?
-            )
-        """, (people_count, reservation_time, time_slot))
+        query = """
+        SELECT Table_ID
+        FROM desk d
+        WHERE d.Number_of_Seat >= ?
+        AND d.Table_ID NOT IN (
+            SELECT r.Table_ID
+            FROM Reservation r
+            WHERE r.Reservation_Time = ?
+            AND r.TimeSlots = ?
+        )
+        """
+        cursor.execute(query, (people_count, reservation_time, time_slot))
         available_tables = [row[0] for row in cursor.fetchall()]
-        cursor.close()
-
-        if not available_tables:
-            return jsonify({'status': 'success', 'available_tables': []})  # 返回空列表表示无可用桌子
-
-        return jsonify({'status': 'success', 'available_tables': available_tables})
+        print("可用桌子:", available_tables)
     except Exception as e:
-        print(f"Error fetching available tables: {e}")
-        return jsonify({'status': 'error', 'message': '伺服器錯誤'}), 500
+        print("Error fetching available tables:", e)
+        return jsonify({'status': 'error', 'message': '查詢可用桌子失敗'}), 500
+    finally:
+        conn_obj.close()
 
+    return jsonify({'status': 'success', 'available_tables': available_tables})
 
 # 預約後呼叫品項提供選擇
 @app.route('/get_menu', methods=['GET'])
@@ -346,16 +476,18 @@ def member():
     reservation_details = []
     for reservation in reservations:
         cursor.execute("""
-            SELECT d.Dish_name, od.Quantity, od.Price
-            FROM OrderDetails od
-            JOIN Dish d ON od.Dish_ID = d.Dish_ID
-            WHERE od.Reservation_ID = ?
+            SELECT d.Dish_name, oi.Quantity, oi.Price
+            FROM Order_Items oi
+            JOIN Dish d ON oi.Dish_ID = d.Dish_ID
+            JOIN Order_rem o ON oi.Order_ID = o.Order_ID
+            WHERE o.Reservation_ID = ?
         """, (reservation[0],))
         items = cursor.fetchall()
         reservation_details.append({
             'reservation': reservation,
             'items': [{'name': item[0], 'quantity': item[1], 'price': item[2]} for item in items]
         })
+
 
     cursor.close()
     conn_obj.close()
@@ -366,16 +498,6 @@ def member():
         reservations=reservation_details
     )
 
-@app.route('/get_customer_info')
-def get_customer_info():
-    if 'Customer_name' in session and 'Customer_phoneNumber' in session:
-        return jsonify({
-            'status': 'success',
-            'name': session['Customer_name'],
-            'phone': session['Customer_phoneNumber']
-        })
-    else:
-        return jsonify({'status': 'fail', 'message': 'User not logged in'}), 401
 
 # 修改密碼
 @app.route('/update_password', methods=['POST'])
