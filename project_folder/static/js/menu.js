@@ -13,11 +13,11 @@ document.addEventListener('click', function(e) {
 });
 
 // 菜單卡片點擊展開/收合
-document.addEventListener('DOMContentLoaded', (e) => {
+document.addEventListener('DOMContentLoaded', () => {
     const cards = document.querySelectorAll('.menu-card');
     
     cards.forEach(card => {
-        card.addEventListener('click', () => {
+        card.addEventListener('click', (e) => {
             // 如果點擊的是評論框或提交按鈕，阻止卡片的展開/收合
             if (e.target.closest('.review-input') || e.target.closest('.submit-review')) {
                 return;
