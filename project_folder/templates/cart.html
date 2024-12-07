@@ -41,6 +41,39 @@
             text-align: left;
             /* 將文本向左對齊 */
         }
+         /* 基本按鈕樣式 */
+        button {
+            background-color: #e67e22; /* 按鈕的背景顏色 */
+            color: white; /* 按鈕文字顏色 */
+            border: none; /* 移除邊框 */
+            border-radius: 8px; /* 圓角邊框 */
+            padding: 0.5rem 1rem; /* 內邊距 */
+            cursor: pointer; /* 滑鼠移過顯示指針 */
+            transition: background-color 0.3s ease; /* 背景顏色過渡效果 */
+        }
+
+        /* 按鈕懸停樣式 */
+        button:hover {
+            background-color: #d35400; /* 懸停時的背景顏色 */
+        }
+
+        /* 特定按鈕的樣式覆蓋 */
+        .bg-green-500 {
+            background-color: #e67e22 !important; /* 修改現有的綠色按鈕背景顏色 */
+        }
+
+        .bg-green-500:hover {
+            background-color: #d35400 !important; /* 修改懸停時的背景顏色 */
+        }
+
+        /* 修改提交按鈕樣式 */
+        .submit-review {
+            background-color: #e67e22;
+        }
+
+        .submit-review:hover {
+            background-color: #d35400;
+        }
     </style>
     <body class="bg-gray-100 p-8">
         <header>
