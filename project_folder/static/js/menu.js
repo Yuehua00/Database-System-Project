@@ -18,6 +18,11 @@ document.addEventListener('DOMContentLoaded', () => {
     
     cards.forEach(card => {
         card.addEventListener('click', () => {
+            // 如果點擊的是評論框或提交按鈕，阻止卡片的展開/收合
+            if (e.target.closest('.review-input') || e.target.closest('.submit-review')) {
+                return;
+            }
+            
             // 先移除其他卡片的 active 狀態
             cards.forEach(c => {
                 if (c !== card) {
