@@ -182,17 +182,15 @@ function moveToStep(step) {
             moveToStep(2);
             return;
         }
-        updateOrderSummary();
+        updateOrderSummary(); // 渲染第三步的數據
     }
 
     if (step === 1) {
-        cart = []; // 清空購物車
+        cart = []; // 僅在返回第一步時清空購物車
         renderCart();
-        document.querySelectorAll('.menu-item .quantity').forEach(el => {
-            el.textContent = '0';
-        });
     }
 }
+
 
 
 
@@ -400,30 +398,32 @@ function updateCartDisplay() {
 
 // 更新訂單摘要
 function updateOrderSummary() {
-    // 獲取表單數據
-    const numberOfPeople = document.querySelector('#Number_of_People')?.value || '未指定';
-    const reservationTime = document.querySelector('#Reservation_Time')?.value || '未指定';
-    const timeSlots = document.querySelector('#TimeSlots')?.value || '未指定';
+    // 顯示顧客資訊
+    const customerName = sessionStorage.getItem('Customer_name') || '未指定';
+    const customerPhone = sessionStorage.getItem('Customer_phone') || '未指定';
 
-    // 獲取購物車內容
-    const cartSummary = document.querySelector('.cart-items');
+    document.querySelector('#summary-name').textContent = `姓名: ${customerName}`;
+    document.querySelector('#summary-phone').textContent = `電話: ${customerPhone}`;
+
+    // 渲染購物車內容
+    const cartSummary = document.querySelector('#summary-items');
     if (cartSummary) {
-        cartSummary.innerHTML = cart.map(item => `
-            <div class="cart-item">
-                <span>${item.name} x ${item.quantity}</span>
-                <span>NT$ ${item.price * item.quantity}</span>
-            </div>
-        `).join('');
+        cartSummary.innerHTML = cart.length > 0
+            ? cart.map(item => `
+                <div class="cart-item">
+                    <span>${item.name} x ${item.quantity}</span>
+                    <span>NT$ ${item.price * item.quantity}</span>
+                </div>
+            `).join('')
+            : '<p>購物車目前沒有任何項目。</p>';
     }
 
-    // 更新訂位資訊
-    document.querySelector('#summary-name').textContent = sessionStorage.getItem('Customer_name') || '未指定';
-    document.querySelector('#summary-phone').textContent = sessionStorage.getItem('Customer_phone') || '未指定';
-    document.querySelector('#summary-table').textContent = '尚未指定'; // 若有桌號分配
-    document.querySelector('#summary-people').textContent = numberOfPeople;
-    document.querySelector('#summary-date').textContent = reservationTime;
-    document.querySelector('#summary-time').textContent = timeSlots;
+    // 更新總金額
+    const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    document.querySelector('#subtotal').textContent = subtotal;
+    document.querySelector('#total').textContent = subtotal;
 }
+
 
 // 呼叫此函式於切換到第三步時
 
