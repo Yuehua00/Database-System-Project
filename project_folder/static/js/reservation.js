@@ -875,3 +875,11 @@ document.getElementById("nextStepBtn").addEventListener("click", async () => {
     
     
 });
+
+
+// 當數量改變時
+if (quantity > 0) {
+    menuCard.classList.add('selected');
+} else {
+    menuCard.classList.remove('selected');
+}
