@@ -822,13 +822,13 @@ footer {
 /* 評論區 */
 .review-input {
     width: 100%;
-    min-height: 80px;
+    height: 80px;
     margin-top: 1rem;
     padding: 0.75rem;
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 1rem;
-    resize: vertical; /* 允許用戶調整高度 */
+    resize: none;
     transition: border-color 0.3s ease;
 }
 
@@ -840,7 +840,7 @@ footer {
 
 .submit-review {
     margin-top: 1rem;
-    background-color: #3498db;
+    background-color: #e67e22;
     color: white;
     padding: 0.5rem 1rem;
     border: none;
@@ -850,5 +850,5 @@ footer {
 }
 
 .submit-review:hover {
-    background-color: #2980b9;
+    background-color: #be681c;
 }
