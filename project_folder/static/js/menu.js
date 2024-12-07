@@ -13,7 +13,7 @@ document.addEventListener('click', function(e) {
 });
 
 // 菜單卡片點擊展開/收合
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', (e) => {
     const cards = document.querySelectorAll('.menu-card');
     
     cards.forEach(card => {
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.target.closest('.review-input') || e.target.closest('.submit-review')) {
                 return;
             }
-            
+
             // 先移除其他卡片的 active 狀態
             cards.forEach(c => {
                 if (c !== card) {
