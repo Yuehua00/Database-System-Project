@@ -305,3 +305,12 @@ document.querySelectorAll('.btn.prev-step').forEach(button => {
         document.querySelector(`.progress-step[data-step="${prevStep}"]`).classList.add('active');
     });
 });
+
+
+function updateItemStyle(quantity, menuItem) {
+    if (quantity > 0) {
+        menuItem.classList.add('selected');
+    } else {
+        menuItem.classList.remove('selected');
+    }
+}

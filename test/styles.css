@@ -185,18 +185,68 @@ main {
     position: relative;
 }
 
+
 .menu-item {
     background-color: #fff;
     padding: 1.5rem;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
-    /* 平滑過渡 */
     overflow: hidden;
-    /* 隱藏超出部分 */
     position: relative;
-    /* 保證定位內部元素 */
 }
+
+/* 當數量大於0時的卡片樣式 */
+.menu-item.selected {
+    background-color: #f0f9f0;
+    /* 淺綠色背景 */
+    border: 1px solid #4CAF50;
+    /* 綠色邊框 */
+}
+
+.menu-item .menu-details {
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    overflow: hidden;
+}
+
+.menu-item.active .menu-details {
+    max-height: 500px;
+    opacity: 1;
+}
+
+.menu-item.active {
+    grid-row: span 1;
+}
+
+.quantity-input {
+    display: inline-block;
+    padding: 5px 10px;
+    font-size: 16px;
+    min-width: 20px;
+    text-align: center;
+}
+
+.quantity-input:not([value="0"]) {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.quantity-btn {
+    background-color: #e67e22;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 5px;
+}
+
 
 .menu-item .menu-details {
     max-height: 0;
