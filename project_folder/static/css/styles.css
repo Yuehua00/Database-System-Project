@@ -220,13 +220,15 @@ main {
     position: relative;
 }
 
-/* 當數量大於0時的卡片樣式 */
+
+/* 當數量大於0時的選中狀態 */
 .menu-item.selected {
     background-color: #f0f9f0;
-    /* 淺綠色背景 */
     border: 1px solid #4CAF50;
-    /* 綠色邊框 */
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.2);
+    /* 綠色陰影 */
 }
+
 
 .menu-item .menu-details {
     max-height: 0;
