@@ -11,7 +11,6 @@ let menuItems = [];  // 定義 menuItems 變數
 let cart = [];
 
 // 更新菜單項目，從資料庫中抓取資料
-// 更新菜單項目，從資料庫中抓取資料
 function renderMenuItems() {
     const container = document.querySelector('.menu-selection');
     if (!container) {
@@ -44,29 +43,27 @@ function renderMenuItems() {
                 <div class="menu-category">
                     <h2>${category}</h2>
                     <div class="menu-items">
-                        ${items.map(item => {
-                            // 確保數量大於0時，添加 'selected' 類別
-                            const isSelected = selectedItems[item.id] && selectedItems[item.id] > 0 ? 'selected' : '';
-                            return `
-                                <div class="menu-item ${isSelected}" data-id="${item.id}">
-                                    <h3>${item.name}</h3>
-                                    <p class="price">價格：NT$${item.price}</p>
-                                    <div class="quantity-control">
-                                        <button class="quantity-btn decrease" data-id="${item.id}" data-change="-1">-</button>
-                                        <span class="quantity">${selectedItems[item.id] || 0}</span>
-                                        <button class="quantity-btn increase" data-id="${item.id}" data-change="1">+</button>
-                                    </div>
+                        ${items.map(item => `
+                            <div class="menu-item" data-id="${item.id}">
+                                <h3>${item.name}</h3>
+                                <p class="price">價格：NT$${item.price}</p>
+                                <div class="quantity-control">
+                                    <button class="quantity-btn decrease" data-id="${item.id}" data-change="-1">-</button>
+                                    <span class="quantity">0</span>
+                                    <button class="quantity-btn increase" data-id="${item.id}" data-change="1">+</button>
                                 </div>
-                            `;
-                        }).join('')}
+                            </div>
+                        `).join('')}
                     </div>
                 </div>
             `).join('');
+
         } else {
             console.error('菜單格式錯誤:', menuItemsData);
         }
     })
     .catch(error => console.error('獲取菜單失敗:', error));
+
 }
 
 
@@ -324,6 +321,17 @@ function updateCart(itemId, change) {
     renderCart();
 }
 
+// 更新按鈕與背景顏色
+function updateButtonStyle() {
+    const button = document.querySelector('.btn');
+    const cartCount = document.querySelectorAll('.cart-item').length;
+
+    if (cartCount >= 1) {
+        button.classList.add('active');
+    } else {
+        button.classList.remove('active');
+    }
+}
 
 // 每次購物車內容變更時執行
 document.querySelector('.cart').addEventListener('change', updateButtonStyle);
@@ -912,28 +920,10 @@ document.getElementById("nextStepBtn").addEventListener("click", async () => {
     
 });
 
-// 用來儲存選擇的菜單項目數量
-let selectedItems = {};
 
-// 增減數量的函數
-function changeQuantity(itemId, change) {
-    if (!selectedItems[itemId]) selectedItems[itemId] = 0;
-
-    // 更新數量
-    selectedItems[itemId] += change;
-
-    // 確保數量不為負
-    if (selectedItems[itemId] < 0) selectedItems[itemId] = 0;
-
-    // 重新渲染菜單
-    renderMenuItems();
+// 當數量改變時
+if (quantity > 0) {
+    menuCard.classList.add('selected');
+} else {
+    menuCard.classList.remove('selected');
 }
-
-// 點擊加減按鈕的事件監聽
-document.addEventListener('click', function(event) {
-    if (event.target.matches('.quantity-btn')) {
-        const itemId = event.target.getAttribute('data-id');
-        const change = parseInt(event.target.getAttribute('data-change'), 10);
-        changeQuantity(itemId, change);
-    }
-});
