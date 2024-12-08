@@ -145,6 +145,27 @@ main {
     /* 確保文字顯示在圖片上方 */
 }
 
+/* 響應式設計：小螢幕上按鈕大小調整 */
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2rem;
+        /* 小螢幕上縮小標題字型 */
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        /* 小螢幕上讓按鈕排列為垂直 */
+        gap: 15px;
+        /* 增加按鈕間距 */
+    }
+
+    .btn {
+        padding: 0.8rem 1.5rem;
+        /* 小螢幕上縮小按鈕內邊距 */
+        font-size: 0.9rem;
+        /* 調整按鈕字體大小 */
+    }
+}
 
 .cta-buttons {
     display: flex;
