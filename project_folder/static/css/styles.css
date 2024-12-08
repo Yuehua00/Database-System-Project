@@ -111,9 +111,8 @@ main {
 
 .hero img {
     width: 100%;
-    height: 100%;
-    object-fit: contain;
-    object-position: center;
+    height: auto;
+    object-fit: cover;
 }
 
 .hero h1 {
