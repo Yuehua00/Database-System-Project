@@ -306,19 +306,57 @@ document.querySelectorAll('.btn.prev-step').forEach(button => {
     });
 });
 
+// 假設你有一個類似的菜單項目結構
+const menuItems = document.querySelectorAll('.menu-item');
+const quantityControls = document.querySelectorAll('.quantity-control');
 
-// 假設你有一個函數處理菜單項目的數量變動
-function updateMenuItemQuantity(menuItemId, quantity) {
-    const menuItem = document.getElementById(menuItemId);
+quantityControls.forEach(control => {
+    const increaseBtn = control.querySelector('.increase');
+    const decreaseBtn = control.querySelector('.decrease');
+    const quantityInput = control.querySelector('.quantity-input');
+    
+    increaseBtn.addEventListener('click', () => updateQuantity(quantityInput, 1));
+    decreaseBtn.addEventListener('click', () => updateQuantity(quantityInput, -1));
+});
 
-    // 根據數量變動來決定是否添加 selected 樣式
+function updateQuantity(input, change) {
+    let quantity = parseInt(input.value);
+    quantity += change;
+    
+    // 確保數量不小於0
+    if (quantity < 0) {
+        quantity = 0;
+    }
+
+    // 更新輸入框的值
+    input.value = quantity;
+
+    // 找到對應的菜單項目
+    const menuItem = input.closest('.menu-item');
+    
+    // 根據數量來更新樣式
     if (quantity > 0) {
         menuItem.classList.add('selected');
     } else {
         menuItem.classList.remove('selected');
     }
 
-    // 更新選項數量顯示
-    const quantityElement = menuItem.querySelector('.quantity');
-    quantityElement.textContent = quantity;
+    // 可選：更新購物車預覽的總數量或金額等
+    updateCartPreview();
+}
+
+function updateCartPreview() {
+    // 更新購物車預覽（可根據需求進行調整）
+    const cartItems = document.querySelector('.cart-items');
+    // 確保每次都重建購物車內容
+    cartItems.innerHTML = '';
+    menuItems.forEach(item => {
+        const quantity = item.querySelector('.quantity-input').value;
+        if (parseInt(quantity) > 0) {
+            const cartItem = document.createElement('div');
+            cartItem.classList.add('cart-item');
+            cartItem.innerHTML = `${item.querySelector('h3').textContent} - ${quantity} 件`;
+            cartItems.appendChild(cartItem);
+        }
+    });
 }
