@@ -26,13 +26,15 @@
     </header>
 
     <main class="home-main">
-        <section class="hero"style="background-image: url('{{ url_for('static', filename='images/hero-background.webp') }}');">
-            <h1>歡迎光臨 大義麵親</h1>
-            <div class="cta-buttons">
-                <a href="{{ url_for('menu') }}" class="btn">查看菜單</a>
-                <a href="{{ url_for('reservation') }}" class="btn">立即訂位</a>
-            </div>
-        </section>
+<section class="hero">
+    <img src="{{ url_for('static', filename='images/主頁3.jpg') }}" alt="主頁背景">
+    <h1>歡迎光臨 大義麵親</h1>
+    <div class="cta-buttons">
+        <a href="{{ url_for('menu') }}" class="btn">查看菜單</a>
+        <a href="{{ url_for('reservation') }}" class="btn">立即訂位</a>
+    </div>
+</section>
+
     </main>
     <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
 </body>
