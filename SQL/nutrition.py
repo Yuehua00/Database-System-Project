@@ -57,17 +57,17 @@ def generate_nutrition_for_dish(dish_name):
         nutrition['碳水化合物'] = random.randint(10, 20)  # 碳水化合物範圍 (g)
         nutrition['脂肪'] = random.randint(5, 15)  # 脂肪範圍 (g)
 
-    elif '甜點' in dish_name:
+    elif '焦糖烤布蕾' in dish_name or '起司蛋糕' in dish_name or '波士頓派' in dish_name or '提拉米蘇' in dish_name or '布朗尼' in dish_name:
         nutrition['熱量'] = random.randint(250, 400)  # 熱量範圍 (kcal)
         nutrition['蛋白質'] = random.randint(3, 10)  # 蛋白質範圍 (g)
         nutrition['碳水化合物'] = random.randint(40, 60)  # 碳水化合物範圍 (g)
         nutrition['脂肪'] = random.randint(10, 20)  # 脂肪範圍 (g)
 
-    elif '飲料' in dish_name:
+    elif '可樂' in dish_name or '雪碧' in dish_name or '可爾必思' in dish_name or '紅茶' in dish_name or '綠茶' in dish_name or '奶茶' in dish_name:
         nutrition['熱量'] = random.randint(30, 120)  # 熱量範圍 (kcal)
-        nutrition['蛋白質'] = random.randint(0, 3)  # 蛋白質範圍 (g)
+        nutrition['蛋白質'] = random.randint(1, 3)  # 蛋白質範圍 (g)
         nutrition['碳水化合物'] = random.randint(8, 30)  # 碳水化合物範圍 (g)
-        nutrition['脂肪'] = random.randint(0, 5)  # 脂肪範圍 (g)
+        nutrition['脂肪'] = random.randint(1, 5)  # 脂肪範圍 (g)
 
     else:
         nutrition['熱量'] = 0
@@ -77,28 +77,27 @@ def generate_nutrition_for_dish(dish_name):
 
     return nutrition
 
-# 生成 SQL insert 語句
 
+# 直接生成 SQL 語句
 
-def generate_sql_insert(dishes):
-    sql_statements = []
+cnt = 0
+sql_statements = []  # 用來儲存 SQL 語句
 
-    for dish_id, dish_name in dishes:
-        nutrition = generate_nutrition_for_dish(dish_name)
-        for nutrition_name, amount in nutrition.items():
-            sql = f"insert into dish_nutrition(nutrition_name, amount, unit, Dish_ID) values('{nutrition_name}', {amount}, '{'g' if nutrition_name != '熱量' else 'kcal'}',{
-                dish_id});"
-            sql_statements.append(sql)
+# 遍歷菜品資料
+for dish_id, dish_name in dishes:
+    nutrition = generate_nutrition_for_dish(dish_name)  # 根據菜品名稱生成營養資料
 
-    return sql_statements
-
-
-# 生成 SQL 語句
-sql_statements = generate_sql_insert(dishes)
+    # 遍歷每一項營養資訊
+    for nutrition_name, amount in nutrition.items():
+        cnt += 1  # 更新 Nutrition_ID
+        # 生成 SQL 插入語句
+        sql = f"insert into nutrition(Nutrition_ID, Nutrition_name, Amount, Unit, Dish_ID) values({
+            cnt}, '{nutrition_name}', {amount}, '{'g' if nutrition_name != '熱量' else 'kcal'}', {dish_id});"
+        sql_statements.append(sql)
 
 # 寫入 SQL 語句到檔案
 with open('nutrition.sql', 'w', encoding='utf-8') as file:
     for sql in sql_statements:
         file.write(sql + '\n')
 
-print("SQL 插入語句已寫入 'sql/nutrition.sql' 檔案中。")
+print("SQL 插入語句已寫入 'nutrition.sql' 檔案中。")
