@@ -79,10 +79,12 @@ main {
     margin: 80px auto 0;
 }
 
-/* 按鈕樣式 */
+
+/* 首頁按鈕樣式 */
 .btn {
     display: inline-block;
     padding: 0.8rem 1.5rem;
+    /* 按鈕內邊距 */
     background-color: #e67e22;
     color: white;
     border: none;
@@ -91,8 +93,21 @@ main {
     text-decoration: none;
     transition: all 0.3s;
     font-weight: 500;
+    font-size: 16px;
+    /* 設定固定字體大小 */
 }
 
+/* 響應式樣式（針對較小的螢幕） */
+@media (max-width: 600px) {
+    .btn {
+        padding: 0.6rem 1.2rem;
+        /* 使按鈕內邊距在小螢幕上更小 */
+        font-size: 14px;
+        /* 在小螢幕上調整字體大小 */
+    }
+}
+
+/* 懸停效果 */
 .btn:hover {
     background-color: #d35400;
     transform: translateY(-2px);
