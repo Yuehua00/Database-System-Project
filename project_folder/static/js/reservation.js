@@ -323,7 +323,7 @@ function updateCart(itemId, change) {
             increaseButton.style.backgroundColor = '#FFFFFF'; // 按鈕背景維持白色
             increaseButton.style.color = '#D35400'; // 按鈕文字改用深橙色
             if (priceElement) {
-                priceElement.style.color = '#28A745'; // 價錢改用綠色
+                priceElement.style.color = '#28A745'; // 價錢也改用綠色，而不是藍色
             }
         } else {
             menuItemElement.style.backgroundColor = ''; // 還原背景
