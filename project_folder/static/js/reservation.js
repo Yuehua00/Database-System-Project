@@ -294,25 +294,48 @@ function updateCart(itemId, change) {
         quantityElement.textContent = currentQuantity;
 
         // 修改樣式
+        // if (currentQuantity >= 1) {
+        //     menuItemElement.style.backgroundColor = '#E67E22'; // 背景變橘色
+        //     menuItemElement.style.color = '#FFFFFF'; // 文字變白色
+        //     decreaseButton.style.backgroundColor = '#FFFFFF'; // 按鈕背景變白
+        //     decreaseButton.style.color = '#E67E22'; // 按鈕文字變橘色
+        //     increaseButton.style.backgroundColor = '#FFFFFF'; // 按鈕背景變白
+        //     increaseButton.style.color = '#E67E22'; // 按鈕文字變橘色
+        //     if (priceElement) {
+        //         priceElement.style.color = '#0000FF'; // 價錢變藍色
+        //     }
+        // } else {
+        //     menuItemElement.style.backgroundColor = ''; // 還原背景
+        //     menuItemElement.style.color = ''; // 還原文字顏色
+        //     decreaseButton.style.backgroundColor = ''; // 還原按鈕背景
+        //     decreaseButton.style.color = ''; // 還原按鈕文字顏色
+        //     increaseButton.style.backgroundColor = ''; // 還原按鈕背景
+        //     increaseButton.style.color = ''; // 還原按鈕文字顏色
+        //     if (priceElement) {
+        //         priceElement.style.color = ''; // 還原價錢顏色
+        //     }
+        // }
         if (currentQuantity >= 1) {
-            menuItemElement.style.backgroundColor = '#E67E22'; // 背景變橘色
-            menuItemElement.style.color = '#FFFFFF'; // 文字變白色
-            decreaseButton.style.backgroundColor = '#FFFFFF'; // 按鈕背景變白
-            decreaseButton.style.color = '#E67E22'; // 按鈕文字變橘色
-            increaseButton.style.backgroundColor = '#FFFFFF'; // 按鈕背景變白
-            increaseButton.style.color = '#E67E22'; // 按鈕文字變橘色
+            // 使用 CSS classes 管理主要狀態
+            menuItemElement.classList.add('active');
+            
+            // 如果需要特別控制按鈕
+            [decreaseButton, increaseButton].forEach(button => {
+                button.classList.add('active');
+            });
+            
+            // 如果需要特別控制價格
             if (priceElement) {
-                priceElement.style.color = '#0000FF'; // 價錢變藍色
+                priceElement.classList.add('active');
             }
         } else {
-            menuItemElement.style.backgroundColor = ''; // 還原背景
-            menuItemElement.style.color = ''; // 還原文字顏色
-            decreaseButton.style.backgroundColor = ''; // 還原按鈕背景
-            decreaseButton.style.color = ''; // 還原按鈕文字顏色
-            increaseButton.style.backgroundColor = ''; // 還原按鈕背景
-            increaseButton.style.color = ''; // 還原按鈕文字顏色
+            // 移除所有活動狀態
+            menuItemElement.classList.remove('active');
+            [decreaseButton, increaseButton].forEach(button => {
+                button.classList.remove('active');
+            });
             if (priceElement) {
-                priceElement.style.color = ''; // 還原價錢顏色
+                priceElement.classList.remove('active');
             }
         }
     }
