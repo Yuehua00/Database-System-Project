@@ -210,7 +210,6 @@ main {
 }
 
 /* 菜單選擇樣式 */
-/* 菜單選擇樣式 */
 .menu-selection {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -937,23 +936,19 @@ footer {
 }
 
 /* 訂位菜單醒目 */
-
+/* 
 .menu-item {
     background-color: #f9f9f9;
-    /* Default background */
     color: #333;
-    /* Default text color */
     transition: background-color 0.3s, color 0.3s;
 }
 
 .menu-item.active .price {
     color: #0000FF;
-    /* Active state color (blue) */
 }
 
 
 .price {
     color: #333;
-    /* Default color */
     transition: color 0.3s ease;
-}
+} */
