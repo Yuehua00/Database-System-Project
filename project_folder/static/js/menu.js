@@ -36,6 +36,50 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+    const menuContainer = document.getElementById('menu-container');
+
+    fetch('/get_pre_menu')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  })
+  .then(data => {
+    if (data.status === 'success') {
+      renderMenu(data.menu); // 渲染菜單
+    } else {
+      console.error('Error in response data:', data.message);
+    }
+  })
+  .catch(error => {
+    console.error('Error fetching menu:', error);
+  });
+
+function renderMenu(menu) {
+    const container = document.querySelector('.menu-container');
+    container.innerHTML = '';
+    menu.forEach(item => {
+        const nutritionInfo = item.nutrition.map(n => 
+            `${n.name}: ${n.amount}${n.unit}`).join(', ');
+
+        const dishElement = `
+            <div class="menu-item">
+                <h3>${item.name}</h3>
+                <p>價格: NT$${item.price}</p>
+                <p>推薦指數: ${item.recommendation}</p>
+                <p>分類: ${item.category}</p>
+                ${nutritionInfo ? `<p>營養成分: ${nutritionInfo}</p>` : ''}
+            </div>
+        `;
+        container.innerHTML += dishElement;
+    });
+}
+
+});
+
+
 // 登入/註冊頁面標籤切換
 document.querySelectorAll('.auth-tab').forEach(tab => {
     tab.addEventListener('click', function() {

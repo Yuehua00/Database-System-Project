@@ -46,7 +46,7 @@ function renderMenuItems() {
                         ${items.map(item => `
                             <div class="menu-item" data-id="${item.id}">
                                 <h3>${item.name}</h3>
-                                <p>價格：NT$${item.price}</p>
+                                <p class="price">價格：NT$${item.price}</p>
                                 <div class="quantity-control">
                                     <button class="quantity-btn decrease" data-id="${item.id}" data-change="-1">-</button>
                                     <span class="quantity">0</span>
@@ -185,7 +185,7 @@ function moveToStep(step) {
             return;
         }
         updateOrderSummary(); // 渲染第三步的數據
-        updateOrderSummary(); // 更新數據顯示
+        //updateOrderSummary(); // 更新數據顯示
     }
     if (step === 2) {
         const numberOfPeople = document.querySelector('[name="Number_of_People"]').value;
@@ -282,16 +282,48 @@ function updateCart(itemId, change) {
         });
     }
 
-    // 更新畫面數量
-    const quantityElement = document.querySelector(`.menu-item[data-id="${itemId}"] .quantity`);
-    if (quantityElement) {
-        quantityElement.textContent = cart.find(item => item.id === itemId)?.quantity || 0;
+    // 更新畫面數量和樣式
+    const menuItemElement = document.querySelector(`.menu-item[data-id="${itemId}"]`);
+    if (menuItemElement) {
+        const quantityElement = menuItemElement.querySelector('.quantity');
+        const decreaseButton = menuItemElement.querySelector('.decrease');
+        const increaseButton = menuItemElement.querySelector('.increase');
+        const priceElement = menuItemElement.querySelector('.price'); // 找到價錢的元素
+
+        const currentQuantity = cart.find(item => item.id === itemId)?.quantity || 0;
+        quantityElement.textContent = currentQuantity;
+
+        // 修改樣式
+        if (currentQuantity >= 1) {
+            menuItemElement.style.backgroundColor = '#E67E22'; // 背景變橘色
+            menuItemElement.style.color = '#FFFFFF'; // 文字變白色
+            decreaseButton.style.backgroundColor = '#FFFFFF'; // 按鈕背景變白
+            decreaseButton.style.color = '#E67E22'; // 按鈕文字變橘色
+            increaseButton.style.backgroundColor = '#FFFFFF'; // 按鈕背景變白
+            increaseButton.style.color = '#E67E22'; // 按鈕文字變橘色
+            if (priceElement) {
+                priceElement.style.color = '#0000FF'; // 價錢變藍色
+            }
+        } else {
+            menuItemElement.style.backgroundColor = ''; // 還原背景
+            menuItemElement.style.color = ''; // 還原文字顏色
+            decreaseButton.style.backgroundColor = ''; // 還原按鈕背景
+            decreaseButton.style.color = ''; // 還原按鈕文字顏色
+            increaseButton.style.backgroundColor = ''; // 還原按鈕背景
+            increaseButton.style.color = ''; // 還原按鈕文字顏色
+            if (priceElement) {
+                priceElement.style.color = ''; // 還原價錢顏色
+            }
+        }
     }
 
     // 渲染購物車
     renderCart();
 }
 
+
+// 每次購物車內容變更時執行
+document.querySelector('.cart').addEventListener('change', updateButtonStyle);
 
 
 
@@ -602,6 +634,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // 繼續按鈕
 // 繼續按鈕的事件處理程序
 document.addEventListener('DOMContentLoaded', () => {
+    updateButtonStyles();
     const customerName = localStorage.getItem('Customer_name') || '未指定';
     const customerPhone = localStorage.getItem('Customer_phone') || '未指定';
     document.querySelectorAll('.btn.next-step').forEach(button => {

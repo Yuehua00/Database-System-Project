@@ -37,6 +37,8 @@ def cart():
 
 @app.route('/reservation', methods=['GET', 'POST'])
 def reservation():  # Change the function name here to 'reservation'
+    if 'Customer_name' not in session:
+        return redirect(url_for('login', next=url_for('reservation'), alert="請先登入"))
     if request.method == 'POST':
         # 檢查是否登入
         if 'Customer_ID' not in session:
@@ -396,6 +398,48 @@ def get_menu():
     #         cursor.close()
     #     if conn_obj:
     #         conn_obj.close()
+
+@app.route('/get_pre_menu', methods=['GET'])
+def get_pre_menu():
+    try:
+        conn_obj = conn()  # 確保資料庫連線
+        if not conn_obj:
+            return jsonify({"status": "error", "message": "資料庫連接失敗"}), 500
+        
+        cursor = conn_obj.cursor()
+        # 聯合查詢菜單和營養資訊
+        cursor.execute("""
+            SELECT d.Dish_ID, d.Dish_name, d.Dish_price, d.Category, d.Recommendation,
+                   n.Nutrient_Name, n.Amount, n.Unit
+            FROM Dish d
+            LEFT JOIN Nutrition n ON d.Dish_ID = n.Dish_ID
+        """)
+        rows = cursor.fetchall()
+
+        # 整理資料結構
+        menu = {}
+        for row in rows:
+            dish_id = row[0]
+            if dish_id not in menu:
+                menu[dish_id] = {
+                    "id": dish_id,
+                    "name": row[1],
+                    "price": float(row[2]),
+                    "category": row[3],
+                    "recommendation": float(row[4]),
+                    "nutrition": []
+                }
+            if row[5]:  # 如果有營養資訊
+                menu[dish_id]["nutrition"].append({
+                    "name": row[5],
+                    "amount": float(row[6]),
+                    "unit": row[7]
+                })
+
+        return jsonify({"status": "success", "menu": list(menu.values())}), 200
+    except Exception as e:
+        print(f"Error fetching menu: {e}")
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 
 def query_order_history(customer_id):
