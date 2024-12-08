@@ -126,7 +126,8 @@ main {
     position: relative;
     color: #4CAF50;
     font-size: 3rem;
-    z-index: 1; /* 確保文字顯示在圖片上方 */
+    z-index: 1;
+    /* 確保文字顯示在圖片上方 */
 }
 
 
@@ -252,24 +253,6 @@ main {
 
 .menu-item.active {
     grid-row: span 1;
-}
-
-.quantity-control {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-top: 1rem;
-}
-
-.quantity-control button {
-    width: 30px;
-    height: 30px;
-    border: none;
-    border-radius: 50%;
-    background-color: #e67e22;
-    color: white;
-    cursor: pointer;
-    font-size: 1.2rem;
 }
 
 /* 購物車預覽 */
@@ -863,29 +846,60 @@ footer {
     font-weight: bold;
 }
 
-.quantity-control {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 10px;
-}
-
+/* 數量按鈕樣式 */
 .quantity-btn {
-    background-color: #e67e22;
+    background-color: #D35400;
+    /* 深橙色 */
     color: white;
     border: none;
-    padding: 5px 10px;
-    border-radius: 3px;
+    padding: 8px 15px;
+    border-radius: 5px;
     cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+
 .quantity-btn:hover {
-    background-color: #d35400;
+    background-color: #E65100;
+    /* 滑鼠懸停時顏色略微加深 */
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
 }
 
 .quantity {
     font-size: 16px;
     color: #333;
+}
+
+.quantity-control {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1rem;
+    /* margin-top: 10px; */
+}
+
+.quantity-control button {
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 50%;
+    background-color: #e67e22;
+    color: white;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+
+/* 輔助狀態 */
+.quantity-btn:disabled {
+    background-color: #95A5A6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 }
 
 /* 評論區 */
@@ -923,31 +937,23 @@ footer {
 }
 
 /* 訂位菜單醒目 */
-.quantity-btn {
-    background-color: #E67E22;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 3px;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
-}
 
 .menu-item {
-    background-color: #f9f9f9; /* Default background */
-    color: #333; /* Default text color */
+    background-color: #f9f9f9;
+    /* Default background */
+    color: #333;
+    /* Default text color */
     transition: background-color 0.3s, color 0.3s;
-}
-
-.quantity-btn:hover {
-    background-color: #D35400;
-}
-
-.price {
-    color: #333; /* Default color */
-    transition: color 0.3s ease;
 }
 
 .menu-item.active .price {
-    color: #0000FF; /* Active state color (blue) */
+    color: #0000FF;
+    /* Active state color (blue) */
+}
+
+
+.price {
+    color: #333;
+    /* Default color */
+    transition: color 0.3s ease;
 }
