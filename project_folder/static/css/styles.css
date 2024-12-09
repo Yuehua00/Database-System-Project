@@ -145,7 +145,7 @@ main {
     right: 0;
     height: 2px;
     background-color: #ddd;
-    z-index: 1;
+    z-index: 0;
 }
 
 .progress-step {
@@ -155,12 +155,15 @@ main {
     color: #666;
     position: relative;
     z-index: 2;
+    border: 2px solid #ddd;
 }
 
 .progress-step.active {
     background-color: #e67e22;
     color: white;
+    border-color: #e67e22;
 }
+
 
 /* 訂位表單容器 */
 .reservation-container {
@@ -194,11 +197,6 @@ main {
     }
 }
 
-/* 進度條相關步驟 */
-.progress-step.active {
-    background-color: #e67e22;
-    color: white;
-}
 
 /* 菜單選擇樣式 */
 .menu-selection {
