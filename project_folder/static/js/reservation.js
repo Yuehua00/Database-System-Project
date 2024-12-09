@@ -367,53 +367,6 @@ function moveToStep(step) {
 }
 
 
-
-
-
-// // 渲染菜單項目
-// function renderMenuItems() {
-//     const container = document.querySelector('.menu-selection');
-//     if (container) {
-//         container.innerHTML = menuItems.map(item => `
-//             <div class="menu-item" data-id="${item.id}">
-//                 <div class="menu-item-header">
-//                     <div>
-//                         <h3>${item.name}</h3>
-//                         <p class="price">NT$ ${item.price}</p>
-//                     </div>
-//                     <div class="quantity-control">
-//                         <button class="quantity-btn decrease" onclick="updateCart(${item.id}, -1)">-</button>
-//                         <span class="quantity">0</span>
-//                         <button class="quantity-btn increase" onclick="updateCart(${item.id}, 1)">+</button>
-//                     </div>
-//                 </div>
-//             </div>
-//         `).join('');
-//     }
-// }
-
-// 更新購物車
-// function updateCart(itemId, change) {
-//     const item = menuItems.find(i => i.id === itemId);
-//     const existingItem = cart.find(i => i.id === itemId);
-    
-//     if (existingItem) {
-//         existingItem.quantity += change;
-//         if (existingItem.quantity <= 0) {
-//             cart = cart.filter(i => i.id !== itemId);
-//         }
-//     } else if (change > 0) {
-//         cart.push({
-//             id: itemId,
-//             name: item.name,
-//             price: item.price,
-//             quantity: 1
-//         });
-//     }
-
-//     updateCartDisplay();
-// }
-
 // 初始化購物車為空陣列
 
 
@@ -451,14 +404,14 @@ function updateCart(itemId, change) {
 
         // 修改樣式
         if (currentQuantity >= 1) {
-            menuItemElement.style.backgroundColor = '#4CAF50'; // 清新綠色
-            menuItemElement.style.color = '#FFFFFF';
-            decreaseButton.style.backgroundColor = '#FFFFFF';
-            decreaseButton.style.color = '#4CAF50';
-            increaseButton.style.backgroundColor = '#FFFFFF';
-            increaseButton.style.color = '#4CAF50';
+            menuItemElement.style.backgroundColor = '#fff3e6'; // 淺橘色背景
+            menuItemElement.style.color = '#2c3e50'; // 深灰藍色文字
+            decreaseButton.style.backgroundColor = '#e67e22'; // 原橘色按鈕
+            decreaseButton.style.color = '#FFFFFF';
+            increaseButton.style.backgroundColor = '#e67e22';
+            increaseButton.style.color = '#FFFFFF';
             if (priceElement) {
-                priceElement.style.color = '#2196F3'; // 價錢變藍色
+                priceElement.style.color = '#2c3e50';
             }
         } else {
             menuItemElement.style.backgroundColor = ''; // 還原背景
@@ -513,47 +466,6 @@ function renderCart() {
 }
 
 
-
-// 綁定事件
-// document.addEventListener('DOMContentLoaded', () => {
-//     const container = document.querySelector('.menu-selection');
-//     if (container) {
-//         container.addEventListener('click', event => {
-//             if (event.target.classList.contains('quantity-btn')) {
-//                 const itemId = parseInt(event.target.closest('.menu-item').dataset.id, 10);
-//                 const change = event.target.classList.contains('increase') ? 1 : -1;
-//                 updateCart(itemId, change);
-//             }
-//         });
-//     }
-// });
-
-
-
-// function renderCart() {
-//     const cartContainer = document.querySelector('.cart-items');
-//     if (!cartContainer) {
-//         console.error('找不到 .cart-items 容器');
-//         return;
-//     }
-
-//     cartContainer.innerHTML = ''; // 清空現有內容
-
-//     if (cart.length === 0) {
-//         cartContainer.innerHTML = '<p>購物車目前沒有任何項目。</p>';
-//         return;
-//     }
-
-//     cart.forEach(item => {
-//         const cartItem = `
-//             <div class="cart-item">
-//                 <span>${item.name} x ${item.quantity}</span>
-//                 <span>NT$ ${item.price * item.quantity}</span>
-//             </div>
-//         `;
-//         cartContainer.innerHTML += cartItem;
-//     });
-// }
 
 
 function submitOrder() {
@@ -679,71 +591,6 @@ function saveReservationData() {
 
 
 
-// 呼叫此函式於切換到第三步時
-
-
-
-// Fetch customer information and update on the page
-// function fetchCustomerInfo() {
-//     fetch('/get_customer_info', {
-//         credentials: 'include' // 確保攜帶 cookie
-//     })
-//         .then(response => {
-//             if (!response.ok) {
-//                 throw new Error(`HTTP error! status: ${response.status}`);
-//             }
-//             return response.json();
-//         })
-//         .then(data => {
-//             console.log(data.name);
-//             console.log(data.phone);
-//             if (data.status === 'success') {
-//                 document.getElementById('customer-name').textContent = data.name;
-//                 document.getElementById('customer-phone').textContent = data.phone;
-//             } else {
-//                 console.error('無法獲取顧客資料:', data.message);
-//                 alert('請登入以繼續。');
-//             }
-//         })
-
-// }
-
-// 在第三步顯示顧客資料及購物車內容
-// function updateOrderSummary() {
-//     // 取得存儲的數據
-//     const numberOfPeople = sessionStorage.getItem('Number_of_People') || '未指定';
-//     const reservationTime = sessionStorage.getItem('Reservation_Time') || '未指定';
-//     const timeSlot = sessionStorage.getItem('TimeSlots') || '未指定';
-//     const tableNumber = sessionStorage.getItem('Table_Number') || '未指定';
-
-//     // 更新畫面
-//     document.getElementById('summary-people').textContent = `用餐人數: ${numberOfPeople}`;
-//     document.getElementById('summary-date').textContent = `用餐日期: ${reservationTime}`;
-//     document.getElementById('summary-time').textContent = `用餐時段: ${timeSlot}`;
-//     document.getElementById('summary-table').textContent = `桌號: ${tableNumber}`;
-
-//     // 更新購物車內容
-//     const cartSummary = document.getElementById('summary-items');
-//     if (cartSummary) {
-//         cartSummary.innerHTML = cart.length > 0
-//             ? cart.map(item => `
-//                 <div class="cart-item">
-//                     <span>${item.name} x ${item.quantity}</span>
-//                     <span>NT$ ${item.price * item.quantity}</span>
-//                 </div>
-//             `).join('')
-//             : '<p>購物車目前沒有任何項目。</p>';
-//     }
-
-//     // 計算小計和總金額
-//     const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-//     document.getElementById('subtotal').textContent = subtotal;
-//     document.getElementById('total').textContent = subtotal;
-// }
-
-
-
-
 
 document.addEventListener('DOMContentLoaded', function() {
     const nextStepBtn = document.getElementById('nextStepBtn');
@@ -797,45 +644,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-
-// 繼續按鈕
-// 繼續按鈕的事件處理程序
-// document.addEventListener('DOMContentLoaded', () => {
-//     updateButtonStyle();
-//     const customerName = localStorage.getItem('Customer_name') || '未指定';
-//     const customerPhone = localStorage.getItem('Customer_phone') || '未指定';
-//     document.querySelectorAll('.btn.next-step').forEach(button => {
-//         button.addEventListener('click', function () {
-//             const currentStep = document.querySelector('.reservation-step.active');
-
-//             if (currentStep.id === 'step1') {
-//                 // 從第一步到第二步，直接跳轉
-//                 moveToStep(2);
-//             } else if (currentStep.id === 'step2' && this.getAttribute('data-next') === '3') {
-//                 // 檢查購物車是否為空
-//                 if (cart.length === 0) {
-//                     alert("請選擇至少一項菜單！");
-//                     return; // 停止執行，防止跳轉到第三步
-//                 }
-//                 // 從第二步到第三步
-//                 moveToStep(3);
-//             }
-//         });
-//     });
-
-//     document.querySelectorAll('.btn.prev-step').forEach(button => {
-//         button.addEventListener('click', function () {
-//             const currentStep = document.querySelector('.reservation-step.active');
-//             if (currentStep.id === 'step2') {
-//                 // 從第二步返回第一步
-//                 moveToStep(1);
-//             } else if (currentStep.id === 'step3') {
-//                 // 從第三步返回第二步
-//                 moveToStep(2);
-//             }
-//         });
-//     });
-// });
 
 async function ensureCustomerID() {
     let customerId = sessionStorage.getItem('Customer_ID');
