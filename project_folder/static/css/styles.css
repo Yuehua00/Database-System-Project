@@ -117,7 +117,7 @@ main {
 .hero {
     text-align: center;
     padding: 6rem 0;
-    background-image: url('{{ url_for('static', filename='images/主頁3.jpg') }}');
+    background-image: url('/static/images/主頁3.jpg');
     background-size: cover; /* 確保圖片覆蓋整個區域 */
     background-position: center; /* 圖片居中 */
     background-repeat: no-repeat; /* 防止重複 */
