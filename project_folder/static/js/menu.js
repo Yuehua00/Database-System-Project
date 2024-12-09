@@ -251,49 +251,46 @@ document.addEventListener('DOMContentLoaded', () => {
         // }
         function renderMenu(menu) {
             const menuContainer = document.getElementById('menu-container');
-            menuContainer.innerHTML = '';
-            menu.forEach(item => {
-                // 修正營養數據的格式
-                const nutritionInfo = item.nutrition
-                    .map(n => {
-                        // 確保數據字段存在
-                        const isNameNumeric = !isNaN(parseFloat(n.name));
-                        const nutrientName = isNameNumeric ? n.amount : n.name;
-                        const nutrientAmount = isNameNumeric ? n.name : n.amount;
-                        const nutrientUnit = n.unit || '';
-                        return `<div>${nutrientName}: ${nutrientAmount}${nutrientUnit}</div>`;
-                    })
-                    .join('');
-        
-                // 構建菜單卡片 HTML
-                const dishHTML = `
-                    <article class="menu-card">
-                        <div class="menu-preview">
-                            <img src="/static/images/dish/${item.id}.jpg" alt="${item.name}">
-                            <h3>${item.name}</h3>
+    menuContainer.innerHTML = '';
+    menu.forEach(item => {
+        // Ensure reviews field is an array
+        const reviews = Array.isArray(item.reviews) ? item.reviews : [];
+        const reviewsHTML = reviews.length > 0
+            ? reviews.map(review => `<p class="review-text">「${review}」</p>`).join('')
+            : '<p class="review-text">尚無評論</p>';
+
+        const nutritionInfo = item.nutrition
+            .map(n => `<div>${n.name}: ${n.amount}${n.unit}</div>`)
+            .join('');
+
+        const dishHTML = `
+            <article class="menu-card">
+                <div class="menu-preview">
+                    <img src="/static/images/dish/${item.id}.jpg" alt="${item.name}">
+                    <h3>${item.name}</h3>
+                </div>
+                <div class="menu-details">
+                    <div class="menu-content">
+                        <p class="price" style="color:orange;">NT$ ${item.price}</p>
+                        <div class="nutrition">
+                            <h4>營養成分:</h4>
+                            ${nutritionInfo}
                         </div>
-                        <div class="menu-details">
-                            <div class="menu-content">
-                                <p class="price" style="color:orange;">NT$ ${item.price}</p>
-                                <div class="nutrition">
-                                    <h4>營養成分:</h4>
-                                    ${nutritionInfo}
-                                </div>
-                                <textarea class="review-input" placeholder="留下您的評論..."></textarea>
-                                <button class="submit-review btn">提交評論</button>
-                                <div class="reviews">
-                                    <h4>顧客評論</h4>
-                                    ${item.reviews && item.reviews.length > 0 
-                                        ? item.reviews.map(r => `<div class="review-item"><p class="review-text">${r}</p></div>`).join('') 
-                                        : '<div class="review-item"><p class="review-text">尚無評論</p></div>'}
-                                </div>
-                            </div>
+                        <textarea class="review-input" placeholder="留下您的評論..."></textarea>
+                        <button class="submit-review btn" data-dish-id="${item.id}">提交評論</button>
+                        <div class="reviews">
+                            <h4>顧客評論</h4>
+                            ${reviewsHTML}
                         </div>
-                    </article>
-                `;
-                menuContainer.innerHTML += dishHTML;
-            });
-        
+                    </div>
+                </div>
+            </article>
+        `;
+        menuContainer.innerHTML += dishHTML;
+    });
+
+    attachReviewEventListeners();  // 註冊評論提交事件
+                
         
             const cards = document.querySelectorAll('.menu-card');
             cards.forEach(card => {
@@ -328,3 +325,36 @@ document.querySelectorAll('.auth-tab').forEach(tab => {
         document.getElementById(formId).classList.add('active');
     });
 });
+
+function attachReviewEventListeners() {
+    document.querySelectorAll('.submit-review').forEach(button => {
+        button.addEventListener('click', () => {
+            const dishId = button.getAttribute('data-dish-id');
+            const reviewInput = button.previousElementSibling.value;
+
+            if (!reviewInput) {
+                alert('評論內容不得為空');
+                return;
+            }
+
+            fetch('/submit_review', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ dish_id: dishId, review: reviewInput })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        alert('評論提交成功');
+                        location.reload(); // 重新載入頁面
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => console.error('Error submitting review:', error));
+        });
+    });
+}
+
