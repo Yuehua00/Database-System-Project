@@ -7,6 +7,8 @@
 //     { id: 5, name: '臘腸番茄義大利麵', price: 270 },
 //     { id: 6, name: '白酒蛤蠣義大利麵', price: 300 }
 // ];
+
+
 document.addEventListener("DOMContentLoaded", () => {
     console.log("DOMContentLoaded event triggered");
     const nextStepBtn = document.getElementById("nextStepBtn");
@@ -682,6 +684,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 // 更新進度條邏輯
 function updateProgress(stepId) {
+    // 更新進度條
     const progressSteps = document.querySelectorAll('.progress-step');
     progressSteps.forEach(step => step.classList.remove('active'));
 
@@ -691,7 +694,35 @@ function updateProgress(stepId) {
     for (let i = 0; i <= stepIndex; i++) {
         progressSteps[i].classList.add('active');
     }
+
+    // 更新相應的內容區塊
+    const steps = document.querySelectorAll('.reservation-step');
+    steps.forEach(step => step.classList.remove('active')); // 移除所有步驟的active類
+
+    const currentStep = document.getElementById(stepId);
+    if (currentStep) {
+        currentStep.classList.add('active'); // 顯示當前步驟的section
+    }
 }
+
+// 監聽 "繼續" 按鈕的點擊事件
+document.getElementById('nextStepBtn').addEventListener('click', function() {
+    // 根據data-next屬性獲取下一步
+    const nextStep = this.getAttribute('data-next');
+    const stepId = `step${nextStep}`; // 生成步驟的ID，例如 'step2'
+
+    // 更新進度條和顯示相應的內容區塊
+    updateProgress(stepId);
+
+    // 更新下一步的data-next屬性
+    const nextStepBtn = document.getElementById('nextStepBtn');
+    const nextStepValue = parseInt(nextStep) + 1; // 增加1，進入下一步
+    if (nextStepValue <= 3) {
+        nextStepBtn.setAttribute('data-next', nextStepValue);
+    } else {
+        nextStepBtn.disabled = true; // 如果已經是最後一步，禁用按鈕
+    }
+});
 
 document.getElementById("nextStepBtn").addEventListener("click", async () => {
     const reservationForm = document.getElementById("reservationForm");
