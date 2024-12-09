@@ -106,29 +106,28 @@
                 </div>
             </section>
 
-            <section class="order-history">
+             <section class="order-history">
                 <h2>訂單查詢</h2>
                 <div class="orders">
-                    {% if orders %}
+                {% if orders %}
                     <ul>
                         {% for order in orders %}
                         <li class="order-item">
-              <!-- 訂單簡介 -->
-                <div class="order-summary" onclick="toggleOrderDetails(this)">
-                            <strong>訂單編號:</strong> {{ order['id'] }}<br>
-                            <strong>訂單日期:</strong> {{ order['date'] }}<br>
-                            <strong>總金額:</strong> NT$ {{ order['total']|int }}<br>
-                            <strong>訂單明細:</strong>
-                          </div>
-                    <!-- 訂單詳細 -->
-                            <div class="order-details" style="display: none;">
-                            <strong>訂單明細:</strong>
+                            <!-- 訂單簡介 -->
+                            <div class="order-summary" onclick="toggleOrderDetails(this)">
+                                <strong>訂單編號:</strong> {{ order['id'] }} - 
+                                <strong>訂單日期:</strong> {{ order['date'] }} - 
+                                <strong>總金額:</strong> NT$ {{ order['total']|int }}
+                            </div>
+                            <!-- 訂單詳細 -->
+                                <div class="order-details" style="display: none;">
+                                <strong>訂單明細:</strong>
                                 <ul>
                                     {% for item in order['items'] %}
                                     <li>{{ item['name'] }} x {{ item['quantity'] }} - NT$ {{ item['price'] }}</li>
                                     {% endfor %}
                                 </ul>
-                            <div>
+                            </div>
                         </li>
                         {% endfor %}
                     </ul>
@@ -137,6 +136,7 @@
                     {% endif %}
                 </div>
             </section>
+
             
 
         </main>
@@ -191,15 +191,15 @@
         </script>
         <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
          function toggleOrderDetails(element) {
-        // 找到相鄰的詳細資訊區塊
-        const details = element.nextElementSibling;
+            // 找到相鄰的詳細資訊區塊
+            const details = element.nextElementSibling;
 
-        // 切換顯示狀態
-        if (details.style.display === "none" || details.style.display === "") {
-            details.style.display = "block"; // 顯示詳細資訊
-        } else {
-            details.style.display = "none"; // 隱藏詳細資訊
+            // 切換顯示狀態
+            if (details.style.display === "none" || details.style.display === "") {
+                details.style.display = "block"; // 顯示詳細資訊
+            } else {
+                details.style.display = "none"; // 隱藏詳細資訊
+            }
         }
-    }
     </body>
 </html>
