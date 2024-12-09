@@ -21,10 +21,6 @@
     </style>
 </head>
 <body>
-    <!-- 歡迎畫面 -->
-    <div class="welcome-screen" id="welcome-screen">
-        歡迎光臨 大義麵親！
-    </div>
     <header>
         <nav>
             <a href="{{ url_for('index') }}" class="logo">大義麵親</a>
@@ -62,21 +58,6 @@
             </div>
         </section>
     </main>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const welcomeScreen = document.getElementById('welcome-screen');
-            setTimeout(welcome-screen, 50);
-            function startPage() {
-                setTimeout(function () {
-                    document.getElementById('welcome-screen').style.top = '20px';
-                    document.getElementById('welcome-screen').style.opacity = '1';
-                    setTimeout(function () {
-                        document.getElementById('welcome-screen').style.opacity = '0';
-                    }, 1000);
-                }, 1000);
-            }
-        });
-    </script>
     <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
 </body>
 </html>
