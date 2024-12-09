@@ -21,6 +21,10 @@
     </style>
 </head>
 <body>
+    <!-- 歡迎畫面 -->
+    <div class="welcome-screen" id="welcome-screen">
+        歡迎光臨 大義麵親！
+    </div>
     <header>
         <nav>
             <a href="{{ url_for('index') }}" class="logo">大義麵親</a>
@@ -50,16 +54,26 @@
     </header>
 
     <main class="home-main">
-<section class="hero">
-    <h1>歡迎光臨 大義麵親</h1>
-    <div class="cta-buttons">
-        <a href="{{ url_for('menu') }}" class="btn">查看菜單</a>
-        <a href="{{ url_for('reservation') }}" class="btn">立即訂位</a>
-    </div>
-</section>
-
-
+        <section class="hero">
+            <h1>歡迎光臨 大義麵親</h1>
+            <div class="cta-buttons">
+                <a href="{{ url_for('menu') }}" class="btn">查看菜單</a>
+                <a href="{{ url_for('reservation') }}" class="btn">立即訂位</a>
+            </div>
+        </section>
     </main>
+    <script>
+        // 歡迎畫面邏輯
+        document.addEventListener("DOMContentLoaded", () => {
+            const welcomeScreen = document.getElementById('welcome-screen');
+            setTimeout(() => {
+                welcomeScreen.style.opacity = '0'; // 添加淡出效果
+                setTimeout(() => {
+                    welcomeScreen.style.display = 'none'; // 移除歡迎畫面
+                }, 500); // 確保淡出效果完成後隱藏
+            }, 3000); // 3秒後觸發
+        });
+    </script>
     <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
 </body>
 </html>
