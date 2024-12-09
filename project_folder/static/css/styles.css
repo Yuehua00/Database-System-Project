@@ -143,7 +143,7 @@ main {
 
 .divider {
     border: none;
-    border-top: 2px solid #2c3e50; /* 橫線顏色與按鈕一致 */
+    border-top: 2px solid #808488; /* 橫線顏色與按鈕一致 */
     margin: 20px auto; /* 控制上下間距 */
     width: 60%; /* 控制橫線寬度 */
 }
