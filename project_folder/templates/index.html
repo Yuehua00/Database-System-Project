@@ -9,7 +9,7 @@
 
     <style>
         .welcome-message {
-            color: #4CAF50;
+            color: #e67e22;
             font-size: 18px;
             font-weight: 600;
             margin-bottom: 20px;
@@ -63,7 +63,6 @@
         </section>
     </main>
     <script>
-        // 歡迎畫面邏輯
         document.addEventListener("DOMContentLoaded", () => {
             const welcomeScreen = document.getElementById('welcome-screen');
             setTimeout(() => {
@@ -71,7 +70,7 @@
                 setTimeout(() => {
                     welcomeScreen.style.display = 'none'; // 移除歡迎畫面
                 }, 500); // 確保淡出效果完成後隱藏
-            }, 3000); // 3秒後觸發
+            }, 2000); // 3秒後觸發
         });
     </script>
     <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
