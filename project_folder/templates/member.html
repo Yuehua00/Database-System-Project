@@ -106,36 +106,40 @@
                 </div>
             </section>
 
-             <section class="order-history">
-                <h2>訂單查詢</h2>
-                <div class="orders">
-                {% if orders %}
+<section class="order-history">
+    <h2>訂單查詢</h2>
+    <div class="orders">
+        {% if orders %}
+        <ul>
+            {% for order in orders %}
+            <li>
+                <div class="order-header" onclick="toggleOrderDetails(this)">
+                    <span>
+                        <strong>訂單編號:</strong> {{ order['id'] }} |
+                        <strong>訂單日期:</strong> {{ order['date'] }} |
+                        <strong>總金額:</strong> NT$ {{ order['total']|int }}
+                    </span>
+                    <span class="toggle-button">[展開]</span>
+                </div>
+                <div class="order-content">
+                    <strong>訂單明細:</strong>
                     <ul>
-                        {% for order in orders %}
-                        <li class="order-item">
-                            <!-- 訂單簡介 -->
-                            <div class="order-summary" onclick="toggleOrderDetails(this)">
-                                <strong>訂單編號:</strong> {{ order['id'] }} - 
-                                <strong>訂單日期:</strong> {{ order['date'] }} - 
-                                <strong>總金額:</strong> NT$ {{ order['total']|int }}
-                            </div>
-                            <!-- 訂單詳細 -->
-                                <div class="order-details" style="display: none;">
-                                <strong>訂單明細:</strong>
-                                <ul>
-                                    {% for item in order['items'] %}
-                                    <li>{{ item['name'] }} x {{ item['quantity'] }} - NT$ {{ item['price'] }}</li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                        </li>
+                        {% for item in order['items'] %}
+                        <li>{{ item['name'] }} x {{ item['quantity'] }} - NT$ {{ item['price'] }}</li>
                         {% endfor %}
                     </ul>
-                    {% else %}
-                    <p>尚無訂單記錄。</p>
-                    {% endif %}
                 </div>
-            </section>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>尚無訂單記錄。</p>
+        {% endif %}
+    </div>
+</section>
+
+
+
 
             
 
@@ -190,16 +194,23 @@
 
         </script>
         <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
-         function toggleOrderDetails(element) {
-            // 找到相鄰的詳細資訊區塊
-            const details = element.nextElementSibling;
+  function toggleOrderDetails(element) {
+    const details = element.nextElementSibling; // 找到詳細資訊區塊
+    const toggleButton = element.querySelector('.toggle-button'); // 找到展開/收起圖示
 
-            // 切換顯示狀態
-            if (details.style.display === "none" || details.style.display === "") {
-                details.style.display = "block"; // 顯示詳細資訊
-            } else {
-                details.style.display = "none"; // 隱藏詳細資訊
-            }
-        }
+    if (details.style.display === "none" || details.style.display === "") {
+        details.style.display = "block"; // 顯示詳細資訊
+        toggleButton.textContent = "[收起]"; // 更新圖示文字
+    } else {
+        details.style.display = "none"; // 隱藏詳細資訊
+        toggleButton.textContent = "[展開]"; // 更新圖示文字
+    }
+}
+document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.order-content').forEach(content => {
+            content.style.display = 'none';
+        });
+    });
+
     </body>
 </html>
