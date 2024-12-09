@@ -133,6 +133,37 @@ document.addEventListener('click', function(e) {
     }
 });
 
+document.addEventListener('click', (event) => {
+    if (event.target.matches('.submit-review')) {
+        const reviewInput = event.target.previousElementSibling.value;
+        const dishId = event.target.closest('.menu-card').dataset.id;
+
+        if (!reviewInput) {
+            alert('請輸入評論內容');
+            return;
+        }
+
+        fetch('/submit_review', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ dish_id: dishId, review: reviewInput })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert('評論已提交');
+                // 重新調用 API 以獲取更新後的評論
+                fetch('/get_pre_menu')
+                    .then(response => response.json())
+                    .then(data => renderMenu(data.menu));
+            } else {
+                alert('提交失敗: ' + data.message);
+            }
+        })
+        .catch(err => console.error('評論提交錯誤:', err));
+    }
+});
+
 
 // 菜單卡片點擊展開/收合
 document.addEventListener('DOMContentLoaded', () => {
@@ -222,18 +253,19 @@ document.addEventListener('DOMContentLoaded', () => {
             const menuContainer = document.getElementById('menu-container');
             menuContainer.innerHTML = '';
             menu.forEach(item => {
-                // 修正營養數據字段
+                // 修正營養數據的格式
                 const nutritionInfo = item.nutrition
                     .map(n => {
-                        // 判斷數據格式是否錯位
+                        // 確保數據字段存在
                         const isNameNumeric = !isNaN(parseFloat(n.name));
                         const nutrientName = isNameNumeric ? n.amount : n.name;
                         const nutrientAmount = isNameNumeric ? n.name : n.amount;
                         const nutrientUnit = n.unit || '';
-                        return `${nutrientName}: ${nutrientAmount}${nutrientUnit}`;
+                        return `<div>${nutrientName}: ${nutrientAmount}${nutrientUnit}</div>`;
                     })
-                    .join(', ');
+                    .join('');
         
+                // 構建菜單卡片 HTML
                 const dishHTML = `
                     <article class="menu-card">
                         <div class="menu-preview">
@@ -242,18 +274,18 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                         <div class="menu-details">
                             <div class="menu-content">
-                                <p class="price" style="color:blue;">NT$ ${item.price}</p>
+                                <p class="price" style="color:orange;">NT$ ${item.price}</p>
                                 <div class="nutrition">
-                                    <h4>營養標示</h4>
-                                    ${nutritionInfo ? `<p>營養成分: ${nutritionInfo}</p>` : ''}
+                                    <h4>營養成分:</h4>
+                                    ${nutritionInfo}
                                 </div>
                                 <textarea class="review-input" placeholder="留下您的評論..."></textarea>
                                 <button class="submit-review btn">提交評論</button>
                                 <div class="reviews">
                                     <h4>顧客評論</h4>
-                                    <div class="review-item">
-                                        <p class="review-text">「${item.review || "尚無評論"}」</p>
-                                    </div>
+                                    ${item.reviews && item.reviews.length > 0 
+                                        ? item.reviews.map(r => `<div class="review-item"><p class="review-text">${r}</p></div>`).join('') 
+                                        : '<div class="review-item"><p class="review-text">尚無評論</p></div>'}
                                 </div>
                             </div>
                         </div>
@@ -261,6 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
                 menuContainer.innerHTML += dishHTML;
             });
+        
         
             const cards = document.querySelectorAll('.menu-card');
             cards.forEach(card => {
