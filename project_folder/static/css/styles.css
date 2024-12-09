@@ -667,6 +667,51 @@ main {
     display: grid;
     gap: 1rem;
 }
+.order-header {
+    cursor: pointer; /* 鼠標指標改變，表明可點擊 */
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.order-header:hover {
+    background-color: #f0f0f0; /* 鼠標懸停時改變背景色 */
+}
+
+.order-content {
+    display: none; /* 初始隱藏詳細資訊 */
+    padding: 1rem;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-top: 0.5rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.order-content ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.order-content li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.order-content li:last-child {
+    border-bottom: none;
+}
+
+.toggle-button {
+    color: #3498db;
+    font-weight: bold;
+}
+
 
 /* 頁尾樣式 */
 footer {
