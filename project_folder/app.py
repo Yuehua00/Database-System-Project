@@ -445,40 +445,113 @@ def get_menu():
 #     except Exception as e:
 #         print(f"Error fetching menu: {e}")
 #         return jsonify({"status": "error", "message": str(e)}), 500
+# @app.route('/get_pre_menu', methods=['GET'])
+# def get_pre_menu():
+#     try:
+#         conn_obj = conn()
+#         if not conn_obj:
+#             raise Exception("資料庫連接失敗")
+
+#         cursor = conn_obj.cursor()
+#         query = """
+#             SELECT d.Dish_ID, d.Dish_name, d.Dish_price, d.Category, d.Recommendation, 
+#                    n.Nutrient_Name, n.Amount, n.Unit,
+#                    c.Conent, c.Star, c.Comment_Time
+#             FROM Dish d
+#             LEFT JOIN Nutrition n ON d.Dish_ID = n.Dish_ID
+#             LEFT JOIN Comment c ON d.Dish_ID = c.Dish_ID
+#         """
+#         cursor.execute(query)
+#         rows = cursor.fetchall()
+
+#         # 結構化數據
+#         menu = {}
+#         for row in rows:
+#             dish_id = row[0]
+#             if dish_id not in menu:
+#                 menu[dish_id] = {
+#                     "id": dish_id,
+#                     "name": row[1],
+#                     "price": float(row[2]),
+#                     "category": row[3],
+#                     "recommendation": float(row[4]) if row[4] else None,
+#                     "nutrition": [],
+#                     "comments": []
+#                 }
+#             # 添加營養信息
+#             if row[5]:
+#                 menu[dish_id]["nutrition"].append({
+#                     "name": row[5],
+#                     "amount": float(row[6]) if row[6] else None,
+#                     "unit": row[7] if row[7] else ""
+#                 })
+#             # 添加評論
+#             if row[8]:  # 確保評論內容存在
+#                 menu[dish_id]["comments"].append({
+#                     "content": row[8],
+#                     "star": int(row[9]) if row[9] else None,
+#                     "time": row[10].strftime("%Y-%m-%d %H:%M:%S") if row[10] else ""
+#                 })
+
+#         return jsonify({"status": "success", "menu": list(menu.values())}), 200
+#     except Exception as e:
+#         print(f"Error in /get_pre_menu: {e}")
+#         return jsonify({"status": "error", "message": str(e)}), 500
 @app.route('/get_pre_menu', methods=['GET'])
 def get_pre_menu():
     try:
-        cursor = conn().cursor()
+        conn_obj = conn()
+        if not conn_obj:
+            raise Exception("資料庫連接失敗")
+
+        cursor = conn_obj.cursor()
         query = """
-            SELECT d.Dish_ID, d.Dish_name, d.Dish_price, d.Category, d.Recommendation, n.Nutrient_Name, n.Amount, n.Unit
+            SELECT d.Dish_ID, d.Dish_name, d.Dish_price, d.Category, d.Recommendation, 
+                   n.Nutrient_Name, n.Amount, n.Unit,
+                   c.Conent, c.Star, c.Comment_Time
             FROM Dish d
             LEFT JOIN Nutrition n ON d.Dish_ID = n.Dish_ID
+            LEFT JOIN Comment c ON d.Dish_ID = c.Dish_ID
         """
         cursor.execute(query)
         rows = cursor.fetchall()
 
+        # Process rows to prevent duplicate entries
         menu = {}
         for row in rows:
-            dish_name = row[0]
-            if dish_name not in menu:
-                menu[dish_name] = {
-                    'id': row[0],
-                    'name': row[1],
-                    'price': row[2],
-                    'category': row[3],
-                    'recommendation': row[4],
-                    'nutrition': []
+            dish_id = row[0]
+            if dish_id not in menu:
+                menu[dish_id] = {
+                    "id": dish_id,
+                    "name": row[1],
+                    "price": float(row[2]),
+                    "category": row[3],
+                    "recommendation": float(row[4]) if row[4] else None,
+                    "nutrition": [],
+                    "comments": []
                 }
-            if row[4]:
-                menu[dish_name]['nutrition'].append({
-                    'name': row[5],
-                    'amount': row[6],
-                    'unit': row[7]
-                })
+            # Add nutrition data if not already added
+            nutrition_entry = {
+                "name": row[5],
+                "amount": float(row[6]) if row[6] else None,
+                "unit": row[7] if row[7] else ""
+            }
+            if nutrition_entry not in menu[dish_id]["nutrition"]:
+                menu[dish_id]["nutrition"].append(nutrition_entry)
 
-        return jsonify({"status": "success", "menu": list(menu.values())})
+            # Add comment data if not already added
+            if row[8]:  # Ensure comment exists
+                comment_entry = {
+                    "content": row[8],
+                    "star": int(row[9]) if row[9] else None,
+                    "time": row[10].strftime("%Y-%m-%d %H:%M:%S") if row[10] else ""
+                }
+                if comment_entry not in menu[dish_id]["comments"]:
+                    menu[dish_id]["comments"].append(comment_entry)
+
+        return jsonify({"status": "success", "menu": list(menu.values())}), 200
     except Exception as e:
-        print("Error fetching menu:", e)
+        print(f"Error in /get_pre_menu: {e}")
         return jsonify({"status": "error", "message": str(e)}), 500
 
 

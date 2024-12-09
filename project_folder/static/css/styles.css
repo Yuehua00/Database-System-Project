@@ -1095,3 +1095,32 @@ footer {
 .search-button:hover {
     background-color: #d35400;
 }
+
+.nutrition {
+    text-align: left; /* 設定文字靠左對齊 */
+    margin-top: 10px; /* 增加上方間距 */
+}
+
+.nutrition h4 {
+    font-size: 1.2rem; /* 標題字體大小 */
+    margin-bottom: 5px; /* 與內容的間距 */
+    color: #333; /* 標題顏色 */
+}
+
+.nutrition div {
+    font-size: 1rem; /* 內容字體大小 */
+    color: #555; /* 內容顏色 */
+    line-height: 1.5; /* 行距 */
+}
+
+.menu-card .menu-details {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+.menu-card.active .menu-details {
+    max-height: 500px; /* 設置足夠的高度以顯示所有內容 */
+    opacity: 1;
+}
