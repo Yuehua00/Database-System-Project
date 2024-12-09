@@ -201,7 +201,6 @@ main {
 }
 
 /* 菜單選擇樣式 */
-/* 菜單選擇樣式 */
 .menu-selection {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -392,9 +391,12 @@ main {
     background-color: #f8f9fa;
 }
 
+/* menu圖片 */
 .menu-preview img {
-    width: 100%;
-    height: 200px;
+    width: 280px;
+    /* 固定寬度 */
+    height: 280px;
+    /* 固定高度 */
     object-fit: cover;
     border-radius: 8px;
     transition: transform 0.3s ease;
@@ -926,8 +928,10 @@ footer {
 }
 
 .menu-item {
-    background-color: #f9f9f9; /* Default background */
-    color: #333; /* Default text color */
+    background-color: #f9f9f9;
+    /* Default background */
+    color: #333;
+    /* Default text color */
     transition: background-color 0.3s, color 0.3s;
 }
 
@@ -936,30 +940,39 @@ footer {
 }
 
 .price {
-    color: #333; /* Default color */
+    color: #333;
+    /* Default color */
     transition: color 0.3s ease;
 }
 
 .menu-item.active .price {
-    color: #0000FF; /* Active state color (blue) */
+    color: #0000FF;
+    /* Active state color (blue) */
 }
 
 /* 菜單呈現設計 */
 .nutrition ul {
-    list-style-type: none; /* 去除點點 */
-    padding: 0; /* 去除內邊距 */
-    margin: 0; /* 去除外邊距 */
+    list-style-type: none;
+    /* 去除點點 */
+    padding: 0;
+    /* 去除內邊距 */
+    margin: 0;
+    /* 去除外邊距 */
 }
 
 .nutrition ul li {
-    margin-bottom: 5px; /* 為每行項目增加一些間距 */
+    margin-bottom: 5px;
+    /* 為每行項目增加一些間距 */
 }
 
 .menu-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 三列布局 */
-    gap: 15px; /* 卡片之間的間距 */
-    padding: 20px; /* 容器內邊距 */
+    grid-template-columns: repeat(3, 1fr);
+    /* 三列布局 */
+    gap: 15px;
+    /* 卡片之間的間距 */
+    padding: 20px;
+    /* 容器內邊距 */
 }
 
 .menu-card {
@@ -973,13 +986,17 @@ footer {
 }
 
 .menu-card:hover {
-    transform: scale(1.05); /* 滑過時放大效果 */
+    transform: scale(1.05);
+    /* 滑過時放大效果 */
 }
 
 .menu-preview img {
-    width: 100%; /* 圖片寬度填滿卡片 */
-    height: auto; /* 保持圖片比例 */
-    object-fit: cover; /* 圖片自適應裁剪 */
+    width: 100%;
+    /* 圖片寬度填滿卡片 */
+    height: auto;
+    /* 保持圖片比例 */
+    object-fit: cover;
+    /* 圖片自適應裁剪 */
 }
 
 .menu-details {
@@ -995,12 +1012,14 @@ footer {
 
 @media (max-width: 768px) {
     .menu-grid {
-        grid-template-columns: repeat(2, 1fr); /* 中屏幕顯示兩列 */
+        grid-template-columns: repeat(2, 1fr);
+        /* 中屏幕顯示兩列 */
     }
 }
 
 @media (max-width: 480px) {
     .menu-grid {
-        grid-template-columns: 1fr; /* 小屏幕顯示一列 */
+        grid-template-columns: 1fr;
+        /* 小屏幕顯示一列 */
     }
 }
