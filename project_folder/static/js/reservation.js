@@ -685,8 +685,9 @@ function updateProgress(stepId) {
     const progressSteps = document.querySelectorAll('.progress-step');
     progressSteps.forEach(step => step.classList.remove('active'));
 
-    // 根據當前步驟更新進度條
-    const stepIndex = stepId === 'step1' ? 0 : stepId === 'step2' ? 1 : 2;
+    const stepMap = { 'step1': 0, 'step2': 1, 'step3': 2 };
+    const stepIndex = stepMap[stepId] ?? -1;
+
     for (let i = 0; i <= stepIndex; i++) {
         progressSteps[i].classList.add('active');
     }
