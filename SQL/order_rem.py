@@ -37,5 +37,5 @@ with open('includes.sql', 'r', encoding='utf-8') as file:
 with open('order_rem.sql', 'w', encoding='utf-8') as file:
     for reservation_id, total_price in orders.items():
         # 寫入每個訂單的總價
-        file.write(f"insert into order_rem values ({reservation_id}, {
+        file.write(f"insert into order_rem values ({
                    total_price}, {reservation_id});\n")
