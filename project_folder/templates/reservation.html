@@ -240,8 +240,9 @@
                 </section>
             </div>
         </main>
-        <script>
+        <!-- <script>
             document.addEventListener("DOMContentLoaded", () => {
+                
                 const nextStepBtn = document.getElementById("nextStepBtn");
                 if (nextStepBtn) {
                     nextStepBtn.addEventListener("click", async () => {
@@ -273,7 +274,7 @@
                                 const availableTablesResponse = await fetch(
                                     `/available_tables?people_count=${numberOfPeople}&reservation_time=${reservationTime}&time_slot=${timeSlots}`
                                 );
-
+                                console.log("Raw Response:", availableTablesResponse);
                                 // 檢查響應是否成功
                                 if (!availableTablesResponse.ok) {
                                     const errorText = await availableTablesResponse.text();
@@ -332,9 +333,8 @@
                 }
             });
 
-        </script>
-
-        <script src="{{ url_for('static', filename='js/reservation.js') }}"></script>
+        </script> -->
         <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/reservation.js') }}"></script>
     </body>
 </html>

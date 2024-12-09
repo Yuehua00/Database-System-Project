@@ -22,7 +22,10 @@ def conn():
     except Exception as e:
         print(f"連線失敗: {e}")
         return None
-    
+
+
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -172,6 +175,8 @@ def change_password():
 def save_reservation():
     try:
         data = request.get_json()
+        table_number = data.get('Table_Number')
+        cart = data.get('Cart')
         print("接收到的數據:", data)  # 調試用
         if not data:
             return jsonify({"status": "error", "message": "缺少請求數據"}), 400
@@ -232,10 +237,10 @@ def save_reservation():
         order_id = order_id_row[0]
         print("Order_ID:", order_id)
 
-        # 插入 Order_Items
+        # 插入 Includes
         for item in cart:
             cursor.execute("""
-                INSERT INTO Order_Items (Order_ID, Dish_ID, Quantity, Price)
+                INSERT INTO Includes (Order_ID, Dish_ID, Quantity, Price)
                 VALUES (?, ?, ?, ?);
             """, (order_id, item['id'], item['quantity'], item['price']))
 
@@ -362,7 +367,7 @@ def get_menu():
             return jsonify({'status': 'error', 'message': '缺少時段參數'}), 400
 
         cursor.execute("""
-            SELECT d.Dish_ID, d.Dish_name, d.Dish_price, d.Category, t.TimeSlot, d.Recommendation
+            SELECT DISTINCT d.Dish_ID, d.Dish_name, d.Dish_price, d.Category, t.TimeSlot, d.Recommendation
             FROM Dish d
             JOIN Dish_TimeSlot t ON d.Dish_ID = t.Dish_ID
             WHERE t.TimeSlot = ?
@@ -399,46 +404,81 @@ def get_menu():
     #     if conn_obj:
     #         conn_obj.close()
 
+# @app.route('/get_pre_menu', methods=['GET'])
+# def get_pre_menu():
+#     try:
+#         conn_obj = conn()  # 確保資料庫連線
+#         if not conn_obj:
+#             return jsonify({"status": "error", "message": "資料庫連接失敗"}), 500
+        
+#         cursor = conn_obj.cursor()
+#         # 聯合查詢菜單和營養資訊
+#         cursor.execute("""
+#             SELECT d.Dish_ID, d.Dish_name, d.Dish_price, d.Category, d.Recommendation,
+#                    n.Nutrient_Name, n.Amount, n.Unit
+#             FROM Dish d
+#             LEFT JOIN Nutrition n ON d.Dish_ID = n.Dish_ID
+#         """)
+#         rows = cursor.fetchall()
+
+#         # 整理資料結構
+#         menu = {}
+#         for row in rows:
+#             dish_id = row[0]
+#             if dish_id not in menu:
+#                 menu[dish_id] = {
+#                     "id": dish_id,
+#                     "name": row[1],
+#                     "price": float(row[2]),
+#                     "category": row[3],
+#                     "recommendation": float(row[4]),
+#                     "nutrition": []
+#                 }
+#             if row[5]:  # 如果有營養資訊
+#                 menu[dish_id]["nutrition"].append({
+#                     "name": row[5],
+#                     "amount": float(row[6]),
+#                     "unit": row[7]
+#                 })
+
+#         return jsonify({"status": "success", "menu": list(menu.values())}), 200
+#     except Exception as e:
+#         print(f"Error fetching menu: {e}")
+#         return jsonify({"status": "error", "message": str(e)}), 500
 @app.route('/get_pre_menu', methods=['GET'])
 def get_pre_menu():
     try:
-        conn_obj = conn()  # 確保資料庫連線
-        if not conn_obj:
-            return jsonify({"status": "error", "message": "資料庫連接失敗"}), 500
-        
-        cursor = conn_obj.cursor()
-        # 聯合查詢菜單和營養資訊
-        cursor.execute("""
-            SELECT d.Dish_ID, d.Dish_name, d.Dish_price, d.Category, d.Recommendation,
-                   n.Nutrient_Name, n.Amount, n.Unit
+        cursor = conn().cursor()
+        query = """
+            SELECT d.Dish_ID, d.Dish_name, d.Dish_price, d.Category, d.Recommendation, n.Nutrient_Name, n.Amount, n.Unit
             FROM Dish d
             LEFT JOIN Nutrition n ON d.Dish_ID = n.Dish_ID
-        """)
+        """
+        cursor.execute(query)
         rows = cursor.fetchall()
 
-        # 整理資料結構
         menu = {}
         for row in rows:
-            dish_id = row[0]
-            if dish_id not in menu:
-                menu[dish_id] = {
-                    "id": dish_id,
-                    "name": row[1],
-                    "price": float(row[2]),
-                    "category": row[3],
-                    "recommendation": float(row[4]),
-                    "nutrition": []
+            dish_name = row[0]
+            if dish_name not in menu:
+                menu[dish_name] = {
+                    'id': row[0],
+                    'name': row[1],
+                    'price': row[2],
+                    'category': row[3],
+                    'recommendation': row[4],
+                    'nutrition': []
                 }
-            if row[5]:  # 如果有營養資訊
-                menu[dish_id]["nutrition"].append({
-                    "name": row[5],
-                    "amount": float(row[6]),
-                    "unit": row[7]
+            if row[4]:
+                menu[dish_name]['nutrition'].append({
+                    'name': row[5],
+                    'amount': row[6],
+                    'unit': row[7]
                 })
 
-        return jsonify({"status": "success", "menu": list(menu.values())}), 200
+        return jsonify({"status": "success", "menu": list(menu.values())})
     except Exception as e:
-        print(f"Error fetching menu: {e}")
+        print("Error fetching menu:", e)
         return jsonify({"status": "error", "message": str(e)}), 500
 
 
@@ -540,7 +580,7 @@ def member():
         for order in orders:
             cursor.execute("""
                 SELECT d.Dish_name, oi.Quantity, oi.Price
-                FROM Order_Items oi
+                FROM Includes oi
                 JOIN Dish d ON oi.Dish_ID = d.Dish_ID
                 WHERE oi.Order_ID = ?
             """, (order[0],))
@@ -668,6 +708,30 @@ def submit_order():
         return jsonify({'status': 'success', 'message': '訂單已送出'})
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
+
+# 取消訂單
+@app.route('/cancel_order/<int:order_id>', methods=['DELETE'])
+def cancel_order(order_id):
+    try:
+        conn_obj = conn()
+        if not conn_obj:
+            return jsonify({"status": "error", "message": "資料庫連接失敗"}), 500
+
+        cursor = conn_obj.cursor()
+
+        # 刪除訂單明細
+        delete_Includes_query = "DELETE FROM Includes WHERE Order_ID = ?"
+        cursor.execute(delete_Includes_query, (order_id,))
+
+        # 刪除訂單總表
+        delete_order_query = "DELETE FROM Order_rem WHERE Order_ID = ?"
+        cursor.execute(delete_order_query, (order_id,))
+        
+        conn_obj.commit()
+        return jsonify({"status": "success", "message": "訂單已成功取消"})
+    except Exception as e:
+        print(f"取消訂單時發生錯誤: {e}")
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 
 if __name__ == '__main__':
