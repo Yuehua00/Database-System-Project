@@ -29,7 +29,7 @@ def index():
 
 @app.route('/menu')
 def menu():
-    return render_template('menu.html')
+    return render_template('menu.html', show_search=True)
 
 @app.route('/cart')
 def cart():
