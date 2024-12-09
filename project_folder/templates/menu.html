@@ -29,11 +29,6 @@
                     <div class="bar3"></div>
                 </div>
                 
-                <div class="search-container">
-                    <input type="text" id="searchInput" class="search-input" placeholder="搜尋餐點名稱...">
-                    <button class="search-button" onclick="filterMenu()">搜尋</button>
-                </div>
-                
                 <div class="dropdown-menu">
                     {% if 'Customer_name' in session %}
                     <span class="welcome-message">歡迎, {{ session['Customer_name'] }}!</span>
@@ -55,6 +50,10 @@
         </header>
 
         <main class="menu-main">
+            <div class="search-container">
+                <input type="text" id="searchInput" class="search-input" placeholder="搜尋餐點名稱...">
+                <button class="search-button" onclick="filterMenu()">搜尋</button>
+            </div>
             <section id="menu-container" class="menu-grid">
                 <!-- 菜單項目將由 JavaScript 動態插入 -->
             </section>
