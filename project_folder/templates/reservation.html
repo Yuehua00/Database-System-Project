@@ -203,8 +203,10 @@
                             <!-- 購物車項目將被插入到這裡 -->
                         </div>
                     </div>
-                    <button type="button" class="btn prev-step" data-prev="1">返回</button>
-                    <button type="button" class="btn next-step" data-next="3">繼續</button>
+                    <!-- <button type="button" class="btn prev-step" data-prev="1">返回</button> -->
+                    <button onclick="updateProgress('step1')" type="button" class="btn prev-step" data-prev="1">返回</button>
+                    <!-- <button type="button" class="btn next-step" data-next="3">繼續</button> -->
+                    <button onclick="updateProgress('step3')" type="button" class="btn next-step" data-next="3">繼續</button>
                 </section>
 
                 <!-- 步驟3：確認訂單 -->
@@ -241,12 +243,10 @@
                             </div>
                         </div>
                     </div>
-                    <button type="button" class="btn prev-step" data-prev="2">返回</button>
+                    <!-- <button type="button" class="btn prev-step" data-prev="2">返回</button> -->
+                    <button onclick="updateProgress('step2')" type="button" class="btn prev-step" data-prev="2">返回</button>
                     <button type="button" class="btn confirm-order">確認訂位</button>
                 </section>
-                <button onclick="updateProgress('step1')">Step 1</button>
-                <button onclick="updateProgress('step2')">Step 2</button>
-                <button onclick="updateProgress('step3')">Step 3</button>
             </div>
         </main>
 
