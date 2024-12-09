@@ -971,6 +971,41 @@ footer {
     background-color: #d35400;
 }
 
+.error-message {
+    color: red;
+    font-size: 1.2rem;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.search-container {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
+}
+
+.search-input {
+    width: 300px;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 5px 0 0 5px;
+    font-size: 1rem;
+}
+
+.search-button {
+    padding: 0.5rem 1rem;
+    background-color: #e67e22;
+    color: white;
+    border: none;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+    background-color: #d35400;
+}
+
 /* 訂位菜單醒目 */
 /* 
 .menu-item {
