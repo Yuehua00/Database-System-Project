@@ -946,50 +946,35 @@ footer {
     color: #0000FF;
 } */
 
-.menu-item {
-    background-color: white;
-    border-radius: 8px;
-    padding: 15px;
-    margin: 10px 0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-}
-
-.menu-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-/* Price styling */
-.price {
-    color: #E67E22;
-    font-weight: bold;
-    font-size: 1.1em;
-    margin: 8px 0;
-}
-
-/* Quantity button styling */
 .quantity-btn {
-    background-color: #E67E22;
-    color: white;
+    background-color: #FF9800;
+    color: #fff;
     border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
+    padding: 5px 10px;
+    border-radius: 3px;
     cursor: pointer;
-    transition: all 0.2s ease;
-    font-weight: 500;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .quantity-btn:hover {
-    background-color: #D35400;
-    transform: scale(1.05);
+    background-color: #E64A19;
 }
 
-.quantity-btn:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-    transform: none;
+.menu-item {
+    background-color: #F5F5F5;
+    color: #333;
+    transition: background-color 0.3s, color 0.3s;
 }
+
+.price {
+    color: #666;
+    transition: color 0.3s;
+}
+
+.menu-item.active .price {
+    color: #1E88E5;
+}
+
 
 /* Active state */
 .menu-item.active {
