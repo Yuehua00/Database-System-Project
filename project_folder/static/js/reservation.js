@@ -451,14 +451,14 @@ function updateCart(itemId, change) {
 
         // 修改樣式
         if (currentQuantity >= 1) {
-            menuItemElement.style.backgroundColor = '#E67E22'; // 背景變橘色
-            menuItemElement.style.color = '#FFFFFF'; // 文字變白色
-            decreaseButton.style.backgroundColor = '#FFFFFF'; // 按鈕背景變白
-            decreaseButton.style.color = '#E67E22'; // 按鈕文字變橘色
-            increaseButton.style.backgroundColor = '#FFFFFF'; // 按鈕背景變白
-            increaseButton.style.color = '#E67E22'; // 按鈕文字變橘色
+            menuItemElement.style.backgroundColor = '#4CAF50'; // 清新綠色
+            menuItemElement.style.color = '#FFFFFF';
+            decreaseButton.style.backgroundColor = '#FFFFFF';
+            decreaseButton.style.color = '#4CAF50';
+            increaseButton.style.backgroundColor = '#FFFFFF';
+            increaseButton.style.color = '#4CAF50';
             if (priceElement) {
-                priceElement.style.color = '#0000FF'; // 價錢變藍色
+                priceElement.style.color = '#2196F3'; // 價錢變藍色
             }
         } else {
             menuItemElement.style.backgroundColor = ''; // 還原背景
