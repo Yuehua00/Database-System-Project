@@ -402,13 +402,6 @@ main {
     transition: transform 0.3s ease;
 }
 
-.menu-preview img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 8px;
-    transition: transform 0.3s ease;
-}
 
 .menu-preview:hover img {
     transform: scale(1.02);
@@ -1097,20 +1090,28 @@ footer {
 }
 
 .nutrition {
-    text-align: left; /* 設定文字靠左對齊 */
-    margin-top: 10px; /* 增加上方間距 */
+    text-align: left;
+    /* 設定文字靠左對齊 */
+    margin-top: 10px;
+    /* 增加上方間距 */
 }
 
 .nutrition h4 {
-    font-size: 1.2rem; /* 標題字體大小 */
-    margin-bottom: 5px; /* 與內容的間距 */
-    color: #333; /* 標題顏色 */
+    font-size: 1.2rem;
+    /* 標題字體大小 */
+    margin-bottom: 5px;
+    /* 與內容的間距 */
+    color: #333;
+    /* 標題顏色 */
 }
 
 .nutrition div {
-    font-size: 1rem; /* 內容字體大小 */
-    color: #555; /* 內容顏色 */
-    line-height: 1.5; /* 行距 */
+    font-size: 1rem;
+    /* 內容字體大小 */
+    color: #555;
+    /* 內容顏色 */
+    line-height: 1.5;
+    /* 行距 */
 }
 
 .menu-card .menu-details {
@@ -1121,6 +1122,7 @@ footer {
 }
 
 .menu-card.active .menu-details {
-    max-height: 500px; /* 設置足夠的高度以顯示所有內容 */
+    max-height: 500px;
+    /* 設置足夠的高度以顯示所有內容 */
     opacity: 1;
 }
