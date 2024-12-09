@@ -411,7 +411,7 @@ function updateCart(itemId, change) {
             increaseButton.style.backgroundColor = '#e67e22';
             increaseButton.style.color = '#FFFFFF';
             if (priceElement) {
-                priceElement.style.color = '#2c3e50';
+                priceElement.style.color = '#27ae60';
             }
         } else {
             menuItemElement.style.backgroundColor = ''; // 還原背景
