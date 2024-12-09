@@ -1091,12 +1091,12 @@ footer {
     text-align: left;
 }
 
-.nutrition div {
-    font-size: 14px;
-    color: #555;
-    margin-left: 10px;
-    margin-bottom: 3px;
-    text-align: left;
+.search-input {
+    width: 300px;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 5px 0 0 5px;
+    font-size: 1rem;
 }
 
 .submit-review {
@@ -1104,14 +1104,13 @@ footer {
     /* 調整為更小的值 */
     background-color: #e67e22;
     color: white;
-    padding: 0.5rem 1rem;
     border: none;
-    border-radius: 5px;
+    border-radius: 0 5px 5px 0;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
-.submit-review:hover {
+.search-button:hover {
     background-color: #d35400;
 }
 
@@ -1149,4 +1148,4 @@ footer {
     margin-bottom: 10px;
 }
 
->>>>>>>Stashed changes
+>>>>>>>Stashed changes>>>>>>>Stashed changes
