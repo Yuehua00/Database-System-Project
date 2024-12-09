@@ -3,6 +3,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask import request, flash, redirect, url_for
 import pyodbc
 from flask_cors import CORS
+import datetime
+
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # 設定 session 加密密鑰
@@ -544,7 +546,7 @@ def get_pre_menu():
                 comment_entry = {
                     "content": row[8],
                     "star": int(row[9]) if row[9] else None,
-                    "time": row[10].strftime("%Y-%m-%d %H:%M:%S") if row[10] else ""
+                    "time": row[10].strftime("%Y-%m-%d") if row[10] else ""
                 }
                 if comment_entry not in menu[dish_id]["comments"]:
                     menu[dish_id]["comments"].append(comment_entry)
@@ -807,25 +809,95 @@ def cancel_order(order_id):
         return jsonify({"status": "error", "message": str(e)}), 500
 
 # 提交評論
-@app.route('/submit_review', methods=['POST'])
-def submit_review():
+# @app.route('/submit_review', methods=['POST'])
+# def submit_review():
+#     try:
+#         data = request.get_json()
+#         review_text = data.get('review')
+#         if not review_text:
+#             return jsonify({'status': 'error', 'message': '評論內容不得為空'}), 400
+
+#         # 假設這裡將評論保存到資料庫
+#         conn_obj = conn()
+#         cursor = conn_obj.cursor()
+#         cursor.execute("INSERT INTO Comment (Conent) VALUES (?)", (review_text,))
+#         conn_obj.commit()
+#         cursor.close()
+
+#         return jsonify({'status': 'success', 'message': '評論已成功提交'})
+#     except Exception as e:
+#         print("提交評論時發生錯誤:", e)
+#         return jsonify({'status': 'error', 'message': '提交評論失敗'})
+
+# @app.route('/submit_comment', methods=['POST'])
+# def submit_comment():
+#     data = request.get_json()
+#     dish_id = data.get('dish_id')
+#     comment = data.get('comment')
+#     star = data.get('star')
+#     customer_id = data.get('customer_id')
+#     comment_time = datetime.now()
+#     conn_obj = conn()
+#     cursor = conn_obj.cursor()
+#     if not dish_id or not comment or not star:
+#         return jsonify({'status': 'error', 'message': '缺少必要字段！'}), 400
+#     print(f"新增評論：內容: {comment}, 星級: {star}, 時間: {comment_time}, 餐點ID: {dish_id}, 顧客ID: {customer_id}")
+#     try:
+#         # 插入評論到資料庫
+        
+        
+#         cursor.execute("""
+#             INSERT INTO Comment (Conent, Star, Comment_Time, Dish_ID, Customer_ID)
+#             VALUES (%s, %s, %s, %s, %s)
+#         """, (comment, star, comment_time, dish_id, customer_id))  # 假設 Customer_ID = 1
+#         conn_obj.commit()
+#         new_comment_id = cursor.lastrowid
+#         new_comment = {
+#             "Comment_ID": new_comment_id,
+#             "Conent": comment,
+#             "Star": star,
+#             "Comment_Time": comment_time,
+#             "Dish_ID": dish_id,
+#             "Customer_ID": 1
+#         }
+#         cursor.close()
+
+#         return jsonify({'status': 'success', 'message': '評論提交成功！', 'comment': new_comment})
+#     except Exception as e:
+#         print('Error inserting comment:', e)
+#         return jsonify({'status': 'error', 'message': '伺服器錯誤，請稍後再試。'}), 500
+@app.route('/submit_comment', methods=['POST'])
+def submit_comment():
     try:
         data = request.get_json()
-        review_text = data.get('review')
-        if not review_text:
-            return jsonify({'status': 'error', 'message': '評論內容不得為空'}), 400
+        content = data.get('content')
+        star = data.get('star')
+        dish_id = data.get('dish_id')
+        customer_id = data.get('customer_id')
+        print(data)
+        
+        # 驗證必要參數
+        if not all([content, star, dish_id, customer_id]):
+            return jsonify({'status': 'error', 'message': '缺少必要的參數'}), 400
 
-        # 假設這裡將評論保存到資料庫
+        comment_time = datetime.now()  # 獲取當前時間
+
         conn_obj = conn()
         cursor = conn_obj.cursor()
-        cursor.execute("INSERT INTO Reviews (Review_Text) VALUES (?)", (review_text,))
+        cursor.execute("INSERT INTO Comment (Conent, Star, Comment_Time, Dish_ID, Customer_ID) VALUES (?, ?, ?, ?, ?)",
+                       (content, star, comment_time, dish_id, customer_id))
         conn_obj.commit()
         cursor.close()
 
-        return jsonify({'status': 'success', 'message': '評論已成功提交'})
+        return jsonify({'status': 'success', 'message': '評論提交成功', 'data': {
+            'content': content,
+            'star': star,
+            'comment_time': comment_time.strftime('%Y-%m-%d %H:%M:%S'),
+            'dish_id': dish_id,
+            'customer_id': customer_id
+        }})
     except Exception as e:
-        print("提交評論時發生錯誤:", e)
-        return jsonify({'status': 'error', 'message': '提交評論失敗'})
-
+        print(f"提交評論時發生錯誤: {e}")
+        return jsonify({'status': 'error', 'message': '伺服器錯誤'}), 500
 if __name__ == '__main__':
     app.run(debug=True)
