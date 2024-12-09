@@ -970,6 +970,8 @@ main {
     display: flex;
     justify-content: center;
     margin: 1rem 0;
+    z-index: 10;
+    position: relative;
 }
 
 .search-input {
