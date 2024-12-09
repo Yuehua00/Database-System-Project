@@ -956,24 +956,26 @@ main {
 
 .search-container {
     display: flex;
-    justify-content: center;
-    margin: 1rem 0;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
 }
 
 .search-input {
-    width: 300px;
-    padding: 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 5px 0 0 5px;
-    font-size: 1rem;
+    padding: 5px 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 200px;
 }
 
 .search-button {
-    padding: 0.5rem 1rem;
+    padding: 5px 15px;
+    font-size: 16px;
     background-color: #e67e22;
     color: white;
     border: none;
-    border-radius: 0 5px 5px 0;
+    border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
@@ -981,6 +983,7 @@ main {
 .search-button:hover {
     background-color: #d35400;
 }
+
 
 
 /* 訂位菜單醒目 */

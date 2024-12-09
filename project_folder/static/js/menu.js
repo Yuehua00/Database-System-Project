@@ -64,17 +64,17 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('searchInput').addEventListener('input', filterMenu);
 
     function filterMenu() {
-        const query = document.getElementById('searchInput').value.trim().toLowerCase();
-        const menuItems = document.querySelectorAll('.menu-item');
-
-        menuItems.forEach(item => {
-            const itemName = item.querySelector('h3').textContent.toLowerCase();
-
-            if (itemName.includes(query)) {
-                item.style.display = ''; // 顯示匹配項
+        const input = document.getElementById("searchInput").value.toLowerCase();
+        const menuCards = document.querySelectorAll(".menu-card");
+    
+        menuCards.forEach(card => {
+            const dishName = card.querySelector("h3").textContent.toLowerCase();
+            if (dishName.includes(input)) {
+                card.style.display = "block";
             } else {
-                item.style.display = 'none'; // 隱藏不匹配項
+                card.style.display = "none";
             }
         });
     }
+    
 });
