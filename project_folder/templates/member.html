@@ -108,27 +108,14 @@
 
 <section class="order-history">
     <h2>訂單查詢</h2>
-    <div class="orders">
-        {% if orders %}
-        <ul>
-            {% for order in orders %}
-            <li>
-                <div class="order-header" onclick="toggleOrderDetails(this)">
-                    <span>
-                        <strong>訂單編號:</strong> {{ order['id'] }} |
-                        <strong>訂單日期:</strong> {{ order['date'] }} |
-                        <strong>總金額:</strong> NT$ {{ order['total']|int }}
-                    </span>
-                    <span class="toggle-button">[展開]</span>
-                </div>
-                <div class="order-content">
-                    <strong>訂單明細:</strong>
-                    <ul>
-                        {% for item in order['items'] %}
-                        <li>{{ item['name'] }} x {{ item['quantity'] }} - NT$ {{ item['price'] }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
+   <div class="order-content" style="display: none;">
+    <strong>訂單明細:</strong>
+    <ul>
+        {% for item in order['items'] %}
+        <li>{{ item['name'] }} x {{ item['quantity'] }} - NT$ {{ item['price'] }}</li>
+        {% endfor %}
+    </ul>
+</div>
             </li>
             {% endfor %}
         </ul>
