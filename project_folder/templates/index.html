@@ -65,12 +65,16 @@
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const welcomeScreen = document.getElementById('welcome-screen');
-            setTimeout(() => {
-                welcomeScreen.style.opacity = '0'; // 添加淡出效果
-                setTimeout(() => {
-                    welcomeScreen.style.display = 'none'; // 移除歡迎畫面
-                }, 500); // 確保淡出效果完成後隱藏
-            }, 2000); // 3秒後觸發
+            setTimeout(welcome-screen, 50);
+            function startPage() {
+                setTimeout(function () {
+                    document.getElementById('welcome-screen').style.top = '20px';
+                    document.getElementById('welcome-screen').style.opacity = '1';
+                    setTimeout(function () {
+                        document.getElementById('welcome-screen').style.opacity = '0';
+                    }, 1000);
+                }, 1000);
+            }
         });
     </script>
     <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
