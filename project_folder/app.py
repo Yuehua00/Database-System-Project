@@ -733,6 +733,26 @@ def cancel_order(order_id):
         print(f"取消訂單時發生錯誤: {e}")
         return jsonify({"status": "error", "message": str(e)}), 500
 
+# 提交評論
+@app.route('/submit_review', methods=['POST'])
+def submit_review():
+    try:
+        data = request.get_json()
+        review_text = data.get('review')
+        if not review_text:
+            return jsonify({'status': 'error', 'message': '評論內容不得為空'}), 400
+
+        # 假設這裡將評論保存到資料庫
+        conn_obj = conn()
+        cursor = conn_obj.cursor()
+        cursor.execute("INSERT INTO Reviews (Review_Text) VALUES (?)", (review_text,))
+        conn_obj.commit()
+        cursor.close()
+
+        return jsonify({'status': 'success', 'message': '評論已成功提交'})
+    except Exception as e:
+        print("提交評論時發生錯誤:", e)
+        return jsonify({'status': 'error', 'message': '提交評論失敗'})
 
 if __name__ == '__main__':
     app.run(debug=True)
