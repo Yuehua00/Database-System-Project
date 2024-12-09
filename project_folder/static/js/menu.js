@@ -77,12 +77,4 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const searchContainer = document.querySelector('.search-container');
-        if (!searchContainer) {
-            console.error('搜尋框未找到！');
-        }
-    });
-    
 });

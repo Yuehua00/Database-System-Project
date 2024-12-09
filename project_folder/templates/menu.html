@@ -50,13 +50,10 @@
         </header>
 
         <main class="menu-main">
-            {% if show_search %}
             <div class="search-container">
                 <input type="text" id="searchInput" class="search-input" placeholder="搜尋餐點名稱...">
                 <button class="search-button" onclick="filterMenu()">搜尋</button>
             </div>
-            {% endif %}
-
             <section id="menu-container" class="menu-grid">
                 <!-- 菜單項目將由 JavaScript 動態插入 -->
             </section>
