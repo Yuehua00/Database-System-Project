@@ -990,14 +990,7 @@ footer {
     /* 滑過時放大效果 */
 }
 
-.menu-preview img {
-    width: 100%;
-    /* 圖片寬度填滿卡片 */
-    height: auto;
-    /* 保持圖片比例 */
-    object-fit: cover;
-    /* 圖片自適應裁剪 */
-}
+
 
 .menu-details {
     padding: 10px;
