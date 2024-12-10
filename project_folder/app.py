@@ -275,11 +275,13 @@ def save_reservation():
 #         return jsonify({"status": "error", "message": str(e)}), 500
 @app.route('/get_customer_info')
 def get_customer_info():
+    customer_id = session.get('Customer_ID')
     if 'Customer_name' in session and 'Customer_phoneNumber' in session:
         return jsonify({
             'status': 'success',
             'name': session['Customer_name'],
-            'phone': session['Customer_phoneNumber']
+            'phone': session['Customer_phoneNumber'],
+            'customer_id': session['Customer_ID']
         })
     else:
         return jsonify({'status': 'fail', 'message': 'User not logged in'}), 401
@@ -721,6 +723,7 @@ def update_password():
 
 @app.route('/update_customer_info', methods=['POST'])
 def update_customer_info():
+    customer_id = session.get('Customer_ID')
     if 'Customer_ID' not in session:
         return jsonify({'success': False, 'message': '未登入，請先登入！'})
 
@@ -870,17 +873,17 @@ def cancel_order(order_id):
 def submit_comment():
     try:
         data = request.get_json()
-        content = data.get('content')
+        content = data.get('comment', '').strip()
         star = data.get('star')
         dish_id = data.get('dish_id')
-        customer_id = data.get('customer_id')
+        customer_id = session.get('Customer_ID')
         print(data)
-        
+        star = int(star)
         # 驗證必要參數
         if not all([content, star, dish_id, customer_id]):
             return jsonify({'status': 'error', 'message': '缺少必要的參數'}), 400
 
-        comment_time = datetime.now()  # 獲取當前時間
+        comment_time = datetime.datetime.now()  # 獲取當前時間
 
         conn_obj = conn()
         cursor = conn_obj.cursor()
@@ -899,5 +902,6 @@ def submit_comment():
     except Exception as e:
         print(f"提交評論時發生錯誤: {e}")
         return jsonify({'status': 'error', 'message': '伺服器錯誤'}), 500
+    
 if __name__ == '__main__':
     app.run(debug=True)

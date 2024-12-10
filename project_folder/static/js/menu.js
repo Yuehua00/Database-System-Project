@@ -170,22 +170,31 @@ document.addEventListener('click', function(e) {
 // 定義缺失的函數 attachReviewEvents
 function attachReviewEvents() {
     document.querySelectorAll('.submit-review').forEach(button => {
-        button.addEventListener('click', async (e) => {
+        button.addEventListener('click', async () => {
             const dishId = button.getAttribute('data-id');
-            const reviewInput = button.previousElementSibling.value.trim();
-            const starSelect = button.previousElementSibling.previousElementSibling;
+            const starSelect = button.previousElementSibling; // 評分選擇框
+            const reviewInput = starSelect.previousElementSibling.value.trim();
             const starRating = starSelect.value;
-
+    
+            // 模擬從會話中獲取 customer_id
+            const customerId = sessionStorage.getItem('Customer_ID'); // 假設從 sessionStorage 中存取
+            console.log(`customer_id: ${customerId}, starRating: ${starRating}, review: ${reviewInput}`);
+            //console.log(customerId);
+            if (!customerId) {
+                alert('請登入後再提交評論！');
+                return;
+            }
+    
             if (!reviewInput) {
                 alert('評論內容不得為空！');
                 return;
             }
-
+    
             if (!starRating) {
                 alert('請選擇評分！');
                 return;
             }
-
+    
             try {
                 const response = await fetch('/submit_comment', {
                     method: 'POST',
@@ -194,9 +203,10 @@ function attachReviewEvents() {
                         dish_id: dishId,
                         comment: reviewInput,
                         star: starRating,
+                        customer_id: customerId,
                     }),
                 });
-
+    
                 const result = await response.json();
                 if (result.status === 'success') {
                     alert('評論提交成功！');
@@ -205,11 +215,12 @@ function attachReviewEvents() {
                     alert(result.message || '提交失敗，請稍後再試。');
                 }
             } catch (error) {
-                console.error('提交評論时出錯:', error);
+                console.error('提交評論時出錯:', error);
                 alert('提交失敗，請稍後再試。');
             }
         });
     });
+    
 }
 
 // 修改 renderMenu 函數以確保正確處理評論資料
@@ -342,7 +353,19 @@ function attachViewMoreEvents() {
 //     });
 // }
 // 菜單卡片點擊展開/收合
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async() => {
+    try {
+        const response = await fetch('/get_customer_info');
+        const result = await response.json();
+        console.log(result);
+        if (result.status === 'success') {
+            sessionStorage.setItem('Customer_ID', result.customer_id);
+        } else {
+            console.warn('用戶未登入或獲取用戶信息失敗');
+        }
+    } catch (error) {
+        console.error('獲取用戶信息時出錯:', error);
+    }
     const cards = document.querySelectorAll('.menu-card');
     cards.forEach(card => {
         card.addEventListener('click', (e) => {

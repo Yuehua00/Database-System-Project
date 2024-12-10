@@ -141,6 +141,17 @@ main {
     margin-bottom: 10px;
 }
 
+<<<<<<< HEAD
+=======
+.divider {
+    border: none;
+    border-top: 2px solid #d9dde1; /* 橫線顏色與按鈕一致 */
+    margin: 20px auto; /* 控制上下間距 */
+    width: 60%; /* 控制橫線寬度 */
+}
+
+
+>>>>>>> b0c444e0b54ccee86d1ef22f1ef7f2a7a99e70c6
 /* 訂位進度條樣式 */
 .reservation-progress {
     display: flex;
