@@ -427,34 +427,34 @@ def get_pre_menu():
 
 
 
-def query_customer_data(customer_id):
-    try:
-        conn_obj = conn()  # 建立資料庫連線
-        if not conn_obj:
-            return None
+# def query_customer_data(customer_id):
+#     try:
+#         conn_obj = conn()  # 建立資料庫連線
+#         if not conn_obj:
+#             return None
 
-        cursor = conn_obj.cursor()
-        query = """
-            SELECT Customer_name, Customer_phoneNumber, PWD, Points
-            FROM Customer
-            WHERE Customer_ID = ?
-        """
-        cursor.execute(query, (customer_id,))
-        customer_data = cursor.fetchone()
-        cursor.close()
-        conn_obj.close()
+#         cursor = conn_obj.cursor()
+#         query = """
+#             SELECT Customer_name, Customer_phoneNumber, PWD, Points
+#             FROM Customer
+#             WHERE Customer_ID = ?
+#         """
+#         cursor.execute(query, (customer_id,))
+#         customer_data = cursor.fetchone()
+#         cursor.close()
+#         conn_obj.close()
 
-        if customer_data:
-            return {
-                'name': customer_data[0],
-                'phone': customer_data[1],
-                'PWD': customer_data[2],
-                'point': customer_data[3],
-            }
-        return None
-    except Exception as e:
-        print(f"Error querying customer data: {e}")
-        return None
+#         if customer_data:
+#             return {
+#                 'name': customer_data[0],
+#                 'phone': customer_data[1],
+#                 'PWD': customer_data[2],
+#                 'point': customer_data[3],
+#             }
+#         return None
+#     except Exception as e:
+#         print(f"Error querying customer data: {e}")
+#         return None
 
 
 @app.route('/member')
