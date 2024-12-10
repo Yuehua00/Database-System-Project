@@ -91,11 +91,21 @@ main {
     text-decoration: none;
     transition: all 0.3s;
     font-weight: 500;
+    min-width: 150px; /* 固定按鈕的最小寬度 */
+    text-align: center; /* 讓文字保持置中 */
 }
 
 .btn:hover {
     background-color: #d35400;
     transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .btn {
+        min-width: 150px; /* 保持最小寬度 */
+        font-size: 1rem; /* 縮小字體大小 */
+        padding: 0.7rem 1.2rem; /* 縮小內邊距 */
+    }
 }
 
 /* 首頁樣式 */
@@ -982,36 +992,6 @@ footer {
     background-color: #d35400;
 }
 
-/* 訂位菜單醒目 */
-/* .quantity-btn {
-    background-color: #E67E22;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 3px;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.menu-item {
-    background-color: #f9f9f9;
-    color: #333;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.quantity-btn:hover {
-    background-color: #D35400;
-}
-
-.price {
-    color: #333;
-    transition: color 0.3s ease;
-}
-
-.menu-item.active .price {
-    color: #0000FF;
-} */
-
 .quantity-btn {
     background-color: #FF9800;
     color: #fff;
@@ -1095,11 +1075,9 @@ footer {
 }
 
 .menu-card:hover {
-    transform: scale(1.05);
+    transform: scale(1.0);
     /* 滑過時放大效果 */
 }
-
-
 
 .menu-details {
     padding: 10px;
@@ -1138,6 +1116,12 @@ footer {
     border: 1px solid #ddd;
     border-radius: 5px 0 0 5px;
     font-size: 1rem;
+}
+
+.search-input:focus {
+    border-color: #e67e22;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(230, 126, 34, 0.2);
 }
 
 .search-button {

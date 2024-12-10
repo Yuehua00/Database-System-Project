@@ -1,14 +1,3 @@
-// 菜單資料
-// const menuItems = [
-//     { id: 1, name: '香蒜培根義大利麵', price: 280 },
-//     { id: 2, name: '奶油蘑菇義大利麵', price: 260 },
-//     { id: 3, name: '番茄海鮮義大利麵', price: 320 },
-//     { id: 4, name: '青醬雞肉義大利麵', price: 290 },
-//     { id: 5, name: '臘腸番茄義大利麵', price: 270 },
-//     { id: 6, name: '白酒蛤蠣義大利麵', price: 300 }
-// ];
-
-
 document.addEventListener("DOMContentLoaded", () => {
     console.log("DOMContentLoaded event triggered");
     const nextStepBtn = document.getElementById("nextStepBtn");
@@ -188,9 +177,6 @@ function renderMenuItems() {
 
 }
 
-
-
-
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Menu items:', menuItems);
     const timeSlotElement = document.querySelector('#TimeSlots');
@@ -265,9 +251,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
 });
 
-
-
-
 // 設置事件監聽器
 function setupEventListeners() {
     // 繼續按鈕
@@ -324,11 +307,14 @@ function validateStep(step) {
 function moveToStep(step) {
     document.querySelectorAll('.reservation-step').forEach(el => el.classList.remove('active'));
     document.getElementById(`step${step}`).classList.add('active');
+
+    //隱藏所有步驟
     document.querySelectorAll('.reservation-step').forEach(el => {
         el.classList.remove('active');
         el.style.display = 'none';
     });    
 
+    //顯示當前步驟
     const currentStep = document.getElementById(`step${step}`);
     currentStep.classList.add('active');
     currentStep.style.display = 'block';
@@ -366,11 +352,9 @@ function moveToStep(step) {
         cart = []; // 僅在返回第一步時清空購物車
         renderCart();
     }
+    // 更新進度條
+    updateProgress(`step${step}`);
 }
-
-
-// 初始化購物車為空陣列
-
 
 // 更新購物車邏輯
 function updateCart(itemId, change) {
@@ -589,11 +573,6 @@ function saveReservationData() {
     });
 }
 
-
-
-
-
-
 document.addEventListener('DOMContentLoaded', function() {
     const nextStepBtn = document.getElementById('nextStepBtn');
     const progressSteps = document.querySelectorAll('.progress-step');
@@ -679,21 +658,25 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 });
 
-
-
-
 // 更新進度條邏輯
 function updateProgress(stepId) {
     // 更新進度條
     const progressSteps = document.querySelectorAll('.progress-step');
-    progressSteps.forEach(step => step.classList.remove('active'));
+    //progressSteps.forEach(step => step.classList.remove('active'));
 
     const stepMap = { 'step1': 0, 'step2': 1, 'step3': 2 };
     const stepIndex = stepMap[stepId] ?? -1;
 
-    for (let i = 0; i <= stepIndex; i++) {
+    /*for (let i = 0; i <= stepIndex; i++) {
         progressSteps[i].classList.add('active');
-    }
+    }*/
+   // 移除所有步驟的 active 類
+    progressSteps.forEach((step, index) => {
+        step.classList.remove('active');
+        if (index === stepIndex) {
+            step.classList.add('active'); // 當前步驟加上 active 類
+        }
+    });
 
     // 更新相應的內容區塊
     const steps = document.querySelectorAll('.reservation-step');
