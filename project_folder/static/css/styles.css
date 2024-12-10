@@ -98,6 +98,14 @@ main {
     transform: translateY(-2px);
 }
 
+@media (max-width: 768px) {
+    .btn {
+        min-width: 150px; /* 保持最小寬度 */
+        font-size: 1rem; /* 縮小字體大小 */
+        padding: 0.7rem 1.2rem; /* 縮小內邊距 */
+    }
+}
+
 /* 首頁樣式 */
 .hero {
     text-align: center;
