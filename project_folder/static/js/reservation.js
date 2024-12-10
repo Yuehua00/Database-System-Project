@@ -324,11 +324,14 @@ function validateStep(step) {
 function moveToStep(step) {
     document.querySelectorAll('.reservation-step').forEach(el => el.classList.remove('active'));
     document.getElementById(`step${step}`).classList.add('active');
+
+    //隱藏所有步驟
     document.querySelectorAll('.reservation-step').forEach(el => {
         el.classList.remove('active');
         el.style.display = 'none';
     });    
 
+    //顯示當前步驟
     const currentStep = document.getElementById(`step${step}`);
     currentStep.classList.add('active');
     currentStep.style.display = 'block';
@@ -366,6 +369,8 @@ function moveToStep(step) {
         cart = []; // 僅在返回第一步時清空購物車
         renderCart();
     }
+    // 更新進度條
+    updateProgress(`step${step}`);
 }
 
 
@@ -689,7 +694,7 @@ function updateProgress(stepId) {
     progressSteps.forEach(step => step.classList.remove('active'));
 
     const stepMap = { 'step1': 0, 'step2': 1, 'step3': 2 };
-    const stepIndex = stepMap[stepId] ?? -1;
+    const stepIndex = stepMap[stepId];
 
     for (let i = 0; i <= stepIndex; i++) {
         progressSteps[i].classList.add('active');
