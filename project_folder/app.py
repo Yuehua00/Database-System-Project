@@ -426,37 +426,6 @@ def get_pre_menu():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 
-def query_order_history(customer_id):
-    try:
-        conn_obj = conn()  # 建立資料庫連線
-        if not conn_obj:
-            return []
-
-        cursor = conn_obj.cursor()
-        query = """
-            SELECT Order_ID, Order_Date, Total_Amount
-            FROM Orders
-            WHERE Customer_ID = ?
-            ORDER BY Order_Date DESC
-        """
-        cursor.execute(query, (customer_id,))
-        orders = cursor.fetchall()
-        cursor.close()
-        conn_obj.close()
-
-        # 整理數據為清單格式
-        return [
-            {
-                'order_id': order[0],
-                'order_date': order[1],
-                'total_amount': order[2],
-            }
-            for order in orders
-        ]
-    except Exception as e:
-        print(f"Error querying order history: {e}")
-        return []
-
 
 def query_customer_data(customer_id):
     try:
