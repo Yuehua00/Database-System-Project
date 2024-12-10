@@ -3,12 +3,16 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask import request, flash, redirect, url_for
 import pyodbc
 from flask_cors import CORS
+import datetime
+
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # 設定 session 加密密鑰
 CORS(app, supports_credentials=True)
 
 # 資料庫連接
+
+
 def conn():
     try:
         connect = pyodbc.connect(
@@ -22,18 +26,22 @@ def conn():
     except Exception as e:
         print(f"連線失敗: {e}")
         return None
-    
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 @app.route('/menu')
 def menu():
     return render_template('menu.html')
 
+
 @app.route('/cart')
 def cart():
     return render_template('cart.html')
+
 
 @app.route('/reservation', methods=['GET', 'POST'])
 def reservation():  # Change the function name here to 'reservation'
@@ -44,7 +52,7 @@ def reservation():  # Change the function name here to 'reservation'
         if 'Customer_ID' not in session:
             # 如果未登入，跳轉到登入頁面
             return redirect(url_for('login'))
-        
+
         # 如果已登入，進行預約操作
         Number_of_People = request.form['Number_of_People']
         TimeSlots = request.form['TimeSlots']
@@ -60,21 +68,25 @@ def reservation():  # Change the function name here to 'reservation'
                 VALUES (?, ?, ?, ?, ?, ?)
             """
             # 假設 table_id 是事先查詢到的有效桌號
-            table_id = 1  
-            cursor.execute(insert_query, (None, TimeSlots, Number_of_People, Reservation_Time, customer_id, table_id))
+            table_id = 1
+            cursor.execute(insert_query, (None, TimeSlots,
+                           Number_of_People, Reservation_Time, customer_id, table_id))
             conn_obj.commit()
             cursor.close()
             return "預約成功"
 
-    return render_template('reservation.html')  # Render the correct reservation template
+    # Render the correct reservation template
+    return render_template('reservation.html')
 
 # 登錄頁面
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         Customer_phoneNumber = request.form.get('Customer_phoneNumber')
         PWD = request.form.get('PWD')
-        
+
         conn_obj = conn()
         if conn_obj:
             cursor = conn_obj.cursor()
@@ -99,7 +111,6 @@ def login():
     return render_template('login.html')
 
 
-
 @app.route('/register', methods=['POST'])
 def register():
     if request.method == 'POST':
@@ -107,8 +118,7 @@ def register():
         Customer_phoneNumber = request.form.get('Customer_phoneNumber')
         Ori_PWD = request.form.get('PWD')
         PWD = generate_password_hash(Ori_PWD)
-        
-        
+
         conn_obj = conn()
         if conn_obj:
             cursor = conn_obj.cursor()
@@ -120,17 +130,20 @@ def register():
                 return jsonify({'status': 'error', 'message': '該手機號碼已被註冊，請使用其他號碼。'})
             else:
                 insert_query = "INSERT INTO Customer (Customer_name, Customer_phoneNumber, PWD) VALUES (?, ?, ?)"
-                cursor.execute(insert_query, (Customer_name, Customer_phoneNumber, PWD))
+                cursor.execute(insert_query, (Customer_name,
+                               Customer_phoneNumber, PWD))
                 conn_obj.commit()
                 cursor.close()
                 return jsonify({'status': 'success', 'message': '註冊成功，請登入。'})
         return jsonify({'status': 'error', 'message': '資料庫連接失敗。'})
+
 
 @app.route('/logout')
 def logout():
     session.pop('Customer_phoneNumber', None)  # 清除登入的電話號碼
     session.pop('Customer_name', None)  # 清除用戶名
     return redirect(url_for('index'))  # 重新導向到首頁
+
 
 @app.route('/change-password', methods=['POST'])
 def change_password():
@@ -163,22 +176,27 @@ def change_password():
         conn_obj.close()
 
         return jsonify({"success": True, "message": "密碼修改成功"})
-    
+
     except Exception as e:
         print(f"Error changing password: {e}")
         return jsonify({"success": False, "message": "修改密碼時出錯"})
+
 
 @app.route('/save_reservation', methods=['POST'])
 def save_reservation():
     try:
         data = request.get_json()
+        table_number = data.get('Table_Number')
+        cart = data.get('Cart')
         print("接收到的數據:", data)  # 調試用
         if not data:
             return jsonify({"status": "error", "message": "缺少請求數據"}), 400
 
         # 檢查必要字段
-        required_fields = ['Number_of_People', 'Reservation_Time', 'TimeSlots', 'Table_Number', 'Cart']
-        missing_fields = [field for field in required_fields if field not in data or not data[field]]
+        required_fields = ['Number_of_People',
+                           'Reservation_Time', 'TimeSlots', 'Table_Number', 'Cart']
+        missing_fields = [
+            field for field in required_fields if field not in data or not data[field]]
         if missing_fields:
             return jsonify({
                 "status": "error",
@@ -232,10 +250,10 @@ def save_reservation():
         order_id = order_id_row[0]
         print("Order_ID:", order_id)
 
-        # 插入 Order_Items
+        # 插入 Includes
         for item in cart:
             cursor.execute("""
-                INSERT INTO Order_Items (Order_ID, Dish_ID, Quantity, Price)
+                INSERT INTO Includes (Order_ID, Dish_ID, Quantity, Price)
                 VALUES (?, ?, ?, ?);
             """, (order_id, item['id'], item['quantity'], item['price']))
 
@@ -248,67 +266,22 @@ def save_reservation():
         print(f"保存訂位信息時發生錯誤: {e}")
         return jsonify({"status": "error", "message": str(e)}), 500
 
-    
-# @app.route('/get_customer_info', methods=['GET'])
-# def get_customer_info():
-#     try:
-#         customer_id = session.get('Customer_ID')  # 從 session 中抓取 Customer_ID
-#         if not customer_id:
-#             return jsonify({"status": "error", "message": "未登入或無法找到顧客資訊"}), 401
 
-#         # 模擬查詢用戶信息
-#         customer_info = {
-#             "Customer_ID": customer_id,
-#             "name": "John Doe",
-#             "phone": "123456789"
-#         }
-#         return jsonify({"status": "success", **customer_info})
-#     except Exception as e:
-#         print("獲取顧客資訊時發生錯誤:", e)
-#         return jsonify({"status": "error", "message": str(e)}), 500
 @app.route('/get_customer_info')
 def get_customer_info():
+    customer_id = session.get('Customer_ID')
     if 'Customer_name' in session and 'Customer_phoneNumber' in session:
         return jsonify({
             'status': 'success',
             'name': session['Customer_name'],
-            'phone': session['Customer_phoneNumber']
+            'phone': session['Customer_phoneNumber'],
+            'customer_id': session['Customer_ID']
         })
     else:
         return jsonify({'status': 'fail', 'message': 'User not logged in'}), 401
 
+
 @app.route('/available_tables', methods=['GET'])
-# def get_available_tables():
-#     try:
-#         people_count = request.args.get('people_count', type=int)
-#         reservation_time = request.args.get('reservation_time')
-#         time_slot = request.args.get('time_slot')
-#         if not people_count or not reservation_time or not time_slot:
-#             return jsonify({'status': 'error', 'message': '缺少必需的參數'}), 400
-
-#         query = """
-#             SELECT Table_ID
-#             FROM desk d
-#             WHERE d.Number_of_Seat >= ?
-#             AND d.Table_ID NOT IN (
-#                 SELECT r.Table_ID
-#                 FROM Reservation r
-#                 WHERE r.Reservation_Time = ?
-#                 AND r.TimeSlots = ?
-#             )
-#         """
-#         params = (people_count, reservation_time, time_slot)
-#         print("查詢參數:", params)
-#         print("可用桌子:", available_tables)
-
-#         cursor = conn.cursor()
-#         cursor.execute(query, params)
-#         available_tables = [row[0] for row in cursor.fetchall()]
-#         return jsonify({'status': 'success', 'available_tables': available_tables})
-    
-#     except Exception as e:
-#         print("Error fetching available tables:", e)
-#         return jsonify({'status': 'error', 'message': '查詢可用桌子時發生錯誤。'}), 500
 def available_tables():
     people_count = request.args.get('people_count')
     reservation_time = request.args.get('reservation_time')
@@ -348,6 +321,8 @@ def available_tables():
     return jsonify({'status': 'success', 'available_tables': available_tables})
 
 # 預約後呼叫品項提供選擇
+
+
 @app.route('/get_menu', methods=['GET'])
 def get_menu():
     try:
@@ -362,7 +337,7 @@ def get_menu():
             return jsonify({'status': 'error', 'message': '缺少時段參數'}), 400
 
         cursor.execute("""
-            SELECT d.Dish_ID, d.Dish_name, d.Dish_price, d.Category, t.TimeSlot, d.Recommendation
+            SELECT DISTINCT d.Dish_ID, d.Dish_name, d.Dish_price, d.Category, t.TimeSlot, d.Recommendation
             FROM Dish d
             JOIN Dish_TimeSlot t ON d.Dish_ID = t.Dish_ID
             WHERE t.TimeSlot = ?
@@ -392,31 +367,27 @@ def get_menu():
         print("Error:", e)
         return jsonify({'status': 'error', 'message': '資料庫操作失敗', 'error': str(e)}), 500
 
-    # finally:
-    #     # 確保資源正確釋放
-    #     if cursor:
-    #         cursor.close()
-    #     if conn_obj:
-    #         conn_obj.close()
 
 @app.route('/get_pre_menu', methods=['GET'])
 def get_pre_menu():
     try:
-        conn_obj = conn()  # 確保資料庫連線
+        conn_obj = conn()
         if not conn_obj:
-            return jsonify({"status": "error", "message": "資料庫連接失敗"}), 500
-        
+            raise Exception("資料庫連接失敗")
+
         cursor = conn_obj.cursor()
-        # 聯合查詢菜單和營養資訊
-        cursor.execute("""
-            SELECT d.Dish_ID, d.Dish_name, d.Dish_price, d.Category, d.Recommendation,
-                   n.Nutrient_Name, n.Amount, n.Unit
+        query = """
+            SELECT d.Dish_ID, d.Dish_name, d.Dish_price, d.Category, d.Recommendation, 
+                   n.Nutrient_Name, n.Amount, n.Unit,
+                   c.Conent, c.Star, c.Comment_Time
             FROM Dish d
             LEFT JOIN Nutrition n ON d.Dish_ID = n.Dish_ID
-        """)
+            LEFT JOIN Comment c ON d.Dish_ID = c.Dish_ID
+        """
+        cursor.execute(query)
         rows = cursor.fetchall()
 
-        # 整理資料結構
+        # Process rows to prevent duplicate entries
         menu = {}
         for row in rows:
             dish_id = row[0]
@@ -426,19 +397,32 @@ def get_pre_menu():
                     "name": row[1],
                     "price": float(row[2]),
                     "category": row[3],
-                    "recommendation": float(row[4]),
-                    "nutrition": []
+                    "recommendation": float(row[4]) if row[4] else None,
+                    "nutrition": [],
+                    "comments": []
                 }
-            if row[5]:  # 如果有營養資訊
-                menu[dish_id]["nutrition"].append({
-                    "name": row[5],
-                    "amount": float(row[6]),
-                    "unit": row[7]
-                })
+            # Add nutrition data if not already added
+            nutrition_entry = {
+                "name": row[5],
+                "amount": float(row[6]) if row[6] else None,
+                "unit": row[7] if row[7] else ""
+            }
+            if nutrition_entry not in menu[dish_id]["nutrition"]:
+                menu[dish_id]["nutrition"].append(nutrition_entry)
+
+            # Add comment data if not already added
+            if row[8]:  # Ensure comment exists
+                comment_entry = {
+                    "content": row[8],
+                    "star": int(row[9]) if row[9] else None,
+                    "time": row[10].strftime("%Y-%m-%d") if row[10] else ""
+                }
+                if comment_entry not in menu[dish_id]["comments"]:
+                    menu[dish_id]["comments"].append(comment_entry)
 
         return jsonify({"status": "success", "menu": list(menu.values())}), 200
     except Exception as e:
-        print(f"Error fetching menu: {e}")
+        print(f"Error in /get_pre_menu: {e}")
         return jsonify({"status": "error", "message": str(e)}), 500
 
 
@@ -472,7 +456,8 @@ def query_order_history(customer_id):
     except Exception as e:
         print(f"Error querying order history: {e}")
         return []
-    
+
+
 def query_customer_data(customer_id):
     try:
         conn_obj = conn()  # 建立資料庫連線
@@ -515,7 +500,8 @@ def member():
         cursor = conn_obj.cursor()
 
         # 獲取會員資料
-        cursor.execute("SELECT Customer_name, Customer_phoneNumber, Points FROM Customer WHERE Customer_ID = ?", (customer_id,))
+        cursor.execute(
+            "SELECT Customer_name, Customer_phoneNumber, Points FROM Customer WHERE Customer_ID = ?", (customer_id,))
         customer = cursor.fetchone()
         if not customer:
             return jsonify({"status": "error", "message": "找不到會員資料"}), 404
@@ -540,7 +526,7 @@ def member():
         for order in orders:
             cursor.execute("""
                 SELECT d.Dish_name, oi.Quantity, oi.Price
-                FROM Order_Items oi
+                FROM Includes oi
                 JOIN Dish d ON oi.Dish_ID = d.Dish_ID
                 WHERE oi.Order_ID = ?
             """, (order[0],))
@@ -604,8 +590,10 @@ def update_password():
         print(f"Error updating password: {e}")
         return jsonify({'success': False, 'message': '修改密碼失敗'}), 500
 
+
 @app.route('/update_customer_info', methods=['POST'])
 def update_customer_info():
+    customer_id = session.get('Customer_ID')
     if 'Customer_ID' not in session:
         return jsonify({'success': False, 'message': '未登入，請先登入！'})
 
@@ -650,6 +638,8 @@ def update_customer_info():
         return jsonify({'success': False, 'message': '更新失敗，請稍後重試。'})
 
 # 選擇品項
+
+
 @app.route('/submit_order', methods=['POST'])
 def submit_order():
     try:
@@ -668,6 +658,67 @@ def submit_order():
         return jsonify({'status': 'success', 'message': '訂單已送出'})
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
+
+# 取消訂單
+
+
+@app.route('/cancel_order/<int:order_id>', methods=['DELETE'])
+def cancel_order(order_id):
+    try:
+        conn_obj = conn()
+        if not conn_obj:
+            return jsonify({"status": "error", "message": "資料庫連接失敗"}), 500
+
+        cursor = conn_obj.cursor()
+
+        # 刪除訂單明細
+        delete_Includes_query = "DELETE FROM Includes WHERE Order_ID = ?"
+        cursor.execute(delete_Includes_query, (order_id,))
+
+        # 刪除訂單總表
+        delete_order_query = "DELETE FROM Order_rem WHERE Order_ID = ?"
+        cursor.execute(delete_order_query, (order_id,))
+
+        conn_obj.commit()
+        return jsonify({"status": "success", "message": "訂單已成功取消"})
+    except Exception as e:
+        print(f"取消訂單時發生錯誤: {e}")
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@app.route('/submit_comment', methods=['POST'])
+def submit_comment():
+    try:
+        data = request.get_json()
+        content = data.get('comment', '').strip()
+        star = data.get('star')
+        dish_id = data.get('dish_id')
+        customer_id = session.get('Customer_ID')
+        print(data)
+        star = int(star)
+        # 驗證必要參數
+        if not all([content, star, dish_id, customer_id]):
+            return jsonify({'status': 'error', 'message': '缺少必要的參數'}), 400
+
+        comment_time = datetime.datetime.now()  # 獲取當前時間
+
+        conn_obj = conn()
+        cursor = conn_obj.cursor()
+        cursor.execute("INSERT INTO Comment (Conent, Star, Comment_Time, Dish_ID, Customer_ID) VALUES (?, ?, ?, ?, ?)",
+                       (content, star, comment_time, dish_id, customer_id))
+        conn_obj.commit()
+        cursor.close()
+
+        return jsonify({'status': 'success', 'message': '評論提交成功', 'data': {
+            'content': content,
+            'star': star,
+            'comment_time': comment_time.strftime('%Y-%m-%d %H:%M:%S'),
+            'dish_id': dish_id,
+            'customer_id': customer_id
+        }})
+    except Exception as e:
+        print(f"提交評論時發生錯誤: {e}")
+        return jsonify({'status': 'error', 'message': '伺服器錯誤'}), 500
 
 
 if __name__ == '__main__':

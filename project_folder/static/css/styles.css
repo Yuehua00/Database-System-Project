@@ -13,30 +13,30 @@ body {
     color: #333;
 }
 
-
 /* 導航列樣式 */
-/* header { */
-/* background-image: url('{{ url_for(' static', filename=' images/主頁.jpg') }}'); */
-/* 設置背景圖片 */
-/* background-size: cover; */
-/* 背景圖片覆蓋整個區域 */
-/* background-position: center center; */
-/* 背景圖片居中 */
-/* background-repeat: no-repeat; */
-/* 不重複顯示背景圖片 */
-/* background-color: #fff; */
-/* 保持白色背景 */
-/* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); */
-/* 保持陰影效果 */
-/* position: fixed; */
-/* 固定在頁面頂部 */
-/* width: 100%; */
-/* 佔滿整個頁面寬度 */
-/* top: 0; */
-/* 保持在頂部 */
-/* z-index: 1000; */
-/* 保證層級在最上層 */
-/* } */
+header {
+    /*background-image: url('{{ url_for(' static', filename=' images/主頁.jpg') }}');*/
+    /* 設置背景圖片 */
+    background-size: cover;
+    /* 背景圖片覆蓋整個區域 */
+    background-position: center center;
+    /* 背景圖片居中 */
+    background-repeat: no-repeat;
+    /* 不重複顯示背景圖片 */
+    background-color: #fff;
+    /* 保持白色背景 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* 保持陰影效果 */
+    position: fixed;
+    /* 固定在頁面頂部 */
+    width: 100%;
+    /* 佔滿整個頁面寬度 */
+    top: 0;
+    /* 保持在頂部 */
+    z-index: 1000;
+    /* 保證層級在最上層 */
+
+}
 
 
 nav {
@@ -79,12 +79,10 @@ main {
     margin: 80px auto 0;
 }
 
-
-/* 首頁按鈕樣式 */
+/* 按鈕樣式 */
 .btn {
     display: inline-block;
     padding: 0.8rem 1.5rem;
-    /* 按鈕內邊距 */
     background-color: #e67e22;
     color: white;
     border: none;
@@ -93,21 +91,8 @@ main {
     text-decoration: none;
     transition: all 0.3s;
     font-weight: 500;
-    font-size: 16px;
-    /* 設定固定字體大小 */
 }
 
-/* 響應式樣式（針對較小的螢幕） */
-@media (max-width: 600px) {
-    .btn {
-        padding: 0.6rem 1.2rem;
-        /* 使按鈕內邊距在小螢幕上更小 */
-        font-size: 14px;
-        /* 在小螢幕上調整字體大小 */
-    }
-}
-
-/* 懸停效果 */
 .btn:hover {
     background-color: #d35400;
     transform: translateY(-2px);
@@ -117,48 +102,43 @@ main {
 .hero {
     text-align: center;
     padding: 6rem 0;
-    background-image: url('/static/images/主頁3.jpg');
-    background-size: cover; /* 確保圖片覆蓋整個區域 */
-    background-position: center; /* 圖片居中 */
-    background-repeat: no-repeat; /* 防止重複 */
-    height: 500px; /* 區域高度 */
-    position: relative;
+    /*background-image: url('{{ url_for('static', filename='images/主頁3.jpg') }}');*/
+    background-size: cover;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
 }
 
 .hero h1 {
-    position: relative;
-    color: #4CAF50;
     font-size: 3rem;
-    z-index: 1;
-    /* 確保文字顯示在圖片上方 */
-}
-
-/* 響應式設計：小螢幕上按鈕大小調整 */
-@media (max-width: 768px) {
-    .hero h1 {
-        font-size: 2rem;
-        /* 小螢幕上縮小標題字型 */
-    }
-
-    .cta-buttons {
-        flex-direction: column;
-        /* 小螢幕上讓按鈕排列為垂直 */
-        gap: 15px;
-        /* 增加按鈕間距 */
-    }
-
-    .btn {
-        padding: 0.8rem 1.5rem;
-        /* 小螢幕上縮小按鈕內邊距 */
-        font-size: 0.9rem;
-        /* 調整按鈕字體大小 */
-    }
+    margin-bottom: 2rem;
+    color: #2c3e50;
 }
 
 .cta-buttons {
     display: flex;
     gap: 1.5rem;
     justify-content: center;
+}
+
+.hero-text {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 16px;
+    color: #555;
+    line-height: 1.5;
+}
+
+.hero-text h2 {
+    color: #e67e22;
+    margin-bottom: 10px;
 }
 
 /* 訂位進度條樣式 */
@@ -178,7 +158,7 @@ main {
     right: 0;
     height: 2px;
     background-color: #ddd;
-    z-index: 1;
+    z-index: 0;
 }
 
 .progress-step {
@@ -188,12 +168,15 @@ main {
     color: #666;
     position: relative;
     z-index: 2;
+    border: 2px solid #ddd;
 }
 
 .progress-step.active {
     background-color: #e67e22;
     color: white;
+    border-color: #e67e22;
 }
+
 
 /* 訂位表單容器 */
 .reservation-container {
@@ -227,11 +210,6 @@ main {
     }
 }
 
-/* 進度條相關步驟 */
-.progress-step.active {
-    background-color: #e67e22;
-    color: white;
-}
 
 /* 菜單選擇樣式 */
 .menu-selection {
@@ -263,10 +241,10 @@ main {
 
 
 .menu-item .menu-details {
-    max-height: 0;
+    max-height: none; /* 取消高度限制 */
+    overflow: visible;
     opacity: 0;
     transition: max-height 0.3s ease, opacity 0.3s ease;
-    overflow: hidden;
 }
 
 .menu-item.active .menu-details {
@@ -276,6 +254,34 @@ main {
 
 .menu-item.active {
     grid-row: span 1;
+}
+
+.view-more {
+    display: block; /* 確保按鈕是可見的 */
+    margin-top: 1rem; /* 增加按鈕和內容的間距 */
+}
+
+.menu-card {
+    overflow: visible; /* 確保外框不裁剪內容 */
+}
+
+
+.quantity-control {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.quantity-control button {
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 50%;
+    background-color: #e67e22;
+    color: white;
+    cursor: pointer;
+    font-size: 1.2rem;
 }
 
 /* 購物車預覽 */
@@ -406,13 +412,17 @@ main {
     background-color: #f8f9fa;
 }
 
+/* menu圖片 */
 .menu-preview img {
-    width: 100%;
-    height: 200px;
+    width: 280px;
+    /* 固定寬度 */
+    height: 280px;
+    /* 固定高度 */
     object-fit: cover;
     border-radius: 8px;
     transition: transform 0.3s ease;
 }
+
 
 .menu-preview:hover img {
     transform: scale(1.02);
@@ -428,9 +438,8 @@ main {
 
 .menu-details {
     height: 0;
-    max-height: 0;
-    /* 新增 */
-    overflow: hidden;
+    overflow: visible; /* 確保不裁剪內容 */
+    max-height: none;  /* 確保高度自適應 */
     transition: max-height 0.3s ease-out;
     /* 改用 max-height */
     opacity: 0;
@@ -659,6 +668,60 @@ main {
     display: grid;
     gap: 1rem;
 }
+.order-header {
+    cursor: pointer; /* 鼠標指標改變，表明可點擊 */
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.order-header:hover {
+    background-color: #f0f0f0; /* 鼠標懸停時改變背景色 */
+}
+
+.order-content {
+    display: none; /* 初始隱藏詳細資訊 */
+    padding: 1rem;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-top: 0.5rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.order-content ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.order-content li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.order-content li:last-child {
+    border-bottom: none;
+}
+
+.toggle-button {
+    color: #3498db;
+    font-weight: bold;
+}
+
+
+/* 頁尾樣式 */
+footer {
+    background-color: #2c3e50;
+    color: #fff;
+    text-align: center;
+    padding: 1.5rem;
+    margin-top: 4rem;
+}
 
 /* 響應式設計 */
 @media (max-width: 768px) {
@@ -774,6 +837,9 @@ main {
     color: #e67e22;
 }
 
+
+
+
 .login .btn {
     width: 100%;
     padding: 0.8rem;
@@ -857,60 +923,29 @@ main {
     font-weight: bold;
 }
 
-/* 數量增減按鈕樣式 */
-.quantity-btn {
-    background-color: #D35400;
-    /* 深橙色 */
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: 500;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.quantity-control {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
 }
 
+.quantity-btn {
+    background-color: #e67e22;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+}
 
 .quantity-btn:hover {
-    background-color: #E65100;
-    /* 滑鼠懸停時顏色略微加深 */
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+    background-color: #d35400;
 }
 
 .quantity {
     font-size: 16px;
     color: #333;
-}
-
-.quantity-control {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-top: 1rem;
-    /* margin-top: 10px; */
-}
-
-.quantity-control button {
-    width: 30px;
-    height: 30px;
-    border: none;
-    border-radius: 50%;
-    background-color: #e67e22;
-    color: white;
-    cursor: pointer;
-    font-size: 1.2rem;
-}
-
-
-/* 輔助狀態 */
-.quantity-btn:disabled {
-    background-color: #95A5A6;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
 }
 
 /* 評論區 */
@@ -947,35 +982,144 @@ main {
     background-color: #d35400;
 }
 
-.error-message {
-    color: red;
-    font-size: 1.2rem;
-    text-align: center;
-    margin-top: 1rem;
+.quantity-btn {
+    background-color: #FF9800;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.quantity-btn:hover {
+    background-color: #E64A19;
+}
+
+.menu-item {
+    background-color: #F5F5F5;
+    color: #333;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.price {
+    color: #666;
+    transition: color 0.3s;
+}
+
+.menu-item.active .price {
+    color: #1E88E5;
+}
+
+
+/* Active state */
+.menu-item.active {
+    border: 2px solid #E67E22;
+}
+
+.menu-item.active .price {
+    color: #2980B9;
+}
+
+/* Quantity display */
+.quantity-display {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 0 12px;
+}
+
+
+/* 菜單呈現設計 */
+.nutrition ul {
+    list-style-type: none;
+    /* 去除點點 */
+    padding: 0;
+    /* 去除內邊距 */
+    margin: 0;
+    /* 去除外邊距 */
+}
+
+.nutrition ul li {
+    margin-bottom: 5px;
+    /* 為每行項目增加一些間距 */
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* 三列布局 */
+    gap: 15px;
+    /* 卡片之間的間距 */
+    padding: 20px;
+    /* 容器內邊距 */
+}
+
+.menu-card {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 10px;
+    overflow: visible; /* 確保內容可超出邊界 */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.menu-card:hover {
+    transform: scale(1.0);
+    /* 滑過時放大效果 */
+}
+
+.menu-details {
+    padding: 10px;
+}
+
+.menu-details .price {
+    font-size: 18px;
+    color: #FF5722;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+    .menu-grid {
+        grid-template-columns: repeat(2, 1fr);
+        /* 中屏幕顯示兩列 */
+    }
+}
+
+@media (max-width: 480px) {
+    .menu-grid {
+        grid-template-columns: 1fr;
+        /* 小屏幕顯示一列 */
+    }
 }
 
 .search-container {
     display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 10px 0;
+    justify-content: center;
+    margin: 1rem 0;
 }
 
 .search-input {
-    padding: 5px 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 200px;
+    width: 300px;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 5px 0 0 5px;
+    font-size: 1rem;
+}
+
+.search-input:focus {
+    border-color: #e67e22;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(230, 126, 34, 0.2);
 }
 
 .search-button {
-    padding: 5px 15px;
-    font-size: 16px;
+    padding: 0.5rem 1rem;
     background-color: #e67e22;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 0 5px 5px 0;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
@@ -984,22 +1128,39 @@ main {
     background-color: #d35400;
 }
 
-
-
-/* 訂位菜單醒目 */
-/* 
-.menu-item {
-    background-color: #f9f9f9;
-    color: #333;
-    transition: background-color 0.3s, color 0.3s;
+.nutrition {
+    text-align: left;
+    /* 設定文字靠左對齊 */
+    margin-top: 10px;
+    /* 增加上方間距 */
 }
 
-.menu-item.active .price {
-    color: #0000FF;
+.nutrition h4 {
+    font-size: 1.2rem;
+    /* 標題字體大小 */
+    margin-bottom: 5px;
+    /* 與內容的間距 */
+    color: #333;
+    /* 標題顏色 */
 }
 
+.nutrition div {
+    font-size: 1rem;
+    /* 內容字體大小 */
+    color: #555;
+    /* 內容顏色 */
+    line-height: 1.5;
+    /* 行距 */
+}
 
-.price {
-    color: #333;
-    transition: color 0.3s ease;
-} */
+.menu-card .menu-details {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+.menu-card.active .menu-details {
+    max-height: none; /* 取消高度限制 */
+    height: auto; /* 根據內容自動調整 */
+}
