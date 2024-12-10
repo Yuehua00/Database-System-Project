@@ -1221,7 +1221,7 @@ footer {
         gap: 0.5rem;
     }
 
-    .menu-item {
+    .menu-items {
         padding: 1rem;
     }
 
@@ -1288,43 +1288,59 @@ footer {
     header {
         position: relative;
     }
-    .reservation-container {
-        width: 90%; /* 擴大寬度到螢幕的90% */
-        max-width: 600px; /* 確保最大寬度適中 */
-        margin: 0 auto; /* 居中 */
-        padding: 1.5rem; /* 增加內間距 */
-        box-sizing: border-box; /* 包含內邊距和邊框在寬度計算內 */
-        background-color: #fff; /* 確保背景顏色清晰 */
-        border-radius: 10px; /* 加圓角 */
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 增加陰影提升層次感 */
+    .menu-selection {
+        display: flex;
+        flex-direction: column; /* 改為垂直排列 */
+        align-items: center; /* 子元素居中對齊 */
+        width: 90%; /* 使用螢幕的 90% 寬度 */
+        margin: 0 auto; /* 居中容器 */
+        padding: 1rem; /* 增加內間距 */
+        box-sizing: border-box; /* 包含內間距與邊框在寬度內 */
     }
 
-    /* 表單中的標籤和輸入框 */
-    .reservation-container label {
-        font-size: 1rem; /* 調整字體大小以適應小螢幕 */
-        margin-bottom: 0.5rem; /* 增加間距 */
-        display: block; /* 保持標籤獨占一行 */
+    .menu-category {
+        width: 100%; /* 每個分類區域占滿容器寬度 */
+        margin-bottom: 1.5rem; /* 增加分類間距 */
     }
 
-    .reservation-container input,
-    .reservation-container select,
-    .reservation-container textarea {
-        width: 100%; /* 確保輸入框、選擇框占滿寬度 */
-        padding: 0.75rem; /* 增加內間距以提升可點擊範圍 */
+    .menu-item h3 {
         font-size: 1rem; /* 調整字體大小 */
-        margin-bottom: 1rem; /* 增加間距 */
-        border: 1px solid #ddd; /* 輕微邊框 */
-        border-radius: 6px; /* 圓角設計 */
-        box-sizing: border-box; /* 包含內邊距和邊框 */
+        margin-bottom: 0.5rem; /* 與描述保持間距 */
     }
 
-    /* 按鈕 */
-    .reservation-container .btn {
-        width: 100%; /* 按鈕占滿寬度 */
-        padding: 0.75rem;
-        font-size: 1rem; /* 調整字體大小 */
-        margin-top: 1rem; /* 增加上間距 */
-        border-radius: 6px;
+    .menu-item .price {
+        font-size: 0.9rem; /* 縮小價格字體 */
+        color: #e67e22; /* 價格突出顯示 */
+        margin-bottom: 1rem; /* 與操作區域分開 */
+    }
+
+    .quantity-control {
+        display: flex;
+        justify-content: space-between; /* 控制按鈕左右對齊 */
+        align-items: center;
+        width: 100%; /* 占滿寬度 */
+        margin-top: 1rem; /* 與內容分隔 */
+    }
+
+    .quantity-btn {
+        flex: 1;
+        max-width: 48%; /* 確保按鈕大小一致 */
+        padding: 0.5rem;
+        background-color: #e67e22; /* 主題色 */
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        font-size: 0.9rem;
         cursor: pointer;
+    }
+
+    .quantity-btn:hover {
+        background-color: #d35400; /* 深色變化 */
+    }
+
+    .quantity {
+        flex: 0 0 20%;
+        text-align: center;
+        font-size: 1rem;
     }
 }
