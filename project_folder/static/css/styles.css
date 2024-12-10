@@ -1251,6 +1251,35 @@ footer {
     .search-input {
         width: 100%;
     }
+    .menu-icon {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        z-index: 10;
+    }
+
+    nav {
+        position: relative;
+    }
+
+    .nav-links {
+        display: none; /* 預設隱藏選單 */
+        flex-direction: column;
+        width: 100%;
+        gap: 1rem;
+        margin-top: 4rem; /* 確保下移，避免與 menu-icon 重疊 */
+    }
+
+    .nav-links.active {
+        display: flex; /* 點擊 menu-icon 展開選單 */
+        background: white;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        padding: 1rem;
+        border-radius: 8px;
+    }
 }
 
 /* 極小型螢幕 (窄手機) */
