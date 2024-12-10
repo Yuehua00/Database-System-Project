@@ -70,15 +70,6 @@ function attachReviewEvents() {
             e.stopPropagation(); // 阻止事件冒泡
         });
     });
-    // 防止查看更多按鈕點擊時觸發卡片展開/收合
-    document.querySelectorAll('.view-more').forEach(button => {
-        button.addEventListener('click', (e) => {
-            e.stopPropagation(); // 阻止事件冒泡
-            const moreComments = button.previousElementSibling;
-            moreComments.style.display = moreComments.style.display === 'none' ? 'block' : 'none';
-            button.textContent = moreComments.style.display === 'none' ? '查看更多評論' : '收起評論';
-        });
-    });
 }
 
 // 修改 renderMenu 函數以確保正確處理評論資料
