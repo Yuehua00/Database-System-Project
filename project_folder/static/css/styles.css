@@ -1164,3 +1164,127 @@ footer {
     max-height: none; /* 取消高度限制 */
     height: auto; /* 根據內容自動調整 */
 }
+
+/* 響應式設計調整 */
+
+/* 中型螢幕 (平板) */
+@media (max-width: 1024px) {
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .nav-links {
+        display: none; /* 預設隱藏選單 */
+        flex-direction: column;
+        width: 100%;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .nav-links.active {
+        display: flex; /* 點擊圖示時展開選單 */
+    }
+
+    .menu-icon {
+        display: flex;
+    }
+
+    .menu-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .menu-card {
+        padding: 1rem;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+}
+
+/* 小型螢幕 (手機) */
+@media (max-width: 768px) {
+    .hero {
+        padding: 3rem 1rem;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .info-group {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .menu-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .menu-item {
+        padding: 1rem;
+    }
+
+    .cart-preview {
+        padding: 1rem;
+    }
+
+    .order-summary {
+        padding: 1rem;
+    }
+
+    .reservation-progress {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .progress-step {
+        margin-bottom: 0.5rem;
+        width: 100%;
+    }
+
+    .search-input {
+        width: 100%;
+    }
+}
+
+/* 極小型螢幕 (窄手機) */
+@media (max-width: 480px) {
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .hero-text {
+        font-size: 0.9rem;
+    }
+
+    .nav-links {
+        text-align: center;
+    }
+
+    .menu-item h3 {
+        font-size: 1rem;
+    }
+
+    .price {
+        font-size: 1rem;
+    }
+
+    .menu-details {
+        padding: 0.5rem;
+    }
+
+    .quantity-control button {
+        width: 24px;
+        height: 24px;
+    }
+
+    .review-input {
+        height: 60px;
+    }
+}
