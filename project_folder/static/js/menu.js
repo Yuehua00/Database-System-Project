@@ -25,7 +25,6 @@ function attachReviewEvents() {
             // 模擬從會話中獲取 customer_id
             const customerId = sessionStorage.getItem('Customer_ID'); // 假設從 sessionStorage 中存取
             console.log(`customer_id: ${customerId}, starRating: ${starRating}, review: ${reviewInput}`);
-            //console.log(customerId);
             if (!customerId) {
                 alert('請登入後再提交評論！');
                 return;
@@ -69,6 +68,15 @@ function attachReviewEvents() {
     document.querySelectorAll('.star-input').forEach(select => {
         select.addEventListener('click', (e) => {
             e.stopPropagation(); // 阻止事件冒泡
+        });
+    });
+    // 防止查看更多按鈕點擊時觸發卡片展開/收合
+    document.querySelectorAll('.view-more').forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.stopPropagation(); // 阻止事件冒泡
+            const moreComments = button.previousElementSibling;
+            moreComments.style.display = moreComments.style.display === 'none' ? 'block' : 'none';
+            button.textContent = moreComments.style.display === 'none' ? '查看更多評論' : '收起評論';
         });
     });
 }
@@ -140,15 +148,6 @@ function renderMenu2(menu) {
     });
 
     attachReviewEvents(); // 綁定評論提交事件
-
-    document.querySelectorAll('.view-more').forEach(button => {
-        button.addEventListener('click', (e) => {
-            e.stopPropagation(); // 阻止事件冒泡
-            const moreComments = e.target.previousElementSibling;
-            moreComments.style.display = moreComments.style.display === 'none' ? 'block' : 'none';
-            e.target.textContent = moreComments.style.display === 'none' ? '查看更多評論' : '收起評論';
-        });
-    });
 }
 
 function attachViewMoreEvents() {
