@@ -1174,7 +1174,7 @@ footer {
         align-items: flex-start;
     }
 
-    .nav-links {
+    .menu-grid {
         display: none; /* 預設隱藏選單 */
         flex-direction: column;
         width: 100%;
@@ -1182,7 +1182,7 @@ footer {
         margin-top: 1rem;
     }
 
-    .nav-links.active {
+    .menu-grid.active {
         display: flex; /* 點擊圖示時展開選單 */
     }
 
@@ -1265,7 +1265,7 @@ footer {
         position: relative;
     }
 
-    .nav-links {
+    .menu-grid {
         gap: 1rem;
         margin-top: 4rem; /* 確保下移，避免與 menu-icon 重疊 */
         display: none; /* 預設隱藏選單 */
@@ -1281,14 +1281,14 @@ footer {
         text-align: center;
     }
 
-    .nav-links.active {
+    .menu-grid.active {
         display: flex; /* 點擊 menu-icon 展開選單 */
         background: white;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         padding: 1rem;
         border-radius: 8px;
     }
-    .nav-links a {
+    .menu-grid a {
         text-decoration: none;
         color: #333;
         padding: 0.5rem 1rem;
@@ -1297,7 +1297,7 @@ footer {
         width: 100%; /* 菜單項目寬度占滿 */
     }
 
-    .nav-links a:hover {
+    .menu-grid a:hover {
         background-color: #f4f4f4;
     }
 
@@ -1323,7 +1323,7 @@ footer {
         font-size: 0.9rem;
     }
 
-    .nav-links {
+    .menu-grid {
         text-align: center;
     }
 
