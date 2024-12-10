@@ -1288,4 +1288,65 @@ footer {
     header {
         position: relative;
     }
+    /* 調整 reservation-container 寬度和間距 */
+    .reservation-container {
+        width: 90%;
+        padding: 1rem;
+        margin: 0 auto;
+        box-shadow: none;
+    }
+
+    /* 調整進度條的間距 */
+    .reservation-progress {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        padding: 1rem;
+    }
+
+    .progress-step {
+        width: 100%;
+        text-align: center;
+        padding: 0.5rem;
+        font-size: 1rem;
+    }
+
+    /* 表單項目佈局調整 */
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    /* 購物車和總計信息的調整 */
+    .cart-preview {
+        padding: 1rem;
+        margin: 1rem 0;
+    }
+
+    .total-section {
+        padding: 1rem;
+    }
+
+    /* 確認訂單的樣式調整 */
+    .order-summary {
+        padding: 1rem;
+    }
+
+    .order-summary h3 {
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    /* 按鈕調整 */
+    .btn {
+        width: 100%;
+        padding: 0.8rem;
+        font-size: 1rem;
+    }
+
+    .prev-step,
+    .next-step,
+    .confirm-order {
+        margin: 0.5rem 0;
+    }
 }
