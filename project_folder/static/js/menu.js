@@ -65,7 +65,6 @@ function attachReviewEvents() {
             }
         });
     });
-    
 }
 
 // 修改 renderMenu 函數以確保正確處理評論資料
@@ -143,7 +142,6 @@ function renderMenu2(menu) {
         });
     });
 }
-
 
 function attachViewMoreEvents() {
     document.querySelectorAll('.view-more').forEach(button => {
