@@ -1999,7 +1999,6 @@ INSERT INTO Customer (Customer_name, Customer_phoneNumber, PWD, Points) VALUES (
 INSERT INTO Customer (Customer_name, Customer_phoneNumber, PWD, Points) VALUES ('Albert', '0991003263', 'scrypt:32768:8:1$RVBTVu5xW9BmaWPx$6b85aa1b59084af6ff2ab4c24a71bc36de7bb5a281d617cf5ca6825dd30483881f54bd82cac74743539e7eadd36f90618ab9d05db3180526cc78470a64bcaac4', 77);
 INSERT INTO Customer (Customer_name, Customer_phoneNumber, PWD, Points) VALUES ('Thora', '0947659981', 'scrypt:32768:8:1$OOpmrQXNqcbNeiA4$d44c63ca4eeedb545000151cbf535479b746ba336d50469b4df5c668b1cafb5b636627e85b8c5554de383df8127e7d2996273f896ec5bc543708416395b9464b', 401);
 
-
 insert into desk values(1, 2);
 insert into desk values(2, 2);
 insert into desk values(3, 2);
@@ -2133,6 +2132,7 @@ insert into dish_timeslot(Dish_ID, TimeSlot) values(26, 'afternoon');
 insert into dish_timeslot(Dish_ID, TimeSlot) values(26, 'dinner');
 insert into dish_timeslot(Dish_ID, TimeSlot) values(27, 'afternoon');
 insert into dish_timeslot(Dish_ID, TimeSlot) values(27, 'dinner');
+
 insert into Nutrition(Nutrition_ID, Nutrient_Name, Amount, Unit, Dish_ID) values(1, '熱量', 544, 'kcal', 1);
 insert into Nutrition(Nutrition_ID, Nutrient_Name, Amount, Unit, Dish_ID) values(2, '蛋白質', 28, 'g', 1);
 insert into Nutrition(Nutrition_ID, Nutrient_Name, Amount, Unit, Dish_ID) values(3, '碳水化合物', 62, 'g', 1);
@@ -2241,9 +2241,6 @@ insert into Nutrition(Nutrition_ID, Nutrient_Name, Amount, Unit, Dish_ID) values
 insert into Nutrition(Nutrition_ID, Nutrient_Name, Amount, Unit, Dish_ID) values(106, '蛋白質', 7, 'g', 27);
 insert into Nutrition(Nutrition_ID, Nutrient_Name, Amount, Unit, Dish_ID) values(107, '碳水化合物', 40, 'g', 27);
 insert into Nutrition(Nutrition_ID, Nutrient_Name, Amount, Unit, Dish_ID) values(108, '脂肪', 19, 'g', 27);
-
-
-
 
 insert into Comment values('不錯的選擇', 5, '2022/01/01', 4, 775);
 insert into Comment values('很好吃', 5, '2022/01/02', 21, 306);
@@ -7245,62 +7242,6 @@ insert into Comment values('味道不錯', 5, '2025/01/01', 22, 1229);
 insert into Comment values('服務很好', 4, '2025/01/01', 9, 402);
 insert into Comment values('好吃', 4, '2025/01/01', 7, 559);
 insert into Comment values('美味100分', 4, '2025/01/01', 13, 1674);
-
-insert into dish_timeslot(Dish_ID, TimeSlot) values(1, 'lunch');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(1, 'dinner');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(2, 'lunch');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(2, 'dinner');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(3, 'lunch');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(3, 'dinner');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(4, 'lunch');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(4, 'dinner');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(5, 'lunch');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(5, 'dinner');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(6, 'lunch');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(6, 'dinner');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(7, 'lunch');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(7, 'dinner');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(8, 'lunch');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(8, 'dinner');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(9, 'lunch');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(9, 'dinner');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(10, 'lunch');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(10, 'dinner');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(11, 'lunch');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(11, 'dinner');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(12, 'lunch');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(12, 'dinner');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(13, 'lunch');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(13, 'dinner');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(14, 'lunch');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(14, 'dinner');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(15, 'lunch');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(15, 'dinner');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(16, 'lunch');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(16, 'dinner');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(17, 'afternoon');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(17, 'dinner');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(18, 'afternoon');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(18, 'dinner');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(19, 'afternoon');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(19, 'dinner');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(20, 'afternoon');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(20, 'dinner');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(21, 'afternoon');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(21, 'dinner');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(22, 'afternoon');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(22, 'dinner');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(23, 'afternoon');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(23, 'dinner');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(24, 'afternoon');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(24, 'dinner');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(25, 'afternoon');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(25, 'dinner');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(26, 'afternoon');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(26, 'dinner');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(27, 'afternoon');
-insert into dish_timeslot(Dish_ID, TimeSlot) values(27, 'dinner');
-
 
 insert into reservation values('下午茶', 1, '2024/12/04', 1725, 1);
 insert into reservation values('午餐', 4, '2024/10/30', 1163, 21);
