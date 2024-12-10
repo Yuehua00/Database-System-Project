@@ -694,7 +694,8 @@ function updateProgress(stepId) {
     progressSteps.forEach(step => step.classList.remove('active'));
 
     const stepMap = { 'step1': 0, 'step2': 1, 'step3': 2 };
-    const stepIndex = stepMap[stepId];
+    //const stepIndex = stepMap[stepId];
+    const stepIndex = stepMap[stepId] ?? -1;
 
     for (let i = 0; i <= stepIndex; i++) {
         progressSteps[i].classList.add('active');
