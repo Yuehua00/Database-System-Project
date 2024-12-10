@@ -15,7 +15,8 @@ document.addEventListener('click', function(e) {
 // 定義缺失的函數 attachReviewEvents
 function attachReviewEvents() {
     document.querySelectorAll('.submit-review').forEach(button => {
-        button.addEventListener('click', async () => {
+        button.addEventListener('click', async (e) => {
+            e.stopPropagation(); // 阻止事件冒泡
             const dishId = button.getAttribute('data-id');
             const starSelect = button.previousElementSibling; // 評分選擇框
             const reviewInput = starSelect.previousElementSibling.value.trim();
@@ -55,7 +56,7 @@ function attachReviewEvents() {
                 const result = await response.json();
                 if (result.status === 'success') {
                     alert('評論提交成功！');
-                    location.reload(); // 重新加载页面以更新评论
+                    location.reload(); // 重新加載頁面以更新評論
                 } else {
                     alert(result.message || '提交失敗，請稍後再試。');
                 }
@@ -63,6 +64,11 @@ function attachReviewEvents() {
                 console.error('提交評論時出錯:', error);
                 alert('提交失敗，請稍後再試。');
             }
+        });
+    });
+    document.querySelectorAll('.star-input').forEach(select => {
+        select.addEventListener('click', (e) => {
+            e.stopPropagation(); // 阻止事件冒泡
         });
     });
 }
@@ -136,6 +142,7 @@ function renderMenu2(menu) {
 
     document.querySelectorAll('.view-more').forEach(button => {
         button.addEventListener('click', (e) => {
+            e.stopPropagation(); // 阻止事件冒泡
             const moreComments = e.target.previousElementSibling;
             moreComments.style.display = moreComments.style.display === 'none' ? 'block' : 'none';
             e.target.textContent = moreComments.style.display === 'none' ? '查看更多評論' : '收起評論';
@@ -175,8 +182,8 @@ document.addEventListener('DOMContentLoaded', async() => {
     cards.forEach(card => {
         card.addEventListener('click', (e) => {
             // 如果點擊的是評論框、提交按鈕、星等選擇或查看更多評論時，阻止卡片的展開/收合
-            if (e.target.closest('.review-input') || e.target.closest('.submit-review')
-                || e.target.closest('.star-input') || e.target.closest('.view-more btn')) {
+            if (e.target.closest('.review-input') || e.target.closest('.submit-review') ||
+                e.target.closest('.star-input') || e.target.closest('.view-more btn')) {
                 return;
             }
 
