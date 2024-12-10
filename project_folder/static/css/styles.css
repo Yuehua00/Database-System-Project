@@ -1221,7 +1221,7 @@ footer {
         gap: 0.5rem;
     }
 
-    .menu-items {
+    .menu-item {
         padding: 1rem;
     }
 
@@ -1234,7 +1234,7 @@ footer {
     }
 
     .reservation-progress {
-        flex-direction: column;
+        flex-direction: row;
         align-items: flex-start;
     }
 
@@ -1287,60 +1287,5 @@ footer {
 
     header {
         position: relative;
-    }
-    .menu-selection {
-        display: flex;
-        flex-direction: column; /* 改為垂直排列 */
-        align-items: center; /* 子元素居中對齊 */
-        width: 90%; /* 使用螢幕的 90% 寬度 */
-        margin: 0 auto; /* 居中容器 */
-        padding: 1rem; /* 增加內間距 */
-        box-sizing: border-box; /* 包含內間距與邊框在寬度內 */
-    }
-
-    .menu-category {
-        width: 100%; /* 每個分類區域占滿容器寬度 */
-        margin-bottom: 1.5rem; /* 增加分類間距 */
-    }
-
-    .menu-item h3 {
-        font-size: 1rem; /* 調整字體大小 */
-        margin-bottom: 0.5rem; /* 與描述保持間距 */
-    }
-
-    .menu-item .price {
-        font-size: 0.9rem; /* 縮小價格字體 */
-        color: #e67e22; /* 價格突出顯示 */
-        margin-bottom: 1rem; /* 與操作區域分開 */
-    }
-
-    .quantity-control {
-        display: flex;
-        justify-content: space-between; /* 控制按鈕左右對齊 */
-        align-items: center;
-        width: 100%; /* 占滿寬度 */
-        margin-top: 1rem; /* 與內容分隔 */
-    }
-
-    .quantity-btn {
-        flex: 1;
-        max-width: 48%; /* 確保按鈕大小一致 */
-        padding: 0.5rem;
-        background-color: #e67e22; /* 主題色 */
-        color: #fff;
-        border: none;
-        border-radius: 4px;
-        font-size: 0.9rem;
-        cursor: pointer;
-    }
-
-    .quantity-btn:hover {
-        background-color: #d35400; /* 深色變化 */
-    }
-
-    .quantity {
-        flex: 0 0 20%;
-        text-align: center;
-        font-size: 1rem;
     }
 }
