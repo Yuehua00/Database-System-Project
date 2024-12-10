@@ -1311,10 +1311,23 @@ footer {
         font-size: 1rem;
     }
 
-    /* 表單項目佈局調整 */
     .form-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
+        display: grid;
+        grid-template-columns: 1fr; /* 每行顯示一個項目 */
+        gap: 1rem; /* 增加行間距 */
+        padding: 1rem; /* 增加內邊距 */
+    }
+
+    .form-grid .form-item {
+        width: 100%; /* 確保項目充滿行寬 */
+    }
+
+    .form-item label,
+    .form-item input,
+    .form-item select {
+        width: 100%; /* 適配窄屏 */
+        display: block; /* 塊級顯示，讓每個元素占據單獨一行 */
+        margin-bottom: 0.5rem; /* 增加項目間的間距 */
     }
 
     /* 購物車和總計信息的調整 */
