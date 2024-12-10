@@ -91,6 +91,8 @@ main {
     text-decoration: none;
     transition: all 0.3s;
     font-weight: 500;
+    min-width: 150px; /* 固定按鈕的最小寬度 */
+    text-align: center; /* 讓文字保持置中 */
 }
 
 .btn:hover {
