@@ -176,8 +176,9 @@ document.addEventListener('DOMContentLoaded', async() => {
     const cards = document.querySelectorAll('.menu-card');
     cards.forEach(card => {
         card.addEventListener('click', (e) => {
-            // 如果點擊的是評論框或提交按鈕，阻止卡片的展開/收合
-            if (e.target.closest('.review-input') || e.target.closest('.submit-review')) {
+            // 如果點擊的是評論框、提交按鈕、星等選擇或查看更多評論時，阻止卡片的展開/收合
+            if (e.target.closest('.review-input') || e.target.closest('.submit-review')
+                || e.target.closest('.star-input') || e.target.closest('.view-more btn')) {
                 return;
             }
 
