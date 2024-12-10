@@ -691,14 +691,21 @@ document.addEventListener("DOMContentLoaded", async () => {
 function updateProgress(stepId) {
     // 更新進度條
     const progressSteps = document.querySelectorAll('.progress-step');
-    progressSteps.forEach(step => step.classList.remove('active'));
+    //progressSteps.forEach(step => step.classList.remove('active'));
 
     const stepMap = { 'step1': 0, 'step2': 1, 'step3': 2 };
     const stepIndex = stepMap[stepId] ?? -1;
 
-    for (let i = 0; i <= stepIndex; i++) {
+    /*for (let i = 0; i <= stepIndex; i++) {
         progressSteps[i].classList.add('active');
-    }
+    }*/
+   // 移除所有步驟的 active 類
+    progressSteps.forEach((step, index) => {
+        step.classList.remove('active');
+        if (index === stepIndex) {
+            step.classList.add('active'); // 當前步驟加上 active 類
+        }
+    });
 
     // 更新相應的內容區塊
     const steps = document.querySelectorAll('.reservation-step');
