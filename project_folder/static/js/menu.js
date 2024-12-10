@@ -100,31 +100,6 @@ function renderMenu2(menu) {
         `).join('');
 
         const dishHTML = `
-            <style>
-                .star-input {
-                    width: 100%;
-                    height: 48px;
-                    /* 新增這行，統一高度 */
-                    padding: 0.75rem;
-                    border: 1px solid #ddd;
-                    border-radius: 6px;
-                    appearance: none;
-                    transition: all 0.3s ease;
-                }
-                .star-input-arrow {
-                    position: absolute;
-                    top: 50%;
-                    right: 10px;
-                    transform: translateY(-50%);
-                    pointer-events: none;
-                    color: #888;
-                }
-                .star-input:focus {
-                    outline: none;
-                    border-color: #e67e22;
-                    box-shadow: 0 0 0 2px rgba(230, 126, 34, 0.2);
-                }
-            </style>
             <article class="menu-card" data-id="${item.id}">
                 <div class="menu-preview">
                     <img src="/static/images/dish/${item.id}.jpg" alt="${item.name}" style="margin: 0 auto; display: block;">
@@ -145,7 +120,6 @@ function renderMenu2(menu) {
                             <option value="3">3 星</option>
                             <option value="4">4 星</option>
                             <option value="5">5 星</option>
-                            <span class="star-input-arrow">▼</span>
                         </select>
                         <button class="submit-review btn" data-id="${item.id}">提交評論</button>
                         <div class="reviews">
