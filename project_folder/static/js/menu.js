@@ -337,14 +337,14 @@ document.querySelectorAll('.auth-tab').forEach(tab => {
 });
 
 // 搜尋
-function searchMenuItems() {
-    const query = document.getElementById('searchInput').value.trim().toLowerCase();
-    const menuItems = document.querySelectorAll('.menu-card');
+function filterMenu() {
+    const searchInput = document.getElementById('searchInput');
+    const filter = searchInput.value.toLowerCase();
+    const menuItems = document.querySelectorAll('.menu-item');
 
     menuItems.forEach(item => {
-        const itemName = item.getAttribute('data-name').toLowerCase();
-
-        if (itemName.includes(query)) {
+        const itemName = item.querySelector('h3').textContent.toLowerCase();
+        if (itemName.includes(filter)) {
             item.style.display = ''; // 顯示匹配的項目
         } else {
             item.style.display = 'none'; // 隱藏不匹配的項目
@@ -352,5 +352,7 @@ function searchMenuItems() {
     });
 }
 
-// 支援即時搜尋
-document.getElementById('searchInput').addEventListener('input', searchMenuItems);
+document.addEventListener('DOMContentLoaded', () => {
+    // 確保在頁面載入後啟用搜尋功能
+    document.querySelector('.search-button').addEventListener('click', filterMenu);
+});
