@@ -1,14 +1,3 @@
-// 菜單資料
-// const menuItems = [
-//     { id: 1, name: '香蒜培根義大利麵', price: 280 },
-//     { id: 2, name: '奶油蘑菇義大利麵', price: 260 },
-//     { id: 3, name: '番茄海鮮義大利麵', price: 320 },
-//     { id: 4, name: '青醬雞肉義大利麵', price: 290 },
-//     { id: 5, name: '臘腸番茄義大利麵', price: 270 },
-//     { id: 6, name: '白酒蛤蠣義大利麵', price: 300 }
-// ];
-
-
 document.addEventListener("DOMContentLoaded", () => {
     console.log("DOMContentLoaded event triggered");
     const nextStepBtn = document.getElementById("nextStepBtn");
@@ -188,9 +177,6 @@ function renderMenuItems() {
 
 }
 
-
-
-
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Menu items:', menuItems);
     const timeSlotElement = document.querySelector('#TimeSlots');
@@ -264,9 +250,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     
 });
-
-
-
 
 // 設置事件監聽器
 function setupEventListeners() {
@@ -372,10 +355,6 @@ function moveToStep(step) {
     // 更新進度條
     updateProgress(`step${step}`);
 }
-
-
-// 初始化購物車為空陣列
-
 
 // 更新購物車邏輯
 function updateCart(itemId, change) {
@@ -594,11 +573,6 @@ function saveReservationData() {
     });
 }
 
-
-
-
-
-
 document.addEventListener('DOMContentLoaded', function() {
     const nextStepBtn = document.getElementById('nextStepBtn');
     const progressSteps = document.querySelectorAll('.progress-step');
@@ -683,9 +657,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         alert("無法獲取顧客資訊，請重新登入。");
     }
 });
-
-
-
 
 // 更新進度條邏輯
 function updateProgress(stepId) {
