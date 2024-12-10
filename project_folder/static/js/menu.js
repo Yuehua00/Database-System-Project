@@ -78,6 +78,7 @@ function renderMenu2(menu) {
     const menuContainer = document.getElementById('menu-container');
     menuContainer.innerHTML = '';
 
+    menu.sort((a, b) => a.id - b.id); // 按 dish_id 升序排序
     menu.forEach(item => {
         const nutritionInfo = (item.nutrition || [])
             .map(n => `<div>${n.name || '未知'} : ${n.amount || 0} ${n.unit || ''}</div>`)
@@ -215,6 +216,7 @@ document.addEventListener('DOMContentLoaded', async() => {
         .then(data => {
             console.log("Menu data:", data);
             if (data.status === 'success') {
+                const sortedMenu = data.menu.sort((a, b) => a.id - b.id); // 排序
                 renderMenu(data.menu); // 渲染菜單
             } else {
                 console.error('Error in response data:', data.message);
