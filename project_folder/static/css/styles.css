@@ -1290,10 +1290,12 @@ footer {
     }
     /* 調整 reservation-container 寬度和間距 */
     .reservation-container {
-        width: 90%;
-        padding: 1rem;
-        margin: 0 auto;
-        box-shadow: none;
+        width: 95%; /* 擴大寬度至更適合的比例 */
+        max-width: 600px; /* 確保不會太寬，依然適合小螢幕 */
+        padding: 1.5rem; /* 增加內邊距讓內容更舒適 */
+        margin: 0 auto; /* 水平居中 */
+        border-radius: 10px; /* 保持視覺上的圓角柔和 */
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* 提升層次感 */
     }
 
     /* 調整進度條的間距 */
@@ -1339,8 +1341,9 @@ footer {
 
     /* 按鈕調整 */
     .btn {
-        width: 100%;
-        padding: 0.8rem;
+        width: 100%; /* 保證按鈕在小螢幕時全寬 */
+        padding: 0.9rem;
+        margin: 0.5rem 0;
         font-size: 1rem;
     }
 
