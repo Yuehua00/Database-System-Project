@@ -141,17 +141,6 @@ main {
     margin-bottom: 10px;
 }
 
-<<<<<<< HEAD
-=======
-.divider {
-    border: none;
-    border-top: 2px solid #d9dde1; /* 橫線顏色與按鈕一致 */
-    margin: 20px auto; /* 控制上下間距 */
-    width: 60%; /* 控制橫線寬度 */
-}
-
-
->>>>>>> b0c444e0b54ccee86d1ef22f1ef7f2a7a99e70c6
 /* 訂位進度條樣式 */
 .reservation-progress {
     display: flex;
@@ -1226,30 +1215,3 @@ footer {
     margin-left: 15px;
     text-align: left;
 }
-<<<<<<< Updated upstream
-=======
-
-.hidden-comment {
-    display: none;
-}
-
-.reviews {
-    margin-top: 1rem;
-    overflow: visible; /* 讓評論可以完整顯示 */
-}
-
-.review-item {
-    margin-bottom: 1rem;
-}
-
-.more-comments {
-    display: none; /* 預設隱藏多餘評論 */
-}
-
-.more-comments.show {
-    display: block; /* 點擊"查看更多"時顯示 */
-}
-.menu-card {
-    margin-bottom: 2rem; /* 增加底部間距 */
-}
->>>>>>> Stashed changes
