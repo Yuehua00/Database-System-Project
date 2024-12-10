@@ -44,21 +44,13 @@ CREATE TABLE Order_rem (
 	Reservation_ID INT FOREIGN KEY REFERENCES Reservation
 );
 
--- 點餐明細表
-CREATE TABLE Order_Items (
-    Order_Item_ID INT IDENTITY(1,1) PRIMARY KEY, -- 自增主鍵
-    Order_ID INT FOREIGN KEY REFERENCES Order_rem(Order_ID), -- 與 Order_rem 表關聯
-    Dish_ID INT FOREIGN KEY REFERENCES Dish(Dish_ID), -- 與菜單關聯
-    Quantity INT NOT NULL, -- 點的數量
-    Price DECIMAL(10, 2) NOT NULL -- 單價
-);
-
 CREATE TABLE Dish (
     Dish_ID INT IDENTITY(1,1),         -- 餐點唯一識別碼
     Dish_name VARCHAR(100) NOT NULL,  -- 餐點名稱
     Dish_price DECIMAL(10, 2) NOT NULL, -- 價格
     Category VARCHAR(100),            -- 分類，例如：義大利麵、飲料等
     Recommendation DECIMAL(10, 2) DEFAULT 0,     -- 推薦指數
+	Image_Name VARCHAR(100)
     PRIMARY KEY(Dish_ID)
 );
 
@@ -70,13 +62,16 @@ CREATE TABLE Dish_TimeSlot (
 );
 
 CREATE TABLE Includes (
-	Order_ID INT,
+	Includes_ID INT IDENTITY(1,1), -- 自增主鍵
+	Order_ID INT, -- 自增主鍵
 	Dish_ID INT,
-	PRIMARY KEY (Order_ID, Dish_ID),
-	FOREIGN KEY (Order_ID) REFERENCES Order_rem,
-	FOREIGN KEY (Dish_ID) REFERENCES Dish
+	Quantity INT NOT NULL, -- 點的數量
+    Price DECIMAL(10, 2) NOT NULL, -- 單價
+	PRIMARY KEY (Includes_ID),
+	FOREIGN KEY (Order_ID) REFERENCES Order_rem(Order_ID), -- 與 Order_rem 表關聯
+	FOREIGN KEY (Dish_ID) REFERENCES Dish(Dish_ID), -- 與菜單關聯
 );
-	
+
 CREATE TABLE Nutrition (
 	Nutrition_ID INT,
 	Nutrient_Name VARCHAR(50),
@@ -86,7 +81,7 @@ CREATE TABLE Nutrition (
 	Dish_ID INT FOREIGN KEY REFERENCES Dish
 );
 CREATE TABLE Comment (
-	Comment_ID INT,
+	Comment_ID INT IDENTITY(1,1),
 	Conent VARCHAR(500),
 	Star INT,
 	Comment_Time DATETIME NOT NULL,
