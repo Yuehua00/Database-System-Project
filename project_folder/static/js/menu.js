@@ -340,7 +340,7 @@ document.querySelectorAll('.auth-tab').forEach(tab => {
 function filterMenu() {
     const searchInput = document.getElementById('searchInput');
     const filter = searchInput.value.toLowerCase();
-    const menuItems = document.querySelectorAll('.menu-item');
+    const menuItems = document.querySelectorAll('.menu-card'); // 更新選擇器
 
     menuItems.forEach(item => {
         const itemName = item.querySelector('h3').textContent.toLowerCase();
@@ -353,6 +353,21 @@ function filterMenu() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 確保在頁面載入後啟用搜尋功能
-    document.querySelector('.search-button').addEventListener('click', filterMenu);
+    const searchButton = document.querySelector('.search-button');
+    if (searchButton) {
+        searchButton.addEventListener('click', filterMenu);
+    } else {
+        console.error('搜尋按鈕未找到');
+    }
+
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault(); // 防止表單提交
+                filterMenu(); // 觸發搜尋
+            }
+        });
+    }
 });
+
